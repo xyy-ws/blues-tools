@@ -68,7 +68,7 @@ parse_weather() {
     hidden_title=$(tr '\n' ' ' < "$tmpfile" | grep -o 'id="hidden_title" value="[^"]*"' | head -1 | sed -E 's/.*value="([^"]*)"/\1/')
 
     if [ -n "$hidden_title" ]; then
-        temp=$(echo "$hidden_title" | grep -oE '[0-9]+/[0-9]+°C' | head -1 | sed 's/°C/℃/')
+        temp=$(echo "$hidden_title" | grep -oE -- '-?[0-9]+/-?[0-9]+°C' | head -1 | sed 's/°C/℃/')
         weather=$(echo "$hidden_title" | sed -E 's/.*[[:space:]](晴|多云|阴|小雨|中雨|大雨|暴雨|阵雨|雷阵雨|雨夹雪|小雪|中雪|大雪|暴雪|雾|霾)(转(晴|多云|阴|小雨|中雨|大雨|暴雨|阵雨|雷阵雨|雨夹雪|小雪|中雪|大雪|暴雪|雾|霾))?.*/\1\2/')
     fi
 
