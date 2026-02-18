@@ -43,3 +43,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 00:11 CST micro-step
 - Plan: add message list `limit` support and unread count in messages response.
 - Done: message API now supports `limit` query and returns `unreadCount` for UI badge rendering.
+
+### 2026-02-19 00:49 CST micro-step
+- Plan: add GitHub source adapter endpoint for latest AI repositories with token-ready auth header support.
+- Done: added GitHub latest endpoint (`/v1/sources/github/latest`) and token-ready fetch flow with local fallback sample data.
