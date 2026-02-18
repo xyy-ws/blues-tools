@@ -39,3 +39,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 00:06 CST micro-step
 - Plan: add feed `limit` support and include active preferences in feed response for web rendering.
 - Done: updated API feed endpoint with `limit` query support and returned current preferences payload.
+
+### 2026-02-19 00:11 CST micro-step
+- Plan: add message list `limit` support and unread count in messages response.
+- Done: message API now supports `limit` query and returns `unreadCount` for UI badge rendering.
