@@ -35,3 +35,7 @@ Last updated: 2026-02-18 23:55 CST
 
 ### ▶ Next step
 - Next commit: refine web message center UX + keep docs/progress.md synced per commit
+
+### 2026-02-19 00:06 CST micro-step
+- Plan: add feed `limit` support and include active preferences in feed response for web rendering.
+- Done: updated API feed endpoint with `limit` query support and returned current preferences payload.
