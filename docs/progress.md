@@ -47,3 +47,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 00:49 CST micro-step
 - Plan: add GitHub source adapter endpoint for latest AI repositories with token-ready auth header support.
 - Done: added GitHub latest endpoint (`/v1/sources/github/latest`) and token-ready fetch flow with local fallback sample data.
+
+### 2026-02-19 09:13 CST hotfix-step
+- Plan: deliver immediate web-acceptance page for GitHub AI latest feed and message center linkage.
+- Done: added `github-acceptance.html` page to render `/v1/sources/github/latest` and quick trigger `/v1/push/trigger` for验收.
