@@ -71,3 +71,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:28 CST translation-fix
 - Plan: fully translate GitHub project summaries into Chinese instead of partial wrapper text.
 - Done: added summary translation pipeline (Google public translate endpoint + fallback) and switched UI to prefer `summaryZh`.
+
+### 2026-02-19 09:28 CST i18n-toggle-step
+- Plan: add language toggle button on acceptance page for Chinese/English switching.
+- Done: added `中/EN` toggle; supports UI labels and project summary display switching (summaryZh/summary).
