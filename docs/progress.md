@@ -79,3 +79,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:38 CST source-discovery-step
 - Plan: add web source-management flow with AI discovery + manual confirm add.
 - Done: added AI discover API, source add/list API, and frontend source panel (discover candidates + one-click add).
+
+### 2026-02-19 09:42 CST source-ui-fix
+- Plan: fix source add UX not reflecting immediately and provide clickable source-content action.
+- Done: after add, UI now updates immediately with success status; added explicit “查看内容/Visit” buttons in candidate and added-source cards.
