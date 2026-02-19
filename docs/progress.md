@@ -55,3 +55,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:15 CST deploy-step
 - Plan: expose acceptance web URL and API via nginx reverse proxy for immediate user verification.
 - Done: acceptance page switched to relative `/info-api`; added lightweight static web server for `apps/info-push/web/src`; nginx routes `/info-push/` and `/info-api/` now available.
+
+### 2026-02-19 09:20 CST feature-step
+- Plan: add GitHub hot/trending projects endpoint and render project简介 in acceptance page.
+- Done: added `/v1/sources/github/trending` (stars-desc) and updated web acceptance page with hot-project toggle + explicit summary block.
