@@ -107,3 +107,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 10:08 CST home-sources-ui-step
 - Plan: remove source-search from home page; show added sources as clickable buttons that auto-refresh corresponding source content.
 - Done: home page removed source-search/add UI; now renders added sources as buttons from `/v1/sources/home`; click button auto-collects and displays corresponding source items.
+
+### 2026-02-19 10:15 CST discovery-relevance-fix
+- Plan: make source discovery query-aware (not AI-only) and ensure non-AI sources (e.g. finance) map to matching GitHub topics.
+- Done: discovery fallback now uses dynamic topic inference + broader source pool; GitHub source collection now follows source topic/keyword instead of hardcoded AI.
