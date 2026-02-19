@@ -95,3 +95,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:56 CST bugfix-persistence
 - Plan: fix "查看无条目" root cause by persisting sources/items state and default-enabling legacy sources.
 - Done: added local JSON persistence for sources/items/preferences and normalized legacy source `enabled=true` to avoid auto-collect skip.
+
+### 2026-02-19 10:00 CST source-validation-step
+- Plan: enforce source probe on add and mark add-failure when source cannot fetch real items.
+- Done: source add now probes real items (github/rss/reddit-rss); failed probes return add-failure; sources page now displays add-failure details and collect-failure details.
