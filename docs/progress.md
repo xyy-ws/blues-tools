@@ -75,3 +75,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:28 CST i18n-toggle-step
 - Plan: add language toggle button on acceptance page for Chinese/English switching.
 - Done: added `中/EN` toggle; supports UI labels and project summary display switching (summaryZh/summary).
+
+### 2026-02-19 09:38 CST source-discovery-step
+- Plan: add web source-management flow with AI discovery + manual confirm add.
+- Done: added AI discover API, source add/list API, and frontend source panel (discover candidates + one-click add).
