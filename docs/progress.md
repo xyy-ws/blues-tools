@@ -115,3 +115,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 10:18 CST finance-discovery-fix
 - Plan: fix finance-query source discovery diversity (not github-only).
 - Done: added Chinese/English token expansion for domain synonyms (finance/market/investing etc.), enabling RSS/social finance sources to be scored and returned.
+
+### 2026-02-19 11:05 CST source-volume-step
+- Plan: increase discovered source count and improve query expansion for richer results.
+- Done: discovery default limit raised to 20; expanded token synonyms (finance/crypto/AI); added dynamic Google News RSS source injection by query.
