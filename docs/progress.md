@@ -87,3 +87,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:49 CST sources-management-step
 - Plan: implement standalone source management capability with CRUD + enable/disable + source-item viewing APIs.
 - Done: added source CRUD/enable-disable/items/collect endpoints and created dedicated `sources.html` management page with clickable source item viewing.
+
+### 2026-02-19 09:53 CST sources-page-flow-adjust
+- Plan: move AI source discovery into dedicated sources page; remove manual collect button and auto-collect on view.
+- Done: added AI discover + candidate confirm-add UI in `sources.html`; removed collect button; clicking "查看条目" now auto-triggers collect then displays latest items.
