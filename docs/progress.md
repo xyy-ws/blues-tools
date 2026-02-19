@@ -119,3 +119,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 11:05 CST source-volume-step
 - Plan: increase discovered source count and improve query expansion for richer results.
 - Done: discovery default limit raised to 20; expanded token synonyms (finance/crypto/AI); added dynamic Google News RSS source injection by query.
+
+### 2026-02-19 11:10 CST source-pool-expand-step
+- Plan: expand source pool size and diversity for broader discovery results.
+- Done: expanded built-in source catalog (github/rss/social) and added dynamic Google News CN + Reddit search sources, increasing candidate diversity for non-AI queries.
