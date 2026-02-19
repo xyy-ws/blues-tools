@@ -103,3 +103,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 10:03 CST navbar-step
 - Plan: add top navigation bar for quick page switching between acceptance and sources management pages.
 - Done: added shared top nav bar to `github-acceptance.html` and `sources.html` with active-page highlighting and direct links.
+
+### 2026-02-19 10:08 CST home-sources-ui-step
+- Plan: remove source-search from home page; show added sources as clickable buttons that auto-refresh corresponding source content.
+- Done: home page removed source-search/add UI; now renders added sources as buttons from `/v1/sources/home`; click button auto-collects and displays corresponding source items.
