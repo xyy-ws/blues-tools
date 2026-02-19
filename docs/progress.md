@@ -59,3 +59,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:20 CST feature-step
 - Plan: add GitHub hot/trending projects endpoint and render project简介 in acceptance page.
 - Done: added `/v1/sources/github/trending` (stars-desc) and updated web acceptance page with hot-project toggle + explicit summary block.
+
+### 2026-02-19 09:22 CST requirement-fix
+- Plan: align acceptance page default behavior to GitHub 热门项目 priority.
+- Done: changed acceptance page default load from latest -> trending and updated UI labels to emphasize 热门项目.
