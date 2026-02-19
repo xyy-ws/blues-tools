@@ -83,3 +83,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:42 CST source-ui-fix
 - Plan: fix source add UX not reflecting immediately and provide clickable source-content action.
 - Done: after add, UI now updates immediately with success status; added explicit “查看内容/Visit” buttons in candidate and added-source cards.
+
+### 2026-02-19 09:49 CST sources-management-step
+- Plan: implement standalone source management capability with CRUD + enable/disable + source-item viewing APIs.
+- Done: added source CRUD/enable-disable/items/collect endpoints and created dedicated `sources.html` management page with clickable source item viewing.
