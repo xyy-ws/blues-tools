@@ -99,3 +99,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 10:00 CST source-validation-step
 - Plan: enforce source probe on add and mark add-failure when source cannot fetch real items.
 - Done: source add now probes real items (github/rss/reddit-rss); failed probes return add-failure; sources page now displays add-failure details and collect-failure details.
+
+### 2026-02-19 10:03 CST navbar-step
+- Plan: add top navigation bar for quick page switching between acceptance and sources management pages.
+- Done: added shared top nav bar to `github-acceptance.html` and `sources.html` with active-page highlighting and direct links.
