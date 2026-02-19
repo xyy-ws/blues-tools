@@ -67,3 +67,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:26 CST ui-fix
 - Plan: show project summary in Chinese on acceptance page.
 - Done: added Chinese summary rendering (`简介（中文）`) with auto-wrap for non-Chinese descriptions.
+
+### 2026-02-19 09:28 CST translation-fix
+- Plan: fully translate GitHub project summaries into Chinese instead of partial wrapper text.
+- Done: added summary translation pipeline (Google public translate endpoint + fallback) and switched UI to prefer `summaryZh`.
