@@ -123,3 +123,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 11:10 CST source-pool-expand-step
 - Plan: expand source pool size and diversity for broader discovery results.
 - Done: expanded built-in source catalog (github/rss/social) and added dynamic Google News CN + Reddit search sources, increasing candidate diversity for non-AI queries.
+
+### 2026-02-19 11:48 CST favorites-step
+- Plan: add favorites button for feed items and create dedicated favorites page sorted by latest favorite time.
+- Done: added favorites APIs (`GET/POST/DELETE /v1/favorites`), added 收藏按钮 on home/source item cards, and created `/info-push/favorites.html` page (latest-first with remove action).
