@@ -91,3 +91,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 09:53 CST sources-page-flow-adjust
 - Plan: move AI source discovery into dedicated sources page; remove manual collect button and auto-collect on view.
 - Done: added AI discover + candidate confirm-add UI in `sources.html`; removed collect button; clicking "查看条目" now auto-triggers collect then displays latest items.
+
+### 2026-02-19 09:56 CST bugfix-persistence
+- Plan: fix "查看无条目" root cause by persisting sources/items state and default-enabling legacy sources.
+- Done: added local JSON persistence for sources/items/preferences and normalized legacy source `enabled=true` to avoid auto-collect skip.
