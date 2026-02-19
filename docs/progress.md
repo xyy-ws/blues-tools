@@ -111,3 +111,7 @@ Last updated: 2026-02-18 23:55 CST
 ### 2026-02-19 10:15 CST discovery-relevance-fix
 - Plan: make source discovery query-aware (not AI-only) and ensure non-AI sources (e.g. finance) map to matching GitHub topics.
 - Done: discovery fallback now uses dynamic topic inference + broader source pool; GitHub source collection now follows source topic/keyword instead of hardcoded AI.
+
+### 2026-02-19 10:18 CST finance-discovery-fix
+- Plan: fix finance-query source discovery diversity (not github-only).
+- Done: added Chinese/English token expansion for domain synonyms (finance/market/investing etc.), enabling RSS/social finance sources to be scored and returned.
