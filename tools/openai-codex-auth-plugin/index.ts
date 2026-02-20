@@ -5,11 +5,24 @@ import {
   type ProviderAuthResult,
 } from "openclaw/plugin-sdk";
 import { loginOpenAICodex } from "/root/.nvm/versions/node/v22.22.0/lib/node_modules/openclaw/node_modules/@mariozechner/pi-ai/dist/index.js";
+import { chooseProfileCandidates } from "./profile-selector.mjs";
 
 const PROVIDER_ID = "openai-codex";
 
 async function runOAuth(ctx: ProviderAuthContext): Promise<ProviderAuthResult> {
-  const progress = ctx.prompter.progress("Starting OpenAI Codex OAuth…");
+  const configProfileIds = Object.keys((ctx.config as { auth?: { profiles?: Record<string, unknown> } })?.auth?.profiles ?? {});
+  const candidates = chooseProfileCandidates(configProfileIds);
+  const selectedProfileId =
+    candidates.length === 1
+      ? candidates[0]
+      : String(
+          await ctx.prompter.select({
+            message: "Choose target auth profile",
+            options: candidates.map((id) => ({ value: id, label: id })),
+          }),
+        );
+
+  const progress = ctx.prompter.progress(`Starting OpenAI Codex OAuth for ${selectedProfileId}…`);
   try {
     const oauthHandlers = ctx.oauth.createVpsAwareHandlers({
       isRemote: ctx.isRemote,
@@ -32,7 +45,7 @@ async function runOAuth(ctx: ProviderAuthContext): Promise<ProviderAuthResult> {
     return {
       profiles: [
         {
-          profileId: `${PROVIDER_ID}:default`,
+          profileId: selectedProfileId,
           credential: {
             type: "oauth",
             provider: PROVIDER_ID,
@@ -43,7 +56,7 @@ async function runOAuth(ctx: ProviderAuthContext): Promise<ProviderAuthResult> {
           },
         },
       ],
-      notes: ["OAuth profile saved as openai-codex:default"],
+      notes: [`OAuth profile saved as ${selectedProfileId}`],
     };
   } catch (error) {
     progress.stop("OpenAI Codex OAuth failed");
