@@ -5,26 +5,26 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `PLAN`
-- last_update: `2026-02-25 01:12 UTC`
+- status: `DOING`
+- last_update: `2026-02-25 00:34 UTC`
 
 ## 目标
 在保持 APK 仅配置一个 URL 的前提下，完成可验收的语音回路：APK -> 语音网关 -> Agent。
 
 ## 当前状态
-- 已完成后续计划文档：`docs/plans/2026-02-25-agent-gateway-mvp-plan.md`
-- 已明确架构原则：对外单URL、网关做稳定性、agent做智能核心。
-- 进入执行前准备阶段（PLAN）。
+- 已进入执行阶段（DOING）。
+- Task 1（冻结 API contract + MVP 边界）已完成并通过测试。
 
 ## 最近动作
-1. 复核长期记忆中的任务管理规则（任务清单登记 + 进度文件一致性）。
-2. 创建任务清单条目并绑定 progress_file。
-3. 建立本任务进度文件。
+1. 将 `test/v015-direct-provider-interface.test.mjs` 改为契约字段锁定测试（required + optional）。
+2. 执行测试并捕获 FAIL 证据（缺少 `request_id` 等字段）。
+3. 更新 `api-contract.md` 与 `milestones.md`，补齐 Gateway MVP 统一响应契约与范围边界。
+4. 复跑 `node --test test/v015-direct-provider-interface.test.mjs`，结果 PASS。
 
 ## 下一步
-1. 用户确认执行方式（Subagent-Driven / Parallel Session）。
-2. 按计划 Task 1 开始：冻结 API contract 与 MVP边界。
-3. 进入 DOING 后每个里程碑提供证据（测试输出/commit）。
+1. 执行 Task 2：实现 Agent Adapter seam（`agent-adapter.mjs` + `server.mjs` 接口解耦）。
+2. 执行 Task 3：单设备会话绑定 + 幂等缓存。
+3. 每个任务完成后给出测试与提交证据。
 
 ## 阻塞项
 - 无硬阻塞。
