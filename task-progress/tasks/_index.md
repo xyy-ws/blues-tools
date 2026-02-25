@@ -16,8 +16,8 @@
   - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
   - branch: `main`
   - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-  - status: `SUSPECTED_STALL`
-  - last_update: `2026-02-25 02:00 UTC`
+  - status: `DOING`
+  - last_update: `2026-02-25 02:09 UTC`
   - progress_file: `task-progress/tasks/VOICE-20260225-DEBUG-LOG-RELAY.md`
 
 - task_id: `VOICE-20260225-ANDROID-UI-DEBUG-PANEL`
