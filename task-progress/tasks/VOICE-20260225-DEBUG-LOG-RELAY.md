@@ -5,8 +5,8 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `DOING`
-- last_update: `2026-02-25 02:09 UTC`
+- status: `SUSPECTED_STALL`
+- last_update: `2026-02-25 02:34 UTC`
 
 ## 目标
 实现手机日志通过网络实时回传到网关，便于远程协同调试唤醒服务。
@@ -29,5 +29,5 @@
 3. 通过后切到 `VERIFY` 并输出联调回执。
 
 ## 阻塞项
-- 无代码阻塞。
+- `SUSPECTED_STALL`（Heartbeat@2026-02-25 02:34 UTC）：自 `02:09 UTC` 后超过 20 分钟无新增提交/状态推进，联调尚未进入“日志已到达”阶段。
 - 待实机联调验证日志是否实时到达。
