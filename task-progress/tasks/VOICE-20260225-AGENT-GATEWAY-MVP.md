@@ -5,31 +5,29 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `BLOCKED`
-- last_update: `2026-02-25 00:38 UTC`
+- status: `DOING`
+- last_update: `2026-02-25 00:42 UTC`
 
 ## 目标
 在保持 APK 仅配置一个 URL 的前提下，完成可验收的语音回路：APK -> 语音网关 -> Agent。
 
 ## 当前状态
 - 已进入执行阶段（DOING）。
-- Task 1（冻结 API contract + MVP 边界）已完成并通过测试。
+- Task 1~4 已完成（契约冻结、Adapter seam、session+幂等、超时+限流+错误码）。
 
 ## 最近动作
-1. 将 `test/v015-direct-provider-interface.test.mjs` 改为契约字段锁定测试（required + optional）。
-2. 执行测试并捕获 FAIL 证据（缺少 `request_id` 等字段）。
-3. 更新 `api-contract.md` 与 `milestones.md`，补齐 Gateway MVP 统一响应契约与范围边界。
-4. 复跑 `node --test test/v015-direct-provider-interface.test.mjs`，结果 PASS。
-5. 按用户要求切换子代理执行 Task 2-4，拉起失败并记录配对阻塞证据。
+1. 完成 Task 2：新增 `agent-adapter.mjs` 并将 `server.mjs` 解耦为 adapter 调用。
+2. 完成 Task 3：新增 `session-store.mjs`，实现单设备 session 绑定与 request_id 幂等缓存。
+3. 完成 Task 4：实现 `withTimeout` 与 `isRateLimited`，标准化 `UNAUTHORIZED/RATE_LIMITED/AGENT_TIMEOUT` 错误码。
+4. 相关测试均已按“先 FAIL 后 PASS”执行通过（v017/v018/v019）。
 
 ## 下一步
-1. 用户侧完成网关配对/恢复（建议先执行 `openclaw status` 检查）。
-2. 重新拉起子代理继续 Task 2（Agent Adapter seam）。
-3. 按里程碑提交 Task 2-4 的测试结果与 commit 回执。
+1. 执行 Task 5：Android 客户端 fallback 与错误态处理。
+2. 执行 Task 6：E2E 验证与 APK 产物回执。
+3. 执行 Task 7：发布门禁清单并等待 push 确认。
 
 ## 阻塞项
-- `SUBAGENT_PAIRING_REQUIRED`：子代理拉起失败，网关返回 `gateway closed (1008): pairing required`（target: `ws://127.0.0.1:18789`）。
-- 需先完成 OpenClaw pairing / gateway 可用性恢复后，才能继续 Task 2-4 子代理执行。
+- 子代理通道仍存在 pairing 问题，但已切换主会话执行，不影响当前里程碑推进。
 
 ## 风险提示（MVP范围内）
 - 需要控制时延与超时，避免移动端抖动。
