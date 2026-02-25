@@ -10,3 +10,12 @@
   - status: `DONE`
   - last_update: `2026-02-25 01:23 UTC`
   - progress_file: `task-progress/tasks/VOICE-20260225-AGENT-GATEWAY-MVP.md`
+
+- task_id: `VOICE-20260225-DEBUG-LOG-RELAY`
+  - title: Android 调试日志网络实时回传（LogRelay）
+  - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
+  - branch: `main`
+  - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
+  - status: `VERIFY`
+  - last_update: `2026-02-25 01:37 UTC`
+  - progress_file: `task-progress/tasks/VOICE-20260225-DEBUG-LOG-RELAY.md`
