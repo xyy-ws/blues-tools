@@ -5,30 +5,30 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `SUSPECTED_STALL`
-- last_update: `2026-02-25 01:15 UTC`
+- status: `VERIFY`
+- last_update: `2026-02-25 01:21 UTC`
 
 ## 目标
 在保持 APK 仅配置一个 URL 的前提下，完成可验收的语音回路：APK -> 语音网关 -> Agent。
 
 ## 当前状态
-- 已进入执行阶段（DOING）。
-- Task 1~4 已完成（契约冻结、Adapter seam、session+幂等、超时+限流+错误码）。
+- 已完成 Task 1~7（实现、验证、文档与发布门禁均完成）。
+- 当前处于 `VERIFY`：等待用户确认是否执行 `git push origin main`。
 
 ## 最近动作
-1. 完成 Task 2：新增 `agent-adapter.mjs` 并将 `server.mjs` 解耦为 adapter 调用。
-2. 完成 Task 3：新增 `session-store.mjs`，实现单设备 session 绑定与 request_id 幂等缓存。
-3. 完成 Task 4：实现 `withTimeout` 与 `isRateLimited`，标准化 `UNAUTHORIZED/RATE_LIMITED/AGENT_TIMEOUT` 错误码。
-4. 相关测试均已按“先 FAIL 后 PASS”执行通过（v017/v018/v019）。
+1. Task 5 完成：Android fallback 与错误态处理（`47fb270`）。
+2. Task 6 完成：E2E 测试全绿（pass 10, fail 0）+ APK 构建成功 + 验收/产物文档落盘（`216fa89`）。
+3. 适配测试断言以兼容 timeout wrapper（`dba6c7f`）。
+4. Task 7 完成：发布门禁清单补充（`ae459ad`）。
 
 ## 下一步
-1. 执行 Task 5：Android 客户端 fallback 与错误态处理。
-2. 执行 Task 6：E2E 验证与 APK 产物回执。
-3. 执行 Task 7：发布门禁清单并等待 push 确认。
+1. 向用户做 push 前置确认（目标仓库 + 目标分支 + 影响范围）。
+2. 用户确认后执行 `git push origin main`。
+3. 推送成功后更新任务为 `DONE` 并发送最终回执。
 
 ## 阻塞项
-- `SUSPECTED_STALL`（Heartbeat@2026-02-25 01:15 UTC）：最近进展/提交停留在 ~00:48 UTC，已超过 20 分钟无新增进度信号。
-- 子代理通道仍存在 pairing 问题，但已切换主会话执行，不影响当前里程碑推进。
+- 无功能阻塞。
+- 仅待用户对 push 动作授权确认。
 
 ## 风险提示（MVP范围内）
 - 需要控制时延与超时，避免移动端抖动。
