@@ -5,8 +5,8 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `DOING`
-- last_update: `2026-02-25 00:42 UTC`
+- status: `SUSPECTED_STALL`
+- last_update: `2026-02-25 01:15 UTC`
 
 ## 目标
 在保持 APK 仅配置一个 URL 的前提下，完成可验收的语音回路：APK -> 语音网关 -> Agent。
@@ -27,6 +27,7 @@
 3. 执行 Task 7：发布门禁清单并等待 push 确认。
 
 ## 阻塞项
+- `SUSPECTED_STALL`（Heartbeat@2026-02-25 01:15 UTC）：最近进展/提交停留在 ~00:48 UTC，已超过 20 分钟无新增进度信号。
 - 子代理通道仍存在 pairing 问题，但已切换主会话执行，不影响当前里程碑推进。
 
 ## 风险提示（MVP范围内）
