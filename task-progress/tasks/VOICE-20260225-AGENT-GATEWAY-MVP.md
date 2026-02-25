@@ -5,15 +5,16 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `VERIFY`
-- last_update: `2026-02-25 01:21 UTC`
+- status: `DONE`
+- last_update: `2026-02-25 01:23 UTC`
 
 ## 目标
 在保持 APK 仅配置一个 URL 的前提下，完成可验收的语音回路：APK -> 语音网关 -> Agent。
 
 ## 当前状态
 - 已完成 Task 1~7（实现、验证、文档与发布门禁均完成）。
-- 当前处于 `VERIFY`：等待用户确认是否执行 `git push origin main`。
+- 已完成 push：`git push origin main`（remote 已更新到 `ae459ad`）。
+- 任务闭环完成，状态置为 `DONE`。
 
 ## 最近动作
 1. Task 5 完成：Android fallback 与错误态处理（`47fb270`）。
