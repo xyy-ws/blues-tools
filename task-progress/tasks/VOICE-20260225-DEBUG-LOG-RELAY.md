@@ -5,8 +5,8 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `VERIFY`
-- last_update: `2026-02-25 01:37 UTC`
+- status: `SUSPECTED_STALL`
+- last_update: `2026-02-25 02:00 UTC`
 
 ## 目标
 实现手机日志通过网络实时回传到网关，便于远程协同调试唤醒服务。

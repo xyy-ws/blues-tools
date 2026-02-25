@@ -5,8 +5,8 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `VERIFY`
-- last_update: `2026-02-25 01:40 UTC`
+- status: `SUSPECTED_STALL`
+- last_update: `2026-02-25 02:00 UTC`
 
 ## 目标
 优化主界面可用性，提供状态、错误、事件流可视化，支持快速验收与排障。
