@@ -7,6 +7,6 @@
   - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
   - branch: `main`
   - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-  - status: `DOING`
-  - last_update: `2026-02-25 00:34 UTC`
+  - status: `BLOCKED`
+  - last_update: `2026-02-25 00:38 UTC`
   - progress_file: `task-progress/tasks/VOICE-20260225-AGENT-GATEWAY-MVP.md`
