@@ -4,6 +4,13 @@
 
 **P0 Preparation / Shadow only** — production retrieval remains local.
 
+## Fast Canary Exception (approved by user)
+
+- Mode: **24h fast canary** (QMD primary + local fallback)
+- Requirement: one-step rollback to local-only must be verified before switch
+- Decision points: T+1h / T+6h / T+24h
+- Any critical trigger hit => immediate rollback
+
 ## 1) Hard Gates for Cutover Consideration
 
 All must pass:
