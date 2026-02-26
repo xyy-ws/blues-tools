@@ -19,7 +19,26 @@ const WORKSPACE_PATTERNS = [
 ];
 
 export function classifyFailure(input = '') {
-  const text = String(input);
+  let text = '';
+
+  if (typeof input === 'string') {
+    text = input;
+    try {
+      const parsed = JSON.parse(input);
+      const code = parsed?.detail?.code ?? parsed?.error?.code ?? parsed?.code ?? '';
+      const message = parsed?.detail?.message ?? parsed?.error?.message ?? parsed?.message ?? '';
+      text = `${text} ${String(code)} ${String(message)}`.trim();
+    } catch {
+      // not JSON, fall back to raw string matching
+    }
+  } else if (input && typeof input === 'object') {
+    const code = input?.detail?.code ?? input?.error?.code ?? input?.code ?? '';
+    const message = input?.detail?.message ?? input?.error?.message ?? input?.message ?? '';
+    text = `${JSON.stringify(input)} ${String(code)} ${String(message)}`.trim();
+  } else {
+    text = String(input);
+  }
+
   if (QUOTA_PATTERNS.some((p) => p.test(text))) return 'quota';
   if (RATE_LIMIT_PATTERNS.some((p) => p.test(text))) return 'rate_limit';
   if (WORKSPACE_PATTERNS.some((p) => p.test(text))) return 'workspace_deactivated';
