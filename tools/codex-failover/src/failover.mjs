@@ -12,15 +12,22 @@ const RATE_LIMIT_PATTERNS = [
   /处于冷却状态/i,
 ];
 
+const WORKSPACE_PATTERNS = [
+  /deactivated_workspace/i,
+  /workspace[_ ]?deactivated/i,
+  /工作区.*停用/i,
+];
+
 export function classifyFailure(input = '') {
   const text = String(input);
   if (QUOTA_PATTERNS.some((p) => p.test(text))) return 'quota';
   if (RATE_LIMIT_PATTERNS.some((p) => p.test(text))) return 'rate_limit';
+  if (WORKSPACE_PATTERNS.some((p) => p.test(text))) return 'workspace_deactivated';
   return 'other';
 }
 
 export function shouldCooldown(kind) {
-  return kind === 'quota' || kind === 'rate_limit';
+  return kind === 'quota' || kind === 'rate_limit' || kind === 'workspace_deactivated';
 }
 
 export function chooseProfile({ orderedProfiles, state, now = Date.now() }) {

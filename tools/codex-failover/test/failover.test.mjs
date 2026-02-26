@@ -17,9 +17,15 @@ test('classifyFailure detects rate_limit/cooldown errors', () => {
   assert.equal(classifyFailure(msg), 'rate_limit');
 });
 
-test('shouldCooldown returns true for quota and rate_limit', () => {
+test('classifyFailure detects deactivated workspace errors', () => {
+  const msg = '{"detail":{"code":"deactivated_workspace"}}';
+  assert.equal(classifyFailure(msg), 'workspace_deactivated');
+});
+
+test('shouldCooldown returns true for quota/rate_limit/workspace_deactivated', () => {
   assert.equal(shouldCooldown('quota'), true);
   assert.equal(shouldCooldown('rate_limit'), true);
+  assert.equal(shouldCooldown('workspace_deactivated'), true);
   assert.equal(shouldCooldown('other'), false);
 });
 
