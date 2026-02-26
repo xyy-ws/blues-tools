@@ -1,19 +1,19 @@
 # QMD Seed (Normalized)
 
-本目录是 QMD 的标准化输入层（只增不改），不替代原始记忆源。
+This folder now contains FULL seed generated from current memory sources.
 
-## Files
-- `rules.jsonl`：长期规则/约定
-- `progress.jsonl`：任务进度快照
-- `incidents.jsonl`：历史事件/决策/风险
+## Inputs
+- MEMORY.md
+- memory/**/*.md
+- task-progress/**/*.md
 
-## JSONL Common Schema
-- `id` string
-- `text` string
-- `source_file` string
-- `date` string|null
-- `topic` string|null
-- `tier` one of `long_term|daily|topic`
-- `sensitivity` one of `public|internal|restricted`
-- `language` string
-- `tags` string[]
+## Outputs
+- rules.jsonl
+- progress.jsonl
+- incidents.jsonl
+- full-seed-report.json
+
+## Notes
+- Source files are not modified (extract-only).
+- Basic redaction applied for obvious secret patterns.
+- Deduplication via SHA256(normalized_text + source_file).

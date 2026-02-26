@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-02-26T06:38:47.411Z",
+  "source_files": 23,
+  "records": {
+    "rules": 13,
+    "progress": 82,
+    "incidents": 42,
+    "total": 137
+  },
+  "source_list": [
+    "MEMORY.md",
+    "memory/2026-02-16.md",
+    "memory/2026-02-17.md",
+    "memory/2026-02-18.md",
+    "memory/2026-02-19.md",
+    "memory/2026-02-20.md",
+    "memory/2026-02-21.md",
+    "memory/2026-02-22.md",
+    "memory/2026-02-23.md",
+    "memory/2026-02-24.md",
+    "memory/2026-02-26.md",
+    "memory/topics-index.md",
+    "memory/topics/codex-auth-plugin.md",
+    "memory/topics/evomap.md",
+    "memory/topics/habit-mvp.md",
+    "memory/topics/info-push-android.md",
+    "memory/topics/openclaw-ops-and-channels.md",
+    "memory/topics/verification-agent.md",
+    "task-progress/daily/2026-02-25.md",
+    "task-progress/tasks/VOICE-20260225-AGENT-GATEWAY-MVP.md",
+    "task-progress/tasks/VOICE-20260225-ANDROID-UI-DEBUG-PANEL.md",
+    "task-progress/tasks/VOICE-20260225-DEBUG-LOG-RELAY.md",
+    "task-progress/tasks/_index.md"
+  ]
+}
