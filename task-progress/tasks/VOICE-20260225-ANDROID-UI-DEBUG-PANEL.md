@@ -5,8 +5,8 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `DOING`
-- last_update: `2026-02-25 03:58 UTC`
+- status: `PAUSED`
+- last_update: `2026-02-26 00:00 UTC`
 
 ## 目标
 优化主界面可用性，提供状态、错误、事件流可视化，支持快速验收与排障。
@@ -19,3 +19,9 @@
 - 测试：`node --test test/v012-main-activity-*.test.mjs test/v022-main-activity-debug-panel.test.mjs` -> PASS
 - 构建：`./gradlew :app:assembleDebug` -> BUILD SUCCESSFUL
 - 提交：`33f2637`
+
+## 暂停快照（2026-02-26 00:00 UTC）
+- 暂停原因：用户指令“这个项目先暂停，进度更新保存”。
+- 暂停时完成度：状态区、最近错误、事件流、复制错误、清空事件、发送测试日志按钮均已实现。
+- 暂停时关键未完项：与 LogRelay 联调阶段的整体验收尚未收口。
+- 恢复第一步：真机跑通一次完整交互链路，确认 UI 面板状态与日志回传一致后进入 VERIFY。

@@ -5,8 +5,8 @@
 - repo: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - branch: `main`
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
-- status: `DOING`
-- last_update: `2026-02-25 03:58 UTC`
+- status: `PAUSED`
+- last_update: `2026-02-26 00:00 UTC`
 
 ## 目标
 实现手机日志通过网络实时回传到网关，便于远程协同调试唤醒服务。
@@ -31,3 +31,9 @@
 ## 阻塞项
 - `SUSPECTED_STALL`（Heartbeat@2026-02-25 02:34 UTC）：自 `02:09 UTC` 后超过 20 分钟无新增提交/状态推进，联调尚未进入“日志已到达”阶段。
 - 待实机联调验证日志是否实时到达。
+
+## 暂停快照（2026-02-26 00:00 UTC）
+- 暂停原因：用户指令“这个项目先暂停，进度更新保存”。
+- 暂停时完成度：Android 侧日志上报、网关接收与落盘、相关测试与构建均已完成。
+- 暂停时关键未完项：实机联调确认 `reply_text` 与 `logs/device-debug/*.log` 同时可见。
+- 恢复第一步：启动 direct bridge，连接真机后执行“发送测试日志”，核对落盘与回包。
