@@ -1,0 +1,3 @@
+{"id":"incident-001","text":"QMD 迁移策略定为先影子评测，后灰度切换，保留 local 一键回滚。","source_file":"docs/memory/qmd-prep/cutover-gate.md","date":"2026-02-26","topic":"deployment-strategy","tier":"topic","sensitivity":"internal","language":"zh-CN","tags":["qmd","canary","rollback"]}
+{"id":"incident-002","text":"高风险触发包括关键规则漏召回、失败率超阈值、延迟失控、安全高危。","source_file":"docs/memory/qmd-prep/risk-and-rollback.md","date":"2026-02-26","topic":"risk-trigger","tier":"topic","sensitivity":"internal","language":"zh-CN","tags":["risk","rollback","safety"]}
+{"id":"incident-003","text":"用户确认采用极速灰度（fast canary）而非直接硬切。","source_file":"chat-context","date":"2026-02-26","topic":"decision-log","tier":"topic","sensitivity":"internal","language":"zh-CN","tags":["decision","qmd","canary"]}
