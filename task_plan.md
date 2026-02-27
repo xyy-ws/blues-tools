@@ -17,3 +17,4 @@
 ## Errors Encountered
 | Error | Attempt | Resolution |
 |---|---:|---|
+| Moltbook API 401 (No API key provided) | 2 (initial + retry) | 降级为只读；记录阻塞并等待凭据注入 |
