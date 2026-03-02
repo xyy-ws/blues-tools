@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { DEMO_BPM, DEMO_LICKS, type BluesLick } from './licksDemo'
 
 type PlaybackState = 'idle' | 'playing' | 'paused'
+type PlaybackMode = 'lick' | 'backing-only'
 
 const SPEED_OPTIONS = [0.5, 0.75, 1] as const
 const STRINGS = ['e', 'B', 'G', 'D', 'A', 'E']
@@ -31,6 +32,7 @@ function playTone(frequency: number, durationMs: number) {
 
 function LickPlayerCard({ lick }: { lick: BluesLick }) {
   const [state, setState] = useState<PlaybackState>('idle')
+  const [mode, setMode] = useState<PlaybackMode>('lick')
   const [speed, setSpeed] = useState<(typeof SPEED_OPTIONS)[number]>(1)
   const [stepIndex, setStepIndex] = useState(0)
   const timeoutRef = useRef<number | null>(null)
@@ -51,7 +53,11 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
 
     const step = lick.steps[stepIndex]
     const stepMs = (60000 / DEMO_BPM) * (step.durationBeats / speed)
-    playTone(step.frequency, stepMs * 0.92)
+    if (mode === 'lick') {
+      playTone(step.frequency, stepMs * 0.92)
+    } else {
+      playTone(step.beat % 4 === 0 ? 130.81 : 98, stepMs * 0.4)
+    }
 
     timeoutRef.current = window.setTimeout(() => {
       setStepIndex((prev) => prev + 1)
@@ -62,12 +68,15 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         window.clearTimeout(timeoutRef.current)
       }
     }
-  }, [lick.steps, speed, state, stepIndex])
+  }, [lick.steps, mode, speed, state, stepIndex])
 
-  function onPlay() {
-    if (state === 'idle' && stepIndex >= lick.steps.length - 1) {
-      setStepIndex(0)
+  function onPlay(nextMode: PlaybackMode = mode) {
+    if (state === 'idle' || state === 'paused') {
+      if (stepIndex >= lick.steps.length || (state === 'idle' && stepIndex >= lick.steps.length - 1)) {
+        setStepIndex(0)
+      }
     }
+    setMode(nextMode)
     setState('playing')
   }
 
@@ -85,7 +94,12 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
     }
   }
 
-  const statusLabel = state === 'idle' ? '已停止 Stopped' : state === 'paused' ? '已暂停 Paused' : '播放中 Playing'
+  const statusLabel =
+    state === 'idle'
+      ? '已停止 Stopped'
+      : state === 'paused'
+        ? `已暂停 Paused (${mode === 'lick' ? 'Lick' : 'Backing only'})`
+        : `播放中 Playing (${mode === 'lick' ? 'Lick' : 'Backing only'})`
 
   return (
     <article className="card" aria-label={`${lick.name} demo card`}>
@@ -172,8 +186,11 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
           </label>
         </div>
         <div className="inline-actions" style={{ marginTop: 8 }}>
-          <button type="button" className="btn-primary" onClick={onPlay}>
+          <button type="button" className="btn-primary" onClick={() => onPlay('lick')}>
             播放 Play
+          </button>
+          <button type="button" onClick={() => onPlay('backing-only')}>
+            只播放伴奏 / Backing only
           </button>
           <button type="button" onClick={onPause}>
             暂停 Pause
@@ -208,17 +225,38 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
 }
 
 export function LicksDemoSection() {
+  const [selectedLickId, setSelectedLickId] = useState(DEMO_LICKS[0]?.id ?? '')
+  const selectedLick = useMemo(
+    () => DEMO_LICKS.find((lick) => lick.id === selectedLickId) ?? DEMO_LICKS[0],
+    [selectedLickId],
+  )
+
+  if (!selectedLick) {
+    return null
+  }
+
   return (
     <section className="page" aria-label="Licks demo section">
       <div>
         <h2>乐句演示 Licks Demo v1</h2>
-        <p className="muted">2 条可播放 Demo 乐句（自动发声 + 指板高亮 + 速度控制）</p>
+        <p className="muted">选择一个乐句进行练习（自动发声 + 指板高亮 + 速度控制）</p>
+      </div>
+
+      <div className="card">
+        <label className="control">
+          选择乐句 / Select lick
+          <select aria-label="Select lick" value={selectedLickId} onChange={(e) => setSelectedLickId(e.target.value)}>
+            {DEMO_LICKS.map((lick) => (
+              <option key={lick.id} value={lick.id}>
+                {lick.name}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
 
       <div className="list">
-        {DEMO_LICKS.map((lick) => (
-          <LickPlayerCard key={lick.id} lick={lick} />
-        ))}
+        <LickPlayerCard key={selectedLick.id} lick={selectedLick} />
       </div>
     </section>
   )

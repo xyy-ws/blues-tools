@@ -1,5 +1,6 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { MemoryRouter } from 'react-router-dom'
 import { BackingPage } from './BackingPage'
 
 afterEach(() => {
@@ -13,9 +14,17 @@ beforeEach(() => {
   vi.useFakeTimers()
 })
 
+function renderPage() {
+  render(
+    <MemoryRouter>
+      <BackingPage />
+    </MemoryRouter>,
+  )
+}
+
 describe('BackingPage', () => {
   it('renders playback controls and handles play/pause(stop via toggle)/stop transitions', () => {
-    render(<BackingPage />)
+    renderPage()
 
     expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
@@ -36,7 +45,7 @@ describe('BackingPage', () => {
   })
 
   it('advances beat indicator while playing', () => {
-    render(<BackingPage />)
+    renderPage()
 
     fireEvent.click(screen.getByRole('button', { name: 'Play' }))
     vi.advanceTimersByTime(1000)
@@ -48,7 +57,7 @@ describe('BackingPage', () => {
   it('uses synth in auto mode when there is no matching real track and real when matched', () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
 
-    render(<BackingPage />)
+    renderPage()
 
     expect(screen.getByText('Playback source: Synth')).toBeInTheDocument()
 

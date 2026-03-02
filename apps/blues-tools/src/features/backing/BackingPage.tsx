@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
@@ -15,7 +16,21 @@ const BAR_COUNT = 12
 const BEATS_PER_BAR = 4
 
 export function BackingPage() {
-  const [initial] = useState(() => loadState() ?? getDefaultState())
+  const [searchParams] = useSearchParams()
+
+  const [initial] = useState(() => {
+    const stored = loadState() ?? getDefaultState()
+    const key = searchParams.get('key') as MusicalKey | null
+    const bpm = Number(searchParams.get('bpm'))
+    const preset = searchParams.get('preset') as ProgressionPreset | null
+
+    return {
+      ...stored,
+      selectedKey: key && CHROMATIC_KEYS.includes(key) ? key : stored.selectedKey,
+      bpm: Number.isFinite(bpm) && bpm >= 40 && bpm <= 220 ? bpm : stored.bpm,
+      preset: preset && PROGRESSION_PRESETS.some((item) => item.id === preset) ? preset : stored.preset,
+    }
+  })
 
   const [selectedKey, setSelectedKey] = useState<MusicalKey>(initial.selectedKey)
   const [bpm, setBpm] = useState(initial.bpm)
