@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { bluesStylePack } from '../../styles/blues'
+import { LicksDemoSection } from './LicksDemoSection'
 
 const ALL_TAG = 'all'
 
@@ -70,6 +71,8 @@ export function KnowledgePage() {
           ))}
         </ul>
       )}
+
+      <LicksDemoSection />
     </section>
   )
 }
