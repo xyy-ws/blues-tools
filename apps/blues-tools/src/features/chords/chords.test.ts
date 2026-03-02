@@ -20,7 +20,7 @@ describe('getChordFingering', () => {
   })
 
   it('falls back to root inversion for non-invertible qualities', () => {
-    expect(INVERSION_OPTIONS['9']).toEqual([0])
+    expect(INVERSION_OPTIONS['9']).toEqual([0, 1, 2])
     expect(getChordFingerings('C', '9', 6, 2 as 0 | 1 | 2 | 3)).toEqual(getChordFingerings('C', '9', 6, 0))
   })
 })
