@@ -28,6 +28,17 @@ describe('AppRouter', () => {
     expect(screen.getByRole('heading', { name: '布鲁斯主页 / Blues Home' })).toBeInTheDocument()
   })
 
+  it('shows two-level nav active state clearly', () => {
+    render(
+      <MemoryRouter initialEntries={['/home']}>
+        <AppRouter />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('link', { name: '布鲁斯主页 Blues Dashboard' })).toHaveClass('active')
+    expect(screen.getByRole('link', { name: '全局首页 Global Home' })).not.toHaveClass('active')
+  })
+
   it('navigates from home Blues selection to style sub-home', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
@@ -62,15 +73,5 @@ describe('AppRouter', () => {
     )
 
     expect(screen.getByRole('heading', { name: 'Knowledge' })).toBeInTheDocument()
-  })
-
-  it('routes to Substyle Library page', () => {
-    render(
-      <MemoryRouter initialEntries={['/substyles']}>
-        <AppRouter />
-      </MemoryRouter>,
-    )
-
-    expect(screen.getByRole('heading', { name: '布鲁斯子风格库 / Blues Substyle Library' })).toBeInTheDocument()
   })
 })

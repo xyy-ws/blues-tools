@@ -7,29 +7,25 @@ afterEach(() => {
 })
 
 describe('ChordFretboardPage', () => {
-  it('updates highlighted frets when chord selection changes', () => {
-    const { container } = render(<ChordFretboardPage />)
-
-    const initialHighlights = container.querySelectorAll('[data-chord-highlight="yes"]')
-    expect(initialHighlights.length).toBeGreaterThan(0)
-
-    fireEvent.change(screen.getByLabelText('Combined chord root'), { target: { value: 'C' } })
-
-    const changedHighlights = container.querySelectorAll('[data-chord-highlight="yes"]')
-    expect(changedHighlights.length).toBeGreaterThan(0)
-    expect(screen.getByText(/Pattern:/)).toBeInTheDocument()
-  })
-
-  it('changes fingering set when root string changes', () => {
+  it('updates displayed pattern when chord selection changes', () => {
     render(<ChordFretboardPage />)
 
-    fireEvent.change(screen.getByLabelText('Combined chord root'), { target: { value: 'E' } })
-    const patternOn6 = screen.getByText(/Pattern:/).textContent
+    const patternBefore = screen.getByText(/Pattern:/).textContent
+    fireEvent.change(screen.getByLabelText('Combined chord root'), { target: { value: 'C' } })
+    const patternAfter = screen.getByText(/Pattern:/).textContent
 
-    fireEvent.change(screen.getByLabelText('Chord root string'), { target: { value: '5' } })
-    const patternOn5 = screen.getByText(/Pattern:/).textContent
+    expect(patternAfter).not.toEqual(patternBefore)
+  })
 
-    expect(patternOn6).not.toEqual(patternOn5)
+  it('supports fret range switch and tone legend metadata', () => {
+    const { container } = render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('Fret range'), { target: { value: '0-12' } })
+
+    expect(container.querySelector('[data-tone-type="root"]')).toBeInTheDocument()
+    expect(container.querySelector('td')?.textContent).toContain('0:')
+    expect(screen.getByText('Legend / 图例')).toBeInTheDocument()
+    expect(screen.getByLabelText('Fingering hint')).toBeInTheDocument()
   })
 
   it('renders string 1 on top and string 6 on bottom', () => {

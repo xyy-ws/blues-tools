@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildRealTrackId, choosePlaybackSource, type RealTrack } from './backing'
+import { buildRealTrackId, choosePlaybackSource, resolvePlayback, type RealTrack } from './backing'
 
 const tracks: RealTrack[] = [
   {
@@ -23,6 +23,13 @@ describe('choosePlaybackSource', () => {
   it('uses real track in auto mode when a match exists', () => {
     const source = choosePlaybackSource('auto', { key: 'C', bpm: 90 }, tracks)
     expect(source).toBe('real')
+  })
+})
+
+describe('resolvePlayback', () => {
+  it('reports explicit real mode fallback when no matching track exists', () => {
+    const result = resolvePlayback('real', { key: 'E', bpm: 120 }, tracks)
+    expect(result).toEqual({ resolved: 'synth', hasMatch: false, mode: 'real' })
   })
 })
 

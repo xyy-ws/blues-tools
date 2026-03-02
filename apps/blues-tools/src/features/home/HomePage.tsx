@@ -6,12 +6,12 @@ export function HomePage() {
   return (
     <section className="page">
       <h1>首页 / Home</h1>
-      <p className="muted">选择风格开始练习。当前仅提供布鲁斯风格。</p>
+      <p className="muted">一级导航：先选风格，再进入风格内工具。当前仅提供布鲁斯风格。</p>
 
       <div className="card">
         <div className="card-title-row">
           <h2>风格 / Styles</h2>
-          <span className="badge info">1 style</span>
+          <span className="badge info">Level 1 · 1 style</span>
         </div>
         <ul className="list" aria-label="Style list">
           {STYLES.map((style) => (
@@ -22,6 +22,9 @@ export function HomePage() {
                 </strong>
                 <span className="badge success">{style.status}</span>
               </div>
+              <p className="muted" style={{ marginTop: 8, marginBottom: 0 }}>
+                进入二级主页 / Enter level-2 dashboard
+              </p>
             </li>
           ))}
         </ul>

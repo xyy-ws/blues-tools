@@ -18,22 +18,32 @@ export interface BackingSelection {
   bpm: number
 }
 
-export function choosePlaybackSource(
-  mode: BackingMode,
-  selection: BackingSelection,
-  tracks: RealTrack[],
-): 'synth' | 'real' {
+export interface PlaybackResolution {
+  resolved: 'synth' | 'real'
+  hasMatch: boolean
+  mode: BackingMode
+}
+
+export function resolvePlayback(mode: BackingMode, selection: BackingSelection, tracks: RealTrack[]): PlaybackResolution {
   if (mode === 'synth') {
-    return 'synth'
+    return { resolved: 'synth', hasMatch: false, mode }
   }
 
   const hasMatch = tracks.some((track) => track.key === selection.key && track.bpm === selection.bpm)
 
   if (mode === 'real') {
-    return hasMatch ? 'real' : 'synth'
+    return { resolved: hasMatch ? 'real' : 'synth', hasMatch, mode }
   }
 
-  return hasMatch ? 'real' : 'synth'
+  return { resolved: hasMatch ? 'real' : 'synth', hasMatch, mode }
+}
+
+export function choosePlaybackSource(
+  mode: BackingMode,
+  selection: BackingSelection,
+  tracks: RealTrack[],
+): 'synth' | 'real' {
+  return resolvePlayback(mode, selection, tracks).resolved
 }
 
 export function buildRealTrackId(track: Omit<RealTrack, 'id'>): string {

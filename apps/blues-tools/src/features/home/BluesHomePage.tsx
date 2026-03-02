@@ -12,12 +12,12 @@ export function BluesHomePage() {
   return (
     <section className="page">
       <h1>布鲁斯主页 / Blues Home</h1>
-      <p className="muted">选择布鲁斯练习工具继续。</p>
+      <p className="muted">二级导航：选择具体布鲁斯练习工具继续。</p>
 
       <div className="card">
         <div className="card-title-row">
           <h2>工具 / Tools</h2>
-          <span className="badge info">{tools.length} tools</span>
+          <span className="badge info">Level 2 · {tools.length} tools</span>
         </div>
         <ul className="list" aria-label="Blues tool list">
           {tools.map((tool) => (

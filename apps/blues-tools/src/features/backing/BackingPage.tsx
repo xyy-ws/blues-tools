@@ -3,13 +3,16 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
 import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTracks } from '../../app/persistence/localState'
-import { buildRealTrackId, choosePlaybackSource, type BackingMode, type RealTrack } from './backing'
+import { buildRealTrackId, resolvePlayback, type BackingMode, type RealTrack } from './backing'
 
 const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
   { id: 'standard-12', label: '标准 12 小节 / Standard 12-bar' },
   { id: 'quick-change', label: '快速换和弦 / Quick change' },
   { id: 'turnaround', label: '结尾回转 / Turnaround ending' },
 ]
+
+const BAR_COUNT = 12
+const BEATS_PER_BAR = 4
 
 export function BackingPage() {
   const [initial] = useState(() => loadState() ?? getDefaultState())
@@ -26,13 +29,15 @@ export function BackingPage() {
   const [newTrackFile, setNewTrackFile] = useState<File | null>(null)
   const [playbackState, setPlaybackState] = useState<'stopped' | 'playing' | 'paused'>('stopped')
   const [currentBar, setCurrentBar] = useState(1)
+  const [currentBeat, setCurrentBeat] = useState(1)
 
-  const playback = useMemo(
-    () => choosePlaybackSource(mode, { key: selectedKey, bpm }, tracks),
+  const playbackResolution = useMemo(
+    () => resolvePlayback(mode, { key: selectedKey, bpm }, tracks),
     [bpm, mode, selectedKey, tracks],
   )
 
   const progression = useMemo(() => getTwelveBarBluesProgression(selectedKey, preset), [preset, selectedKey])
+  const playback = playbackResolution.resolved
 
   useEffect(() => {
     const existing = loadState() ?? getDefaultState()
@@ -47,6 +52,23 @@ export function BackingPage() {
       fretboardKey: existing.fretboardKey,
     })
   }, [selectedKey, bpm, preset, mode, tracks])
+
+  useEffect(() => {
+    if (playbackState !== 'playing') return
+
+    const beatIntervalMs = Math.max(120, Math.round((60_000 / Math.max(bpm, 1)) * 0.75))
+    const timer = window.setInterval(() => {
+      setCurrentBeat((prevBeat) => {
+        if (prevBeat < BEATS_PER_BAR) {
+          return prevBeat + 1
+        }
+        setCurrentBar((prevBar) => (prevBar % BAR_COUNT) + 1)
+        return 1
+      })
+    }, beatIntervalMs)
+
+    return () => window.clearInterval(timer)
+  }, [bpm, playbackState])
 
   function handleTrackImport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -90,34 +112,47 @@ export function BackingPage() {
     })
   }
 
-  function handlePlay() {
-    setPlaybackState('playing')
-    setCurrentBar((bar) => (bar === 1 ? 2 : bar))
-  }
+  function togglePlayPause() {
+    if (playbackState === 'playing') {
+      setPlaybackState('paused')
+      return
+    }
 
-  function handlePause() {
-    setPlaybackState('paused')
+    setPlaybackState('playing')
   }
 
   function handleStop() {
     setPlaybackState('stopped')
     setCurrentBar(1)
+    setCurrentBeat(1)
   }
+
+  const progressPercent = (((currentBar - 1) * BEATS_PER_BAR + currentBeat) / (BAR_COUNT * BEATS_PER_BAR)) * 100
+  const sourceDetailText =
+    mode === 'auto'
+      ? playbackResolution.hasMatch
+        ? '自动模式：已匹配实录音轨 / Auto: real track matched'
+        : '自动模式：未匹配实录，使用合成 / Auto: fallback to synth'
+      : mode === 'real'
+        ? playbackResolution.hasMatch
+          ? '实录模式：已匹配实录音轨 / Real mode: matched'
+          : '实录模式：未匹配，临时回退合成 / Real mode: fallback to synth'
+        : '合成模式：固定使用合成伴奏 / Synth mode: forced synth'
 
   return (
     <section className="page">
       <h1>伴奏 / Backing</h1>
       <p aria-live="polite">
-        状态提示：{playback === 'real' ? '已匹配本地音轨' : '当前使用合成伴奏'}
+        状态提示：{sourceDetailText}
         <span className={`badge ${playback === 'real' ? 'success' : 'info'}`} style={{ marginLeft: 8 }}>
-          {playback === 'real' ? 'Real Track Active' : 'Synth Active'}
+          Active: {playback === 'real' ? 'Real' : 'Synth'}
         </span>
       </p>
 
       <div className="card">
         <div className="card-title-row">
           <h2>Session Controls</h2>
-          <span className="badge warn">Source: {playback === 'real' ? 'Real Track' : 'Synth'}</span>
+          <span className="badge warn">Mode: {mode.toUpperCase()} → Source: {playback === 'real' ? 'Real' : 'Synth'}</span>
         </div>
         <div className="grid-3">
           <label className="control">
@@ -183,17 +218,26 @@ export function BackingPage() {
           </span>
         </div>
         <div className="inline-actions">
-          <button type="button" onClick={handlePlay}>
-            Play
-          </button>
-          <button type="button" onClick={handlePause}>
-            Pause
+          <button type="button" className="btn-primary" onClick={togglePlayPause}>
+            {playbackState === 'playing' ? 'Pause' : playbackState === 'paused' ? 'Resume' : 'Play'}
           </button>
           <button type="button" onClick={handleStop}>
             Stop
           </button>
         </div>
-        <p style={{ marginTop: 8 }}>当前小节 / Current bar: {currentBar}</p>
+        <p style={{ marginTop: 8 }}>
+          当前小节 / Current bar: {currentBar} · 当前拍 / Beat: {currentBeat}
+        </p>
+        <div className="bar-progress" aria-label="Current bar progress indicator">
+          <div className="bar-progress-fill" style={{ width: `${progressPercent}%` }} />
+        </div>
+        <div className="beat-indicator" aria-label="1-2-3-4 beat indicator">
+          {[1, 2, 3, 4].map((beat) => (
+            <span key={beat} className={`beat-dot${currentBeat === beat ? ' active' : ''}`}>
+              {beat}
+            </span>
+          ))}
+        </div>
       </div>
 
       <div className="card grid-3">

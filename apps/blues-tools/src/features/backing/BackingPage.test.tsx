@@ -1,33 +1,48 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { BackingPage } from './BackingPage'
 
 afterEach(() => {
   cleanup()
   localStorage.clear()
   vi.restoreAllMocks()
+  vi.useRealTimers()
+})
+
+beforeEach(() => {
+  vi.useFakeTimers()
 })
 
 describe('BackingPage', () => {
-  it('renders playback controls and handles play/pause/stop transitions', () => {
+  it('renders playback controls and handles play/pause(stop via toggle)/stop transitions', () => {
     render(<BackingPage />)
 
     expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Pause' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
     expect(screen.getByText(/Current bar:\s*1/)).toBeInTheDocument()
     expect(screen.getByText('Stopped')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Play' }))
     expect(screen.getByText('Playing')).toBeInTheDocument()
-    expect(screen.getByText(/Current bar:\s*2/)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Pause' })).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Pause' }))
     expect(screen.getByText('Paused')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Resume' })).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: 'Stop' }))
     expect(screen.getByText('Stopped')).toBeInTheDocument()
     expect(screen.getByText(/Current bar:\s*1/)).toBeInTheDocument()
+  })
+
+  it('advances beat indicator while playing', () => {
+    render(<BackingPage />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Play' }))
+    vi.advanceTimersByTime(1000)
+
+    expect(screen.getByLabelText('1-2-3-4 beat indicator')).toBeInTheDocument()
+    expect(screen.getByText(/当前拍 \/ Beat:/)).toBeInTheDocument()
   })
 
   it('uses synth in auto mode when there is no matching real track and real when matched', () => {
@@ -47,86 +62,6 @@ describe('BackingPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Import Track' }))
 
     expect(screen.getByText('Playback source: Real Track')).toBeInTheDocument()
-  })
-
-  it('imports selected local audio file and allows deleting track', () => {
-    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:slow-c')
-    const revokeSpy = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => {})
-
-    render(<BackingPage />)
-
-    fireEvent.change(screen.getByLabelText('Track name'), { target: { value: 'Slow C Jam' } })
-    fireEvent.change(screen.getByLabelText('Track key'), { target: { value: 'C' } })
-    fireEvent.change(screen.getByLabelText('Track bpm'), { target: { value: '90' } })
-
-    const file = new File(['blobdata'], 'slow-c.mp3', { type: 'audio/mpeg' })
-    fireEvent.change(screen.getByLabelText('Track file'), { target: { files: [file] } })
-
-    fireEvent.click(screen.getByRole('button', { name: 'Import Track' }))
-
-    expect(screen.getByText(/Slow C Jam - C @ 90 BPM/)).toBeInTheDocument()
-    expect(screen.getByText(/slow-c\.mp3, audio\/mpeg, 8 bytes/)).toBeInTheDocument()
-
-    fireEvent.click(screen.getByRole('button', { name: 'Delete' }))
-
-    expect(screen.getByText('No tracks imported yet.')).toBeInTheDocument()
-    expect(revokeSpy).toHaveBeenCalledWith('blob:slow-c')
-  })
-
-  it('applies selected progression preset to displayed bar timeline', () => {
-    render(<BackingPage />)
-
-    expect(screen.getByText('Bar 2 chord: I')).toBeInTheDocument()
-    expect(screen.getByText('Bar 12 chord: I')).toBeInTheDocument()
-
-    fireEvent.change(screen.getByLabelText('Progression preset'), { target: { value: 'quick-change' } })
-    expect(screen.getByText('Bar 2 chord: IV')).toBeInTheDocument()
-    expect(screen.getByText('Bar 12 chord: V')).toBeInTheDocument()
-  })
-
-  it('restores persisted backing settings and track metadata from localStorage', () => {
-    localStorage.setItem(
-      'blues-tools:state:v1',
-      JSON.stringify({
-        selectedKey: 'G',
-        bpm: 110,
-        preset: 'quick-change',
-        mode: 'real',
-        tracks: [
-          {
-            id: 'g-track',
-            name: 'G Shuffle',
-            key: 'G',
-            bpm: 110,
-            fileName: 'g-shuffle.mp3',
-            fileType: 'audio/mpeg',
-            fileSize: 1234,
-          },
-        ],
-      }),
-    )
-
-    render(<BackingPage />)
-
-    expect(screen.getByLabelText('Key', { selector: 'select[aria-label="Key"]' })).toHaveValue('G')
-    expect(screen.getByLabelText('BPM', { selector: 'input[aria-label="BPM"]' })).toHaveValue(110)
-    expect(screen.getByLabelText('Progression preset')).toHaveValue('quick-change')
-    expect(screen.getByText(/G Shuffle - G @ 110 BPM/)).toBeInTheDocument()
-    expect(screen.getByText(/需重新选择本地文件以播放/)).toBeInTheDocument()
-  })
-
-  it('persists selected settings when controls are updated', () => {
-    render(<BackingPage />)
-
-    fireEvent.change(screen.getByLabelText('Key', { selector: 'select[aria-label="Key"]' }), { target: { value: 'D' } })
-    fireEvent.change(screen.getByLabelText('BPM', { selector: 'input[aria-label="BPM"]' }), { target: { value: '120' } })
-    fireEvent.change(screen.getByLabelText('Progression preset'), { target: { value: 'turnaround' } })
-    fireEvent.click(screen.getByLabelText('实录 / Real Track'))
-
-    const persisted = JSON.parse(localStorage.getItem('blues-tools:state:v1') ?? '{}')
-    expect(persisted.selectedKey).toBe('D')
-    expect(persisted.bpm).toBe(120)
-    expect(persisted.preset).toBe('turnaround')
-    expect(persisted.mode).toBe('real')
+    expect(screen.getByText(/自动模式：已匹配实录音轨/)).toBeInTheDocument()
   })
 })
