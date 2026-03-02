@@ -223,7 +223,7 @@ export function LicksDemoSection() {
   return (
     <section className="page" aria-label="乐句演示区块">
       <div>
-        <h2 className="section-title">乐句示范（第一版）</h2>
+        <h2 className="section-title">乐句示范</h2>
         <p className="muted helper-text">自动发声、指板高亮和速度控制</p>
       </div>
 
