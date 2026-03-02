@@ -1,4 +1,6 @@
-const STYLES = [{ id: 'blues', label: '布鲁斯 / Blues', status: '可用 / Available' }]
+import { Link } from 'react-router-dom'
+
+const STYLES = [{ id: 'blues', label: '布鲁斯 / Blues', status: '可用 / Available', to: '/blues/home' }]
 
 export function HomePage() {
   return (
@@ -15,7 +17,9 @@ export function HomePage() {
           {STYLES.map((style) => (
             <li key={style.id} className="list-item">
               <div className="card-title-row">
-                <strong>{style.label}</strong>
+                <strong>
+                  <Link to={style.to}>{style.label}</Link>
+                </strong>
                 <span className="badge success">{style.status}</span>
               </div>
             </li>

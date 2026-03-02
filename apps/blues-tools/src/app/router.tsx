@@ -4,6 +4,7 @@ import { BackingPage } from '../features/backing/BackingPage'
 import { ImprovPage } from '../features/improv/ImprovPage'
 import { KnowledgePage } from '../features/knowledge/KnowledgePage'
 import { HomePage } from '../features/home/HomePage'
+import { BluesHomePage } from '../features/home/BluesHomePage'
 import { ChordFretboardPage } from '../features/chords-fretboard/ChordFretboardPage'
 
 export function AppRouter() {
@@ -12,6 +13,7 @@ export function AppRouter() {
       <Route path="/" element={<AppShell />}>
         <Route index element={<HomePage />} />
         <Route path="home" element={<HomePage />} />
+        <Route path="blues/home" element={<BluesHomePage />} />
         <Route path="backing" element={<BackingPage />} />
         <Route path="chord-fretboard" element={<ChordFretboardPage />} />
         <Route path="fretboard" element={<Navigate to="/chord-fretboard" replace />} />

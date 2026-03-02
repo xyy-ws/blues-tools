@@ -5,6 +5,7 @@ import { getDefaultState, loadState, saveState } from '../../app/persistence/loc
 import { getBluesScaleNotes, getFretNote, STANDARD_TUNING } from './fretboard'
 
 const FRET_COUNT = 12
+const DISPLAY_TUNING: Array<{ openString: MusicalKey; index: number }> = STANDARD_TUNING.map((openString, index) => ({ openString, index })).slice().reverse()
 
 export function FretboardPage() {
   const [initial] = useState(() => loadState() ?? getDefaultState())
@@ -55,10 +56,10 @@ export function FretboardPage() {
         <div style={{ overflowX: 'auto' }}>
           <table aria-label="Fretboard grid" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 4 }}>
             <tbody>
-              {STANDARD_TUNING.map((openString, stringIndex) => (
+              {DISPLAY_TUNING.map(({ openString, index: stringIndex }, displayIndex) => (
                 <tr key={`${openString}-${stringIndex}`}>
                   <th scope="row" style={{ textAlign: 'left', paddingRight: 8, whiteSpace: 'nowrap' }}>
-                    String {6 - stringIndex} ({openString})
+                    String {displayIndex + 1} ({openString})
                   </th>
                   {Array.from({ length: FRET_COUNT + 1 }).map((_, fret) => {
                     const note = getFretNote(openString, fret)

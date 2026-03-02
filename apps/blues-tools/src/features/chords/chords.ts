@@ -1,39 +1,122 @@
 import type { MusicalKey } from '../../domain/music/types'
+import { CHROMATIC_KEYS } from '../../domain/music/keys'
 
 export type ChordQuality = 'dominant7' | 'minor7' | 'major'
+export type RootString = 6 | 5 | 4
 
-const CHORD_FINGERINGS: Record<MusicalKey, Record<ChordQuality, string>> = {
-  C: { dominant7: 'x32310', minor7: 'x35343', major: 'x32010' },
-  'C#': { dominant7: 'x46464', minor7: 'x46454', major: 'x46664' },
-  D: { dominant7: 'xx0212', minor7: 'xx0211', major: 'xx0232' },
-  'D#': { dominant7: 'x65676', minor7: 'x68676', major: 'x68886' },
-  E: { dominant7: '020100', minor7: '022030', major: '022100' },
-  F: { dominant7: '131211', minor7: '131111', major: '133211' },
-  'F#': { dominant7: '242322', minor7: '242222', major: '244322' },
-  G: { dominant7: '320001', minor7: '353333', major: '320003' },
-  'G#': { dominant7: '464544', minor7: '464444', major: '466544' },
-  A: { dominant7: 'x02020', minor7: 'x02010', major: 'x02220' },
-  'A#': { dominant7: '686766', minor7: '686666', major: '688766' },
-  B: { dominant7: 'x21202', minor7: 'x20202', major: 'x24442' },
+type PatternToken = number | 'x'
+
+type VoicingTemplate = {
+  rootString: RootString
+  tokens: [PatternToken, PatternToken, PatternToken, PatternToken, PatternToken, PatternToken]
 }
 
-function shiftFrettedNotes(pattern: string, step: number): string {
-  return pattern
-    .split('')
-    .map((value) => {
-      if (value === 'x' || value === 'X' || value === '0') return value
-      const parsed = Number.parseInt(value, 10)
-      if (Number.isNaN(parsed)) return value
-      return String(Math.min(9, parsed + step))
-    })
-    .join('')
+const VOICING_TEMPLATES: Record<RootString, Record<ChordQuality, VoicingTemplate[]>> = {
+  6: {
+    dominant7: [
+      { rootString: 6, tokens: [0, 2, 0, 1, 0, 0] },
+      { rootString: 6, tokens: [0, 2, 0, 1, 3, 0] },
+      { rootString: 6, tokens: [0, 5, 3, 4, 3, 0] },
+      { rootString: 6, tokens: [0, 2, 3, 1, 3, 0] },
+      { rootString: 6, tokens: [0, 'x', 0, 1, 0, 'x'] },
+    ],
+    minor7: [
+      { rootString: 6, tokens: [0, 2, 0, 0, 0, 0] },
+      { rootString: 6, tokens: [0, 2, 0, 0, 3, 0] },
+      { rootString: 6, tokens: [0, 5, 3, 3, 3, 0] },
+      { rootString: 6, tokens: [0, 2, 2, 0, 3, 0] },
+      { rootString: 6, tokens: [0, 'x', 0, 0, 0, 'x'] },
+    ],
+    major: [
+      { rootString: 6, tokens: [0, 2, 2, 1, 0, 0] },
+      { rootString: 6, tokens: [0, 2, 2, 1, 0, 3] },
+      { rootString: 6, tokens: [0, 5, 5, 4, 3, 0] },
+      { rootString: 6, tokens: [0, 2, 4, 1, 3, 0] },
+      { rootString: 6, tokens: [0, 'x', 2, 1, 0, 'x'] },
+    ],
+  },
+  5: {
+    dominant7: [
+      { rootString: 5, tokens: ['x', 0, 2, 0, 2, 0] },
+      { rootString: 5, tokens: ['x', 0, 2, 0, 2, 3] },
+      { rootString: 5, tokens: ['x', 0, 5, 3, 5, 3] },
+      { rootString: 5, tokens: ['x', 0, 2, 3, 2, 3] },
+      { rootString: 5, tokens: ['x', 0, 2, 0, 'x', 0] },
+    ],
+    minor7: [
+      { rootString: 5, tokens: ['x', 0, 2, 0, 1, 0] },
+      { rootString: 5, tokens: ['x', 0, 2, 0, 1, 3] },
+      { rootString: 5, tokens: ['x', 0, 5, 3, 4, 3] },
+      { rootString: 5, tokens: ['x', 0, 2, 0, 4, 3] },
+      { rootString: 5, tokens: ['x', 0, 2, 0, 'x', 0] },
+    ],
+    major: [
+      { rootString: 5, tokens: ['x', 0, 2, 2, 2, 0] },
+      { rootString: 5, tokens: ['x', 0, 2, 2, 2, 5] },
+      { rootString: 5, tokens: ['x', 0, 5, 4, 5, 3] },
+      { rootString: 5, tokens: ['x', 0, 2, 2, 5, 5] },
+      { rootString: 5, tokens: ['x', 0, 'x', 2, 2, 0] },
+    ],
+  },
+  4: {
+    dominant7: [
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 1, 2] },
+      { rootString: 4, tokens: ['x', 'x', 0, 5, 3, 5] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 1, 0] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 4, 5] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 1, 'x'] },
+    ],
+    minor7: [
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 1, 1] },
+      { rootString: 4, tokens: ['x', 'x', 0, 5, 4, 5] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 1, 0] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 4, 4] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 1, 'x'] },
+    ],
+    major: [
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 3, 2] },
+      { rootString: 4, tokens: ['x', 'x', 0, 5, 5, 5] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 3, 5] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 5, 5] },
+      { rootString: 4, tokens: ['x', 'x', 0, 2, 3, 'x'] },
+    ],
+  },
 }
 
-export function getChordFingerings(root: MusicalKey, quality: ChordQuality): string[] {
-  const base = CHORD_FINGERINGS[root][quality]
-  return [base, shiftFrettedNotes(base, 1), shiftFrettedNotes(base, 2), shiftFrettedNotes(base, 3), shiftFrettedNotes(base, 4)]
+const ROOT_STRING_TO_OPEN_NOTE: Record<RootString, MusicalKey> = {
+  6: 'E',
+  5: 'A',
+  4: 'D',
 }
 
-export function getChordFingering(root: MusicalKey, quality: ChordQuality): string {
-  return getChordFingerings(root, quality)[0]
+function getRootFret(root: MusicalKey, rootString: RootString): number {
+  const open = ROOT_STRING_TO_OPEN_NOTE[rootString]
+  const rootIndex = CHROMATIC_KEYS.indexOf(root)
+  const openIndex = CHROMATIC_KEYS.indexOf(open)
+  return (rootIndex - openIndex + CHROMATIC_KEYS.length) % CHROMATIC_KEYS.length
+}
+
+function renderPattern(template: VoicingTemplate, rootFret: number): string | null {
+  const rendered = template.tokens.map((token) => {
+    if (token === 'x') return 'x'
+    const fret = rootFret + token
+    if (fret < 0 || fret > 9) return null
+    return String(fret)
+  })
+
+  if (rendered.some((value) => value === null)) return null
+  return rendered.join('')
+}
+
+export function getChordFingerings(root: MusicalKey, quality: ChordQuality, rootString: RootString = 6): string[] {
+  const rootFret = getRootFret(root, rootString)
+  const fingerings = VOICING_TEMPLATES[rootString][quality]
+    .map((template) => renderPattern(template, rootFret))
+    .filter((pattern): pattern is string => pattern !== null)
+
+  return [...new Set(fingerings)].slice(0, 5)
+}
+
+export function getChordFingering(root: MusicalKey, quality: ChordQuality, rootString: RootString = 6): string {
+  return getChordFingerings(root, quality, rootString)[0] ?? 'xxxxxx'
 }

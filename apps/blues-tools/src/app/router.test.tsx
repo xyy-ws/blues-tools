@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
 import { afterEach, describe, expect, it } from 'vitest'
 import { AppRouter } from './router'
@@ -26,6 +26,18 @@ describe('AppRouter', () => {
     )
 
     expect(screen.getByRole('heading', { name: '首页 / Home' })).toBeInTheDocument()
+  })
+
+  it('navigates from home Blues selection to style sub-home', () => {
+    render(
+      <MemoryRouter initialEntries={['/']}>
+        <AppRouter />
+      </MemoryRouter>,
+    )
+
+    fireEvent.click(screen.getByRole('link', { name: '布鲁斯 / Blues' }))
+
+    expect(screen.getByRole('heading', { name: '布鲁斯主页 / Blues Home' })).toBeInTheDocument()
   })
 
   it('routes to Knowledge page', () => {

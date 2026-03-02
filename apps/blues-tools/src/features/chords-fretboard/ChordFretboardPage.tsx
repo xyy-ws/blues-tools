@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
-import { getChordFingerings, type ChordQuality } from '../chords/chords'
+import { getChordFingerings, type ChordQuality, type RootString } from '../chords/chords'
 import { getFretNote, STANDARD_TUNING } from '../fretboard/fretboard'
 
 const FRET_COUNT = 12
+const DISPLAY_TUNING: Array<{ openString: MusicalKey; index: number }> = STANDARD_TUNING.map((openString, index) => ({ openString, index })).slice().reverse()
 
 const QUALITY_LABELS: Record<ChordQuality, string> = {
   dominant7: '属七 / Dominant 7',
@@ -27,10 +28,11 @@ function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret
 export function ChordFretboardPage() {
   const [root, setRoot] = useState<MusicalKey>('E')
   const [quality, setQuality] = useState<ChordQuality>('dominant7')
+  const [rootString, setRootString] = useState<RootString>(6)
   const [variantIndex, setVariantIndex] = useState(0)
 
-  const fingerings = useMemo(() => getChordFingerings(root, quality), [root, quality])
-  const selectedPattern = fingerings[variantIndex] ?? fingerings[0]
+  const fingerings = useMemo(() => getChordFingerings(root, quality, rootString), [root, quality, rootString])
+  const selectedPattern = fingerings[variantIndex] ?? fingerings[0] ?? 'xxxxxx'
 
   const highlighted = useMemo(() => {
     const positions = getHighlightedFrets(selectedPattern)
@@ -79,6 +81,22 @@ export function ChordFretboardPage() {
         </label>
 
         <label className="control">
+          根音弦 / Root string
+          <select
+            aria-label="Chord root string"
+            value={rootString}
+            onChange={(e) => {
+              setRootString(Number(e.target.value) as RootString)
+              setVariantIndex(0)
+            }}
+          >
+            <option value={6}>6th string</option>
+            <option value={5}>5th string</option>
+            <option value={4}>4th string</option>
+          </select>
+        </label>
+
+        <label className="control">
           指法变体 / Fingering variant
           <select aria-label="Fingering variant" value={variantIndex} onChange={(e) => setVariantIndex(Number(e.target.value))}>
             {fingerings.map((_, index) => (
@@ -107,10 +125,10 @@ export function ChordFretboardPage() {
         <div style={{ overflowX: 'auto' }}>
           <table aria-label="Combined fretboard grid" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 4 }}>
             <tbody>
-              {STANDARD_TUNING.map((openString, stringIndex) => (
+              {DISPLAY_TUNING.map(({ openString, index: stringIndex }, displayIndex) => (
                 <tr key={`${openString}-${stringIndex}`}>
                   <th scope="row" style={{ textAlign: 'left', paddingRight: 8, whiteSpace: 'nowrap' }}>
-                    String {6 - stringIndex} ({openString})
+                    String {displayIndex + 1} ({openString})
                   </th>
                   {Array.from({ length: FRET_COUNT + 1 }).map((_, fret) => {
                     const note = getFretNote(openString, fret)
