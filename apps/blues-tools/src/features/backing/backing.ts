@@ -51,42 +51,6 @@ export interface RealTrack {
   disabledReason?: string
 }
 
-export const BUNDLED_REAL_TRACKS: RealTrack[] = [
-  {
-    id: 'bundled-slow-shuffle-c-68',
-    name: '慢速布鲁斯 Shuffle · C',
-    grooveId: 'slow-shuffle',
-    key: 'C',
-    bpm: 68,
-    fileName: 'slow-blues-shuffle-c-68.wav',
-    fileUrl: '/blues/audio/backing/slow-blues-shuffle-c-68.wav',
-    fileType: 'audio/wav',
-    fileSize: 0,
-  },
-  {
-    id: 'bundled-chicago-shuffle-a-98',
-    name: '中速芝加哥 Shuffle · A',
-    grooveId: 'chicago-shuffle',
-    key: 'A',
-    bpm: 98,
-    fileName: 'medium-chicago-shuffle-a-98.wav',
-    fileUrl: '/blues/audio/backing/medium-chicago-shuffle-a-98.wav',
-    fileType: 'audio/wav',
-    fileSize: 0,
-  },
-  {
-    id: 'bundled-texas-straight-e-108',
-    name: '德州直八 Blues · E',
-    grooveId: 'texas-straight',
-    key: 'E',
-    bpm: 108,
-    fileName: 'texas-blues-straight-e-108.wav',
-    fileUrl: '/blues/audio/backing/texas-blues-straight-e-108.wav',
-    fileType: 'audio/wav',
-    fileSize: 0,
-  },
-]
-
 export interface BackingSelection {
   key: MusicalKey
   bpm: number

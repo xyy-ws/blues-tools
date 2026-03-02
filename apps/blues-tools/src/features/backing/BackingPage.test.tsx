@@ -66,6 +66,12 @@ describe('BackingPage', () => {
     expect(screen.getByText('状态：stopped')).toBeInTheDocument()
   })
 
+  it('shows upload-only empty state for real-track library by default', () => {
+    renderPage()
+    expect(screen.getByText('暂无已上传实录。请先在下方“上传实录伴奏”中导入音频文件。')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '播放所选实录' })).toBeDisabled()
+  })
+
   it('uploads user track, shows success feedback, and can play real', async () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
     renderPage()
@@ -93,7 +99,7 @@ describe('BackingPage', () => {
     expect(screen.getByText('上传失败：仅支持音频文件。')).toBeInTheDocument()
   })
 
-  it('can delete uploaded track but not bundled tracks', () => {
+  it('can delete uploaded track and shows empty guidance when library is empty', () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
     renderPage()
 
@@ -104,7 +110,7 @@ describe('BackingPage', () => {
     fireEvent.click(screen.getByRole('button', { name: '删除所选实录' }))
     expect(screen.queryByRole('option', { name: /Delete Me/ })).not.toBeInTheDocument()
     expect(screen.getByText('已删除：Delete Me')).toBeInTheDocument()
-    expect(screen.getByText('当前为内置伴奏，无法删除。')).toBeInTheDocument()
+    expect(screen.getByText('暂无已上传实录。请先在下方“上传实录伴奏”中导入音频文件。')).toBeInTheDocument()
   })
 
   it('removes style selector from upload form', () => {

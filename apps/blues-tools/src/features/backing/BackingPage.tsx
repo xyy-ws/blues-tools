@@ -4,7 +4,7 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
 import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTracks } from '../../app/persistence/localState'
-import { BUNDLED_REAL_TRACKS, GROOVE_PROFILES, buildRealTrackId, inferGrooveId, type GrooveId, type RealTrack } from './backing'
+import { GROOVE_PROFILES, buildRealTrackId, inferGrooveId, type GrooveId, type RealTrack } from './backing'
 import { createBackingClickPlayer } from './backingAudio'
 import { createPlaceholderBackingExtractorService } from './backingExtractor'
 
@@ -60,11 +60,7 @@ export function BackingPage() {
   const clickPlayerRef = useRef(createBackingClickPlayer())
   const realAudioRef = useRef<HTMLAudioElement | null>(null)
 
-  const allTracks = useMemo(() => [...tracks, ...BUNDLED_REAL_TRACKS], [tracks])
-  const selectedRealTrack = useMemo(
-    () => allTracks.find((track) => track.id === selectedRealTrackId) ?? allTracks[0] ?? null,
-    [allTracks, selectedRealTrackId],
-  )
+  const selectedRealTrack = useMemo(() => tracks.find((track) => track.id === selectedRealTrackId) ?? tracks[0] ?? null, [tracks, selectedRealTrackId])
   const progression = useMemo(() => getTwelveBarBluesProgression(selectedKey, preset), [preset, selectedKey])
 
   useEffect(() => {
@@ -100,10 +96,10 @@ export function BackingPage() {
   }, [bpm, playbackState, currentSource])
 
   useEffect(() => {
-    if (!selectedRealTrackId && allTracks[0]) {
-      setSelectedRealTrackId(allTracks[0].id)
+    if (!selectedRealTrackId && tracks[0]) {
+      setSelectedRealTrackId(tracks[0].id)
     }
-  }, [allTracks, selectedRealTrackId])
+  }, [tracks, selectedRealTrackId])
 
   useEffect(() => {
     return () => {
@@ -319,12 +315,16 @@ export function BackingPage() {
         <div className="grid-3">
           <label className="control">
             伴奏名称
-            <select aria-label="伴奏名称" value={selectedRealTrack?.id ?? ''} onChange={(e) => setSelectedRealTrackId(e.target.value)}>
-              {allTracks.map((track) => (
-                <option key={track.id} value={track.id}>
-                  {track.name}（{track.key} / {track.bpm} BPM / {track.grooveId}）
-                </option>
-              ))}
+            <select aria-label="伴奏名称" value={selectedRealTrack?.id ?? ''} onChange={(e) => setSelectedRealTrackId(e.target.value)} disabled={tracks.length === 0}>
+              {tracks.length === 0 ? (
+                <option value="">暂无已上传实录</option>
+              ) : (
+                tracks.map((track) => (
+                  <option key={track.id} value={track.id}>
+                    {track.name}（{track.key} / {track.bpm} BPM / {track.grooveId}）
+                  </option>
+                ))
+              )}
             </select>
           </label>
 
@@ -334,21 +334,16 @@ export function BackingPage() {
         </div>
 
         <div className="inline-actions">
-          <button type="button" className="btn-primary" onClick={() => (currentSource === 'real' && playbackState === 'playing' ? pauseCurrentSource() : void playRealTrack())}>
+          <button type="button" className="btn-primary" onClick={() => (currentSource === 'real' && playbackState === 'playing' ? pauseCurrentSource() : void playRealTrack())} disabled={!selectedRealTrack}>
             {currentSource === 'real' && playbackState === 'playing' ? '暂停' : '播放所选实录'}
           </button>
           <button type="button" onClick={stopCurrentSource}>停止</button>
-          <button
-            type="button"
-            onClick={() => selectedRealTrack && deleteTrack(selectedRealTrack.id)}
-            disabled={!selectedRealTrack || selectedRealTrack.id.startsWith('bundled-')}
-            title={selectedRealTrack?.id.startsWith('bundled-') ? '内置伴奏不可删除' : undefined}
-          >
+          <button type="button" onClick={() => selectedRealTrack && deleteTrack(selectedRealTrack.id)} disabled={!selectedRealTrack}>
             删除所选实录
           </button>
         </div>
 
-        {selectedRealTrack?.id.startsWith('bundled-') ? <p className="muted">当前为内置伴奏，无法删除。</p> : null}
+        {tracks.length === 0 ? <p className="empty-state">暂无已上传实录。请先在下方“上传实录伴奏”中导入音频文件。</p> : null}
       </div>
 
       <div className="card">
@@ -401,29 +396,23 @@ export function BackingPage() {
 
       <div className="card">
         <h3>已导入音轨</h3>
-        {[...tracks, ...BUNDLED_REAL_TRACKS].length === 0 ? (
-          <p className="empty-state">还没有导入音轨。</p>
+        {tracks.length === 0 ? (
+          <p className="empty-state">还没有导入音轨。请上传实录伴奏后再进行选择、播放和管理。</p>
         ) : (
           <ul className="list">
-            {[...tracks, ...BUNDLED_REAL_TRACKS].map((track) => {
-              const isBundled = track.id.startsWith('bundled-')
-              return (
-                <li key={track.id} className="list-item">
-                  <div className="card-title-row">
-                    <strong>
-                      {track.name} - {track.grooveId} - {track.key} @ {track.bpm} BPM
-                    </strong>
-                    <button type="button" onClick={() => deleteTrack(track.id)} disabled={isBundled} title={isBundled ? '内置伴奏不可删除' : undefined}>
-                      删除
-                    </button>
-                  </div>
-                  <p className="muted">
-                    {track.fileName}, {track.fileType}, {track.fileSize} bytes {track.fileUrl ? null : '（需重新选择本地文件以播放） '}
-                    {isBundled ? '（内置伴奏不可删除）' : ''}
-                  </p>
-                </li>
-              )
-            })}
+            {tracks.map((track) => (
+              <li key={track.id} className="list-item">
+                <div className="card-title-row">
+                  <strong>
+                    {track.name} - {track.grooveId} - {track.key} @ {track.bpm} BPM
+                  </strong>
+                  <button type="button" onClick={() => deleteTrack(track.id)}>
+                    删除
+                  </button>
+                </div>
+                <p className="muted">{track.fileName}, {track.fileType}, {track.fileSize} bytes {track.fileUrl ? null : '（需重新选择本地文件以播放） '}</p>
+              </li>
+            ))}
           </ul>
         )}
       </div>
