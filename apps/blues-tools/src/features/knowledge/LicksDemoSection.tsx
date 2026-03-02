@@ -37,7 +37,8 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
 
   const totalBeats = useMemo(() => lick.steps.reduce((sum, step) => sum + step.durationBeats, 0), [lick.steps])
   const currentStep = lick.steps[stepIndex]
-  const progressPercent = state === 'idle' ? 0 : Math.min((currentStep.beat / totalBeats) * 100, 100)
+  const currentBeat = currentStep?.beat ?? totalBeats
+  const progressPercent = state === 'idle' ? 0 : Math.min((currentBeat / totalBeats) * 100, 100)
 
   useEffect(() => {
     if (state !== 'playing') return
