@@ -85,6 +85,7 @@ export function ChordFretboardPage() {
     [root, quality, rootString, resolvedInversion],
   )
   const selectedPattern = fingerings[voicingIndex] ?? fingerings[0] ?? 'xxxxxx'
+  const voicingConstrained = fingerings.length < 2
   const chordTones = useMemo(() => {
     const rootIndex = CHROMATIC_KEYS.indexOf(root)
     return new Set(QUALITY_INTERVALS[quality].map((step) => CHROMATIC_KEYS[(rootIndex + step) % CHROMATIC_KEYS.length]))
@@ -180,7 +181,12 @@ export function ChordFretboardPage() {
 
         <label className="control">
           按法变体（Voicing）
-          <select aria-label="按法变体" value={voicingIndex} onChange={(e) => setVoicingIndex(Number(e.target.value))}>
+          <select
+            aria-label="按法变体"
+            value={voicingIndex}
+            onChange={(e) => setVoicingIndex(Number(e.target.value))}
+            disabled={voicingConstrained}
+          >
             {fingerings.map((_, index) => (
               <option key={index} value={index}>
                 变体 {index + 1}
@@ -211,6 +217,11 @@ export function ChordFretboardPage() {
         <p>
           当前按法变体：<strong>变体 {voicingIndex + 1}</strong>（{selectedPattern}）
         </p>
+        {voicingConstrained ? (
+          <p className="muted helper-text" role="status">
+            当前转位仅有 1 个可用按法变体；可切换根音弦或转位以获得更多按法。
+          </p>
+        ) : null}
         <p className="muted helper-text" style={{ marginBottom: 8 }}>
           记谱格式为 EADGBe（x 表示闷音）。先选转位，再切换同转位下的按法变体。
         </p>

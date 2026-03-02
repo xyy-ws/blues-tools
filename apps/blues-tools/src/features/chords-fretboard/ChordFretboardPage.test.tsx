@@ -17,6 +17,20 @@ describe('ChordFretboardPage', () => {
     expect(after).not.toEqual(before)
   })
 
+  it('offers multiple voicing variants and updates displayed pattern when voicing changes', () => {
+    render(<ChordFretboardPage />)
+
+    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    expect(voicingSelect.disabled).toBe(false)
+    expect(voicingSelect.options.length).toBeGreaterThanOrEqual(2)
+
+    const before = screen.getByText(/当前按法变体：/).textContent
+    fireEvent.change(voicingSelect, { target: { value: '1' } })
+    const after = screen.getByText(/当前按法变体：/).textContent
+
+    expect(after).not.toEqual(before)
+  })
+
   it('highlights only fingering positions and keeps tone types inside highlighted notes', () => {
     const { container } = render(<ChordFretboardPage />)
 

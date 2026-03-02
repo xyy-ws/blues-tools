@@ -19,8 +19,12 @@ describe('getChordFingering', () => {
     expect(rootPosition[0]).not.toEqual(firstInversion[0])
   })
 
-  it('falls back to root inversion for non-invertible qualities', () => {
+  it("supports explicit inversion options for quality '9' and only falls back when inversion is unsupported", () => {
     expect(INVERSION_OPTIONS['9']).toEqual([0, 1, 2])
-    expect(getChordFingerings('C', '9', 6, 2 as 0 | 1 | 2 | 3)).toEqual(getChordFingerings('C', '9', 6, 0))
+
+    const secondInversion = getChordFingerings('E', '9', 6, 2)
+    expect(secondInversion).not.toEqual(getChordFingerings('E', '9', 6, 0))
+
+    expect(getChordFingerings('E', '9', 6, 3)).toEqual(getChordFingerings('E', '9', 6, 0))
   })
 })
