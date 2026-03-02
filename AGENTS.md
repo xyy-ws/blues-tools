@@ -266,3 +266,4 @@ When user asks for autonomous team execution:
 - Pause only when: sensitive action approval required, missing critical input, or hard failure (`BLOCKED`).
 - On any subagent completion notice, planner MUST immediately do one of: (a) dispatch next step, (b) dispatch verifier, (c) issue explicit BLOCKED with required input. Never idle after completion.
 - Treat subagent completion announcements as workflow triggers, not status-only messages.
+- Planner MUST treat `sessions_send` callback packets from Builder/Verifier as highest-priority triggers and dispatch next action immediately.
