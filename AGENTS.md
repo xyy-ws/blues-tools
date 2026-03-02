@@ -241,6 +241,7 @@ At minimum include:
 After each milestone completion:
 - send a concise status update,
 - include evidence (artifact path / commit hash / verification result),
+- explicitly state `NEXT: <step>` and start it immediately,
 - then continue to next milestone unless user says otherwise.
 
 ### 5) Security Baseline
@@ -263,3 +264,5 @@ When user asks for autonomous team execution:
 - Report only milestone receipts to user, not full internal chatter.
 - Default execution mode: AUTO-CONTINUE. Do not wait for user confirmation after each step.
 - Pause only when: sensitive action approval required, missing critical input, or hard failure (`BLOCKED`).
+- On any subagent completion notice, planner MUST immediately do one of: (a) dispatch next step, (b) dispatch verifier, (c) issue explicit BLOCKED with required input. Never idle after completion.
+- Treat subagent completion announcements as workflow triggers, not status-only messages.
