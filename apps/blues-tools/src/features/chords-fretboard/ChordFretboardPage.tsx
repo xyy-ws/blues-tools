@@ -184,9 +184,8 @@ export function ChordFretboardPage() {
       <div className="card">
         <div className="inline-actions" style={{ marginBottom: 8 }}>
           <span className="badge info">Legend / 图例</span>
-          <span className="badge success">Root 根音</span>
-          <span className="badge warn">Chord Tone 和弦音</span>
-          <span className="badge">Other 其他音</span>
+          <span className="badge success">Root in fingering 指法根音</span>
+          <span className="badge warn">Chord tone in fingering 指法和弦音</span>
         </div>
         <div style={{ overflowX: 'auto' }}>
           <table aria-label="Combined fretboard grid" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 4 }}>
@@ -201,7 +200,14 @@ export function ChordFretboardPage() {
                     const isHighlighted = highlighted.has(`${stringIndex}-${fret}`)
                     const isRoot = note === root
                     const isChordTone = chordTones.has(note)
-                    const toneTag = isRoot ? 'root' : isChordTone ? 'chord-tone' : 'other'
+                    const toneTag = isHighlighted ? (isRoot ? 'root' : isChordTone ? 'chord-tone' : 'other') : undefined
+                    const highlightColor =
+                      toneTag === 'root'
+                        ? 'rgba(77, 210, 168, 0.26)'
+                        : toneTag === 'chord-tone'
+                          ? 'rgba(242, 194, 107, 0.26)'
+                          : 'rgba(77, 161, 255, 0.22)'
+
                     return (
                       <td
                         key={fret}
@@ -211,13 +217,7 @@ export function ChordFretboardPage() {
                           border: '1px solid var(--border)',
                           borderRadius: 8,
                           padding: '0.35rem 0.45rem',
-                          background: isHighlighted
-                            ? 'rgba(77, 161, 255, 0.22)'
-                            : isRoot
-                              ? 'rgba(77, 210, 168, 0.14)'
-                              : isChordTone
-                                ? 'rgba(242, 194, 107, 0.14)'
-                                : 'rgba(7, 15, 27, 0.72)',
+                          background: isHighlighted ? highlightColor : 'rgba(7, 15, 27, 0.72)',
                           color: isHighlighted ? '#dff0ff' : 'var(--muted)',
                           minWidth: 52,
                         }}

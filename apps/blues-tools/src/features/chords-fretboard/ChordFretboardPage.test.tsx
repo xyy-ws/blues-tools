@@ -17,12 +17,21 @@ describe('ChordFretboardPage', () => {
     expect(patternAfter).not.toEqual(patternBefore)
   })
 
-  it('supports fret range switch and tone legend metadata', () => {
+  it('highlights only fingering positions and keeps tone types inside highlighted notes', () => {
     const { container } = render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('Fret range'), { target: { value: '0-12' } })
 
-    expect(container.querySelector('[data-tone-type="root"]')).toBeInTheDocument()
+    const highlightedCells = container.querySelectorAll('[data-chord-highlight="yes"]')
+    const typedCells = container.querySelectorAll('[data-tone-type]')
+
+    expect(highlightedCells.length).toBeGreaterThan(0)
+    expect(typedCells.length).toBe(highlightedCells.length)
+    expect(container.querySelector('[data-chord-highlight="no"][data-tone-type]')).not.toBeInTheDocument()
+
+    expect(container.querySelector('[data-chord-highlight="yes"][data-tone-type="root"]')).toBeInTheDocument()
+    expect(container.querySelector('[data-chord-highlight="yes"][data-tone-type="chord-tone"]')).toBeInTheDocument()
+
     expect(container.querySelector('td')?.textContent).toContain('0:')
     expect(screen.getByText('Legend / 图例')).toBeInTheDocument()
     expect(screen.getByLabelText('Fingering hint')).toBeInTheDocument()
