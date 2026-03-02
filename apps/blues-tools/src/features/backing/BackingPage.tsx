@@ -4,16 +4,9 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
 import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTracks } from '../../app/persistence/localState'
-import {
-  BUNDLED_REAL_TRACKS,
-  GROOVE_PROFILES,
-  buildRealTrackId,
-  resolvePlayback,
-  type BackingMode,
-  type GrooveId,
-  type RealTrack,
-} from './backing'
+import { BUNDLED_REAL_TRACKS, GROOVE_PROFILES, buildRealTrackId, type GrooveId, type RealTrack } from './backing'
 import { createBackingClickPlayer } from './backingAudio'
+import { createPlaceholderBackingExtractorService } from './backingExtractor'
 
 const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
   { id: 'standard-12', label: '标准 12 小节' },
@@ -23,6 +16,7 @@ const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
 
 const BAR_COUNT = 12
 const BEATS_PER_BAR = 4
+const extractorService = createPlaceholderBackingExtractorService()
 
 export function BackingPage() {
   const [searchParams] = useSearchParams()
@@ -44,33 +38,31 @@ export function BackingPage() {
   const [selectedKey, setSelectedKey] = useState<MusicalKey>(initial.selectedKey)
   const [bpm, setBpm] = useState(initial.bpm)
   const [preset, setPreset] = useState<ProgressionPreset>(initial.preset)
-  const [mode, setMode] = useState<BackingMode>(initial.mode)
   const [selectedGroove, setSelectedGroove] = useState<GrooveId>('slow-shuffle')
   const [tracks, setTracks] = useState<RealTrack[]>(toHydratedTracks(initial.tracks))
+  const [selectedRealTrackId, setSelectedRealTrackId] = useState('')
 
   const [newTrackName, setNewTrackName] = useState('')
   const [newTrackKey, setNewTrackKey] = useState<MusicalKey>('C')
   const [newTrackGroove, setNewTrackGroove] = useState<GrooveId>('slow-shuffle')
   const [newTrackBpm, setNewTrackBpm] = useState(90)
   const [newTrackFile, setNewTrackFile] = useState<File | null>(null)
+
   const [playbackState, setPlaybackState] = useState<'stopped' | 'playing' | 'paused'>('stopped')
+  const [currentSource, setCurrentSource] = useState<'synth' | 'real'>('synth')
+  const [errorReason, setErrorReason] = useState('无')
   const [currentBar, setCurrentBar] = useState(1)
   const [currentBeat, setCurrentBeat] = useState(1)
-  const [audioStatus, setAudioStatus] = useState<'idle' | 'ready' | 'blocked' | 'fallback'>('idle')
 
   const clickPlayerRef = useRef(createBackingClickPlayer())
   const realAudioRef = useRef<HTMLAudioElement | null>(null)
 
   const allTracks = useMemo(() => [...tracks, ...BUNDLED_REAL_TRACKS], [tracks])
-
-  const playbackResolution = useMemo(
-    () => resolvePlayback(mode, { key: selectedKey, bpm, grooveId: selectedGroove }, allTracks),
-    [allTracks, bpm, mode, selectedGroove, selectedKey],
+  const selectedRealTrack = useMemo(
+    () => allTracks.find((track) => track.id === selectedRealTrackId) ?? allTracks[0] ?? null,
+    [allTracks, selectedRealTrackId],
   )
-
   const progression = useMemo(() => getTwelveBarBluesProgression(selectedKey, preset), [preset, selectedKey])
-  const playback = playbackResolution.resolved
-  const matchedTrack = playbackResolution.matchedTrack
 
   useEffect(() => {
     const existing = loadState() ?? getDefaultState()
@@ -78,16 +70,16 @@ export function BackingPage() {
       selectedKey,
       bpm,
       preset,
-      mode,
+      mode: existing.mode,
       tracks: toPersistedTracks(tracks),
       improvKey: existing.improvKey,
       improvPreset: existing.improvPreset,
       fretboardKey: existing.fretboardKey,
     })
-  }, [selectedKey, bpm, preset, mode, tracks])
+  }, [selectedKey, bpm, preset, tracks])
 
   useEffect(() => {
-    if (playbackState !== 'playing') return
+    if (playbackState !== 'playing' || currentSource !== 'synth') return
 
     const beatIntervalMs = Math.max(120, Math.round((60_000 / Math.max(bpm, 1)) * 0.75))
     const timer = window.setInterval(() => {
@@ -96,30 +88,33 @@ export function BackingPage() {
         if (prevBeat >= BEATS_PER_BAR) {
           setCurrentBar((prevBar) => (prevBar % BAR_COUNT) + 1)
         }
-
-        if (playback === 'synth') {
-          clickPlayerRef.current.playBeat(nextBeat === 1)
-        }
-
+        clickPlayerRef.current.playBeat(nextBeat === 1)
         return nextBeat
       })
     }, beatIntervalMs)
 
     return () => window.clearInterval(timer)
-  }, [bpm, playbackState, playback])
+  }, [bpm, playbackState, currentSource])
+
+  useEffect(() => {
+    if (!selectedRealTrackId && allTracks[0]) {
+      setSelectedRealTrackId(allTracks[0].id)
+    }
+  }, [allTracks, selectedRealTrackId])
 
   useEffect(() => {
     return () => {
       realAudioRef.current?.pause()
       clickPlayerRef.current.dispose()
+      tracks.forEach((track) => {
+        if (track.fileUrl.startsWith('blob:')) URL.revokeObjectURL(track.fileUrl)
+      })
     }
-  }, [])
+  }, [tracks])
 
   function handleTrackImport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!newTrackName || !newTrackFile) {
-      return
-    }
+    if (!newTrackName || !newTrackFile) return
 
     const trackWithoutId = {
       name: newTrackName,
@@ -138,107 +133,121 @@ export function BackingPage() {
     }
 
     setTracks((existing) => [track, ...existing])
+    setSelectedRealTrackId(track.id)
     setNewTrackName('')
     setNewTrackFile(null)
     event.currentTarget.reset()
   }
 
   function handleTrackFileChange(event: ChangeEvent<HTMLInputElement>) {
-    const selected = event.target.files?.[0] ?? null
-    setNewTrackFile(selected)
+    setNewTrackFile(event.target.files?.[0] ?? null)
   }
 
   function deleteTrack(id: string) {
     setTracks((existing) => {
       const track = existing.find((item) => item.id === id)
-      if (track?.fileUrl) {
-        URL.revokeObjectURL(track.fileUrl)
-      }
+      if (track?.fileUrl) URL.revokeObjectURL(track.fileUrl)
       return existing.filter((item) => item.id !== id)
     })
+    if (selectedRealTrackId === id) setSelectedRealTrackId('')
   }
 
-  async function startPlayback() {
-    try {
-      const unlocked = await clickPlayerRef.current.ensureUnlocked()
-
-      if (playback === 'real' && matchedTrack?.fileUrl && !matchedTrack.disabledReason) {
-        if (!realAudioRef.current) {
-          realAudioRef.current = new Audio()
-          realAudioRef.current.loop = true
-        }
-
-        realAudioRef.current.src = matchedTrack.fileUrl
-        realAudioRef.current.currentTime = 0
-
-        try {
-          await realAudioRef.current.play()
-          setAudioStatus('ready')
-        } catch {
-          setAudioStatus(unlocked ? 'fallback' : 'blocked')
-        }
-      } else {
-        setAudioStatus(unlocked ? 'ready' : 'blocked')
-      }
-
-      setPlaybackState('playing')
-    } catch {
-      setAudioStatus('blocked')
-      setPlaybackState('playing')
-    }
+  async function playSynth() {
+    realAudioRef.current?.pause()
+    const unlocked = await clickPlayerRef.current.ensureUnlocked()
+    setCurrentSource('synth')
+    setPlaybackState('playing')
+    setErrorReason(unlocked ? '无' : '浏览器阻止音频，请再次点击播放')
   }
 
-  function togglePlayPause() {
-    if (playbackState === 'playing') {
-      realAudioRef.current?.pause()
-      setPlaybackState('paused')
+  async function playRealTrack() {
+    if (!selectedRealTrack?.fileUrl) {
+      setCurrentSource('synth')
+      setErrorReason('所选实录无可用音频文件')
       return
     }
 
-    void startPlayback()
+    try {
+      if (!realAudioRef.current) {
+        realAudioRef.current = new Audio()
+        realAudioRef.current.loop = true
+      }
+      realAudioRef.current.src = selectedRealTrack.fileUrl
+      realAudioRef.current.currentTime = 0
+      await realAudioRef.current.play()
+      setCurrentSource('real')
+      setPlaybackState('playing')
+      setErrorReason('无')
+    } catch {
+      setCurrentSource('synth')
+      setPlaybackState('playing')
+      setErrorReason('实录播放失败')
+    }
   }
 
-  function handleStop() {
-    realAudioRef.current?.pause()
-    if (realAudioRef.current) {
-      realAudioRef.current.currentTime = 0
+  function pauseCurrentSource() {
+    if (currentSource === 'real') {
+      realAudioRef.current?.pause()
     }
+    setPlaybackState('paused')
+  }
+
+  function stopCurrentSource() {
+    realAudioRef.current?.pause()
+    if (realAudioRef.current) realAudioRef.current.currentTime = 0
     setPlaybackState('stopped')
+    setCurrentSource('synth')
     setCurrentBar(1)
     setCurrentBeat(1)
   }
 
   const progressPercent = (((currentBar - 1) * BEATS_PER_BAR + currentBeat) / (BAR_COUNT * BEATS_PER_BAR)) * 100
   const selectedGrooveProfile = GROOVE_PROFILES.find((item) => item.id === selectedGroove)
-  const sourceDetailText =
-    mode === 'auto'
-      ? playbackResolution.hasMatch
-        ? '自动模式：实录伴奏已激活'
-        : '自动模式：未匹配到实录，回退到合成伴奏'
-      : mode === 'real'
-        ? playbackResolution.hasMatch
-          ? '实录模式：实录伴奏已激活'
-          : '实录模式：未匹配到实录，回退到合成伴奏'
-        : '合成模式：固定使用合成伴奏'
 
   return (
     <section className="page">
       <h1>伴奏</h1>
-      <p aria-live="polite">
-        状态提示：{sourceDetailText}
-        <span className={`badge ${playback === 'real' ? 'success' : 'info'}`} style={{ marginLeft: 8 }}>
-          当前来源：{playback === 'real' ? '实录' : '合成'}
-        </span>
-      </p>
+      <div aria-live="polite">
+        <p>{`当前播放源（合成/实录）：${currentSource === 'real' ? '实录' : '合成'}`}</p>
+        <p>{`错误原因：${errorReason}`}</p>
+      </div>
 
       <div className="card">
         <div className="card-title-row">
-          <h2>练习控制</h2>
-          <span className="badge warn">模式：{mode.toUpperCase()} → 来源：{playback === 'real' ? '实录' : '合成'}</span>
+          <h2>合成伴奏（练习模式）</h2>
+          <span className={`badge ${currentSource === 'synth' ? 'success' : 'info'}`}>状态：{currentSource === 'synth' ? playbackState : '未启用'}</span>
         </div>
+
         <div className="grid-3">
           <label className="control">
-            伴奏律动
+            调号
+            <select aria-label="伴奏调性" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
+              {CHROMATIC_KEYS.map((key) => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="control">
+            BPM
+            <input aria-label="伴奏 BPM" type="number" min={40} max={220} value={bpm} onChange={(e) => setBpm(Number(e.target.value))} />
+          </label>
+
+          <label className="control">
+            进行预设
+            <select aria-label="进行预设" value={preset} onChange={(e) => setPreset(e.target.value as ProgressionPreset)}>
+              {PROGRESSION_PRESETS.map((progressionPreset) => (
+                <option key={progressionPreset.id} value={progressionPreset.id}>
+                  {progressionPreset.label}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="control">
+            律动预设
             <select
               aria-label="伴奏律动"
               value={selectedGroove}
@@ -256,87 +265,18 @@ export function BackingPage() {
               ))}
             </select>
           </label>
-
-          <label className="control">
-            伴奏调性
-            <select aria-label="伴奏调性" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
-              {CHROMATIC_KEYS.map((key) => (
-                <option key={key} value={key}>
-                  {key}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="control">
-            伴奏 BPM
-            <input
-              aria-label="伴奏 BPM"
-              type="number"
-              min={40}
-              max={220}
-              value={bpm}
-              onChange={(e) => setBpm(Number(e.target.value))}
-            />
-          </label>
-
-          <label className="control">
-            进行预设
-            <select
-              aria-label="进行预设"
-              value={preset}
-              onChange={(e) => setPreset(e.target.value as ProgressionPreset)}
-            >
-              {PROGRESSION_PRESETS.map((progressionPreset) => (
-                <option key={progressionPreset.id} value={progressionPreset.id}>
-                  {progressionPreset.label}
-                </option>
-              ))}
-            </select>
-          </label>
         </div>
-        <p className="muted" aria-label="律动说明">
-          {selectedGrooveProfile?.description}（建议 BPM {selectedGrooveProfile?.bpmRange.recommended}，范围 {selectedGrooveProfile?.bpmRange.min}-{selectedGrooveProfile?.bpmRange.max}）
-        </p>
-      </div>
 
-      <fieldset className="card">
-        <legend>模式</legend>
-        <div className="inline-actions">
-          <label>
-            <input type="radio" name="mode" checked={mode === 'synth'} onChange={() => setMode('synth')} /> 合成
-          </label>
-          <label>
-            <input type="radio" name="mode" checked={mode === 'real'} onChange={() => setMode('real')} /> 实录
-          </label>
-          <label>
-            <input type="radio" name="mode" checked={mode === 'auto'} onChange={() => setMode('auto')} /> 自动
-          </label>
-        </div>
-      </fieldset>
-
-      <div className="card">
-        <div className="card-title-row">
-          <h2>播放控制</h2>
-          <span className={`badge ${playbackState === 'playing' ? 'success' : playbackState === 'paused' ? 'warn' : 'info'}`}>
-            {playbackState === 'playing' ? '播放中' : playbackState === 'paused' ? '已暂停' : '已停止'}
-          </span>
-        </div>
-        <div className="inline-actions">
-          <button type="button" className="btn-primary" onClick={togglePlayPause}>
-            {playbackState === 'playing' ? '暂停' : playbackState === 'paused' ? '继续' : '播放'}
+        <div className="inline-actions" style={{ marginTop: 8 }}>
+          <button type="button" className="btn-primary" onClick={() => (currentSource === 'synth' && playbackState === 'playing' ? pauseCurrentSource() : void playSynth())}>
+            {currentSource === 'synth' && playbackState === 'playing' ? '暂停' : '播放合成'}
           </button>
-          <button type="button" onClick={handleStop}>
-            停止
-          </button>
+          <button type="button" onClick={stopCurrentSource}>停止</button>
         </div>
-        <p style={{ marginTop: 8 }}>
-          当前小节：{currentBar} · 当前拍：{currentBeat}
-        </p>
-        <p className="muted" aria-label="音频状态">
-          音频状态：
-          {audioStatus === 'ready' ? '已解锁，可正常发声' : audioStatus === 'fallback' ? '实录播放失败，已回退节拍器提示' : audioStatus === 'blocked' ? '浏览器阻止音频，请再次点击播放' : '待启动'}
-        </p>
+
+        <p style={{ marginTop: 8 }}>当前小节：{currentBar} · 当前拍：{currentBeat}</p>
+        <p className="muted">音频状态：{errorReason === '无' ? '已解锁，可正常发声' : errorReason}</p>
+        <p className="muted">{selectedGrooveProfile?.description}</p>
         <div className="bar-progress" aria-label="当前小节进度">
           <div className="bar-progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
@@ -349,41 +289,47 @@ export function BackingPage() {
         </div>
       </div>
 
-      <div className="card grid-3">
-        <p>播放源：{playback === 'real' ? '实录音轨' : '合成'}</p>
-        <p>已选律动：{selectedGrooveProfile?.displayName}</p>
-        <p>匹配音轨：{matchedTrack ? `${matchedTrack.name} (${matchedTrack.key} / ${matchedTrack.bpm})` : '未匹配'}</p>
-        <p>所选预设：{preset}</p>
-        <p>第 2 小节和弦：{progression[1].degree}</p>
-        <p>第 12 小节和弦：{progression[11].degree}</p>
-      </div>
-
       <div className="card">
-        <h2>导入本地实录伴奏</h2>
-        <form onSubmit={handleTrackImport} className="grid-3">
-          <label className="control">
-            名称
-            <input
-              aria-label="Track name"
-              value={newTrackName}
-              onChange={(e) => setNewTrackName(e.target.value)}
-              required
-            />
-          </label>
+        <div className="card-title-row">
+          <h2>实录伴奏（素材库）</h2>
+          <span className={`badge ${currentSource === 'real' ? 'success' : 'info'}`}>状态：{currentSource === 'real' ? playbackState : '未启用'}</span>
+        </div>
 
+        <div className="grid-3">
           <label className="control">
-            律动风格
-            <select aria-label="Track groove" value={newTrackGroove} onChange={(e) => setNewTrackGroove(e.target.value as GrooveId)}>
-              {GROOVE_PROFILES.map((groove) => (
-                <option key={groove.id} value={groove.id}>
-                  {groove.displayName}
+            伴奏名称
+            <select aria-label="伴奏名称" value={selectedRealTrack?.id ?? ''} onChange={(e) => setSelectedRealTrackId(e.target.value)}>
+              {allTracks.map((track) => (
+                <option key={track.id} value={track.id}>
+                  {track.name}（{track.key} / {track.bpm} BPM / {track.grooveId}）
                 </option>
               ))}
             </select>
           </label>
 
+          <p>调号：{selectedRealTrack?.key ?? '-'}</p>
+          <p>BPM：{selectedRealTrack?.bpm ?? '-'}</p>
+          <p>风格：{selectedRealTrack ? GROOVE_PROFILES.find((g) => g.id === selectedRealTrack.grooveId)?.displayName : '-'}</p>
+        </div>
+
+        <div className="inline-actions">
+          <button type="button" className="btn-primary" onClick={() => (currentSource === 'real' && playbackState === 'playing' ? pauseCurrentSource() : void playRealTrack())}>
+            {currentSource === 'real' && playbackState === 'playing' ? '暂停' : '播放所选实录'}
+          </button>
+          <button type="button" onClick={stopCurrentSource}>停止</button>
+        </div>
+      </div>
+
+      <div className="card">
+        <h2>上传实录伴奏</h2>
+        <form onSubmit={handleTrackImport} className="grid-3">
           <label className="control">
-            调性
+            名称
+            <input aria-label="Track name" value={newTrackName} onChange={(e) => setNewTrackName(e.target.value)} required />
+          </label>
+
+          <label className="control">
+            调号
             <select aria-label="Track key" value={newTrackKey} onChange={(e) => setNewTrackKey(e.target.value as MusicalKey)}>
               {CHROMATIC_KEYS.map((key) => (
                 <option key={key} value={key}>
@@ -395,19 +341,23 @@ export function BackingPage() {
 
           <label className="control">
             BPM
-            <input
-              aria-label="Track bpm"
-              type="number"
-              min={40}
-              max={220}
-              value={newTrackBpm}
-              onChange={(e) => setNewTrackBpm(Number(e.target.value))}
-            />
+            <input aria-label="Track bpm" type="number" min={40} max={220} value={newTrackBpm} onChange={(e) => setNewTrackBpm(Number(e.target.value))} />
+          </label>
+
+          <label className="control">
+            风格
+            <select aria-label="Track groove" value={newTrackGroove} onChange={(e) => setNewTrackGroove(e.target.value as GrooveId)}>
+              {GROOVE_PROFILES.map((groove) => (
+                <option key={groove.id} value={groove.id}>
+                  {groove.displayName}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="control">
             文件
-            <input aria-label="Track file" type="file" accept="audio/*" onChange={handleTrackFileChange} />
+            <input aria-label="Track file" type="file" accept="audio/*" onChange={handleTrackFileChange} required />
           </label>
 
           <div className="inline-actions" style={{ alignItems: 'end' }}>
@@ -417,17 +367,15 @@ export function BackingPage() {
       </div>
 
       <div className="card">
-        <h3>内置实录 Groove</h3>
-        <ul className="list">
-          {BUNDLED_REAL_TRACKS.map((track) => (
-            <li key={track.id} className="list-item">
-              <strong>
-                {track.name} - {track.key} @ {track.bpm} BPM
-              </strong>
-              <p className="muted">{track.fileUrl}</p>
-            </li>
-          ))}
-        </ul>
+        <h2>链接提取素材（即将支持）</h2>
+        <div className="inline-actions">
+          <input aria-label="素材链接 URL" type="url" placeholder="粘贴 YouTube / 音频链接" style={{ minWidth: 280 }} />
+          <button type="button" disabled>
+            开始提取（即将支持）
+          </button>
+        </div>
+        <p className="muted">该入口已预留服务层结构（backingExtractor.ts），当前版本不发起网络提取。</p>
+        <p className="muted">服务状态：{typeof extractorService.extractFromUrl === 'function' ? '占位已接入' : '未接入'}</p>
       </div>
 
       <div className="card">
@@ -453,6 +401,12 @@ export function BackingPage() {
             ))}
           </ul>
         )}
+      </div>
+
+      <div className="card grid-3">
+        <p>所选预设：{preset}</p>
+        <p>第 2 小节和弦：{progression[1].degree}</p>
+        <p>第 12 小节和弦：{progression[11].degree}</p>
       </div>
     </section>
   )
