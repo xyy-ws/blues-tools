@@ -15,11 +15,11 @@ describe('KnowledgePage', () => {
       </MemoryRouter>,
     )
 
-    fireEvent.change(screen.getByLabelText('Search knowledge'), { target: { value: 'blue notes' } })
+    fireEvent.change(screen.getByLabelText('搜索乐句知识'), { target: { value: 'blue notes' } })
     expect(screen.getByRole('heading', { name: 'Blue Notes' })).toBeInTheDocument()
 
-    fireEvent.change(screen.getByLabelText('Filter tag'), { target: { value: 'turnaround' } })
-    expect(screen.getByText('No cards matched your filters.')).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText('筛选标签'), { target: { value: 'turnaround' } })
+    expect(screen.getByText('当前筛选条件下没有匹配卡片。')).toBeInTheDocument()
   })
 
   it('renders practical training sections and practice actions', () => {
@@ -29,11 +29,11 @@ describe('KnowledgePage', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getAllByRole('heading', { name: '今日练习任务 / Today practice' })[0]).toBeInTheDocument()
-    expect(screen.getAllByText(/什么时候用 \/ Where in 12-bar/).length).toBeGreaterThanOrEqual(3)
-    expect(screen.getAllByText(/常见错误 \/ Common mistakes/).length).toBeGreaterThanOrEqual(3)
+    expect(screen.getAllByRole('heading', { name: '今日练习任务' })[0]).toBeInTheDocument()
+    expect(screen.getAllByText('适用位置').length).toBeGreaterThanOrEqual(3)
+    expect(screen.getAllByText('常见错误').length).toBeGreaterThanOrEqual(3)
 
-    const practiceLinks = screen.getAllByRole('link', { name: '立即练习 / Practice now' })
+    const practiceLinks = screen.getAllByRole('link', { name: '立即练习' })
     expect(practiceLinks.length).toBeGreaterThanOrEqual(3)
     expect(practiceLinks[0]).toHaveAttribute('href', expect.stringContaining('/backing?key='))
 

@@ -22,14 +22,14 @@ export function SubstyleLibraryPage() {
 
   return (
     <section className="page">
-      <h1 className="page-title">布鲁斯子风格库 / Blues Substyle Library</h1>
+      <h1 className="page-title">布鲁斯子风格库</h1>
       <p className="muted helper-text">可按关键词与标签筛选常见子风格，并查看节奏、伴奏和练习建议。</p>
 
       <div className="card grid-2 card-controls">
         <label className="control">
           关键词搜索
           <input
-            aria-label="Search substyles"
+            aria-label="搜索子风格"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="例如：shuffle、slide、指弹"
@@ -38,7 +38,7 @@ export function SubstyleLibraryPage() {
 
         <label className="control">
           标签筛选
-          <select aria-label="Filter substyle tag" value={tag} onChange={(e) => setTag(e.target.value)}>
+          <select aria-label="筛选子风格标签" value={tag} onChange={(e) => setTag(e.target.value)}>
             {tags.map((item) => (
               <option key={item} value={item}>
                 {item}

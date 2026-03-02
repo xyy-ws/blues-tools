@@ -35,22 +35,22 @@ export function KnowledgePage() {
 
   return (
     <section className="page">
-      <h1 className="page-title">Knowledge</h1>
+      <h1 className="page-title">乐句库</h1>
 
       <div className="card grid-2 card-controls">
         <label className="control">
-          <span className="control-label">Search</span>
+          <span className="control-label">搜索</span>
           <input
-            aria-label="Search knowledge"
+            aria-label="搜索乐句知识"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search concepts"
+            placeholder="搜索概念"
           />
         </label>
 
         <label className="control">
-          <span className="control-label">Filter tag</span>
-          <select aria-label="Filter tag" value={tag} onChange={(e) => setTag(e.target.value)}>
+          <span className="control-label">筛选标签</span>
+          <select aria-label="筛选标签" value={tag} onChange={(e) => setTag(e.target.value)}>
             {tags.map((item) => (
               <option key={item} value={item}>
                 {item}
@@ -60,8 +60,8 @@ export function KnowledgePage() {
         </label>
       </div>
 
-      <section className="card" aria-label="Today practice checklist">
-        <h2 className="section-title">今日练习任务 / Today practice</h2>
+      <section className="card" aria-label="今日练习清单">
+        <h2 className="section-title">今日练习任务</h2>
         <ul className="list list-tight">
           {TODAY_TASKS.map((task) => (
             <li className="list-item" key={task}>
@@ -79,7 +79,7 @@ export function KnowledgePage() {
       </section>
 
       {filteredCards.length === 0 ? (
-        <p className="empty-state">No cards matched your filters.</p>
+        <p className="empty-state">当前筛选条件下没有匹配卡片。</p>
       ) : (
         <ul className="list">
           {filteredCards.map((card) => (
@@ -88,17 +88,17 @@ export function KnowledgePage() {
               <p className="item-body">{card.content}</p>
 
               <div className="card card-nested">
-                <h3 className="subsection-title">什么时候用 / Where in 12-bar</h3>
+                <h3 className="subsection-title">适用位置</h3>
                 <p className="item-body">{card.whereInTwelveBar}</p>
 
-                <h3 className="subsection-title">常见错误 / Common mistakes</h3>
+                <h3 className="subsection-title">常见错误</h3>
                 <ul className="spaced-list">
                   {card.commonMistakes.map((mistake) => (
                     <li key={`${card.id}-${mistake}`}>{mistake}</li>
                   ))}
                 </ul>
 
-                <h3 className="subsection-title">相关乐句 / Related licks</h3>
+                <h3 className="subsection-title">相关乐句</h3>
                 <div className="inline-actions">
                   {card.relatedLicks.map((lick) => (
                     <span className="tag-chip" key={`${card.id}-${lick}`}>
@@ -112,7 +112,7 @@ export function KnowledgePage() {
                     className="btn-primary"
                     to={`/backing?key=${card.practiceLink.key}&bpm=${card.practiceLink.bpm}&preset=${card.practiceLink.progression}`}
                   >
-                    立即练习 / Practice now
+                    立即练习
                   </Link>
                 </div>
               </div>

@@ -7,9 +7,9 @@ import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTra
 import { buildRealTrackId, resolvePlayback, type BackingMode, type RealTrack } from './backing'
 
 const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
-  { id: 'standard-12', label: '标准 12 小节 / Standard 12-bar' },
-  { id: 'quick-change', label: '快速换和弦 / Quick change' },
-  { id: 'turnaround', label: '结尾回转 / Turnaround ending' },
+  { id: 'standard-12', label: '标准 12 小节' },
+  { id: 'quick-change', label: '快速换和弦' },
+  { id: 'turnaround', label: '结尾回转' },
 ]
 
 const BAR_COUNT = 12
@@ -146,33 +146,33 @@ export function BackingPage() {
   const sourceDetailText =
     mode === 'auto'
       ? playbackResolution.hasMatch
-        ? '自动模式：已匹配实录音轨 / Auto: real track matched'
-        : '自动模式：未匹配实录，使用合成 / Auto: fallback to synth'
+        ? '自动模式：已匹配实录音轨'
+        : '自动模式：未匹配实录，使用合成'
       : mode === 'real'
         ? playbackResolution.hasMatch
-          ? '实录模式：已匹配实录音轨 / Real mode: matched'
-          : '实录模式：未匹配，临时回退合成 / Real mode: fallback to synth'
-        : '合成模式：固定使用合成伴奏 / Synth mode: forced synth'
+          ? '实录模式：已匹配实录音轨'
+          : '实录模式：未匹配，临时回退合成'
+        : '合成模式：固定使用合成伴奏'
 
   return (
     <section className="page">
-      <h1>伴奏 / Backing</h1>
+      <h1>伴奏</h1>
       <p aria-live="polite">
         状态提示：{sourceDetailText}
         <span className={`badge ${playback === 'real' ? 'success' : 'info'}`} style={{ marginLeft: 8 }}>
-          Active: {playback === 'real' ? 'Real' : 'Synth'}
+          当前来源：{playback === 'real' ? '实录' : '合成'}
         </span>
       </p>
 
       <div className="card">
         <div className="card-title-row">
-          <h2>Session Controls</h2>
-          <span className="badge warn">Mode: {mode.toUpperCase()} → Source: {playback === 'real' ? 'Real' : 'Synth'}</span>
+          <h2>练习控制</h2>
+          <span className="badge warn">模式：{mode.toUpperCase()} → 来源：{playback === 'real' ? '实录' : '合成'}</span>
         </div>
         <div className="grid-3">
           <label className="control">
-            调性 / Key
-            <select aria-label="Key" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
+            调性
+            <select aria-label="调性" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
               {CHROMATIC_KEYS.map((key) => (
                 <option key={key} value={key}>
                   {key}
@@ -194,9 +194,9 @@ export function BackingPage() {
           </label>
 
           <label className="control">
-            进行预设 / Progression preset
+            进行预设
             <select
-              aria-label="Progression preset"
+              aria-label="进行预设"
               value={preset}
               onChange={(e) => setPreset(e.target.value as ProgressionPreset)}
             >
@@ -211,42 +211,42 @@ export function BackingPage() {
       </div>
 
       <fieldset className="card">
-        <legend>模式 / Mode</legend>
+        <legend>模式</legend>
         <div className="inline-actions">
           <label>
-            <input type="radio" name="mode" checked={mode === 'synth'} onChange={() => setMode('synth')} /> 合成 / Synth
+            <input type="radio" name="mode" checked={mode === 'synth'} onChange={() => setMode('synth')} /> 合成
           </label>
           <label>
-            <input type="radio" name="mode" checked={mode === 'real'} onChange={() => setMode('real')} /> 实录 / Real Track
+            <input type="radio" name="mode" checked={mode === 'real'} onChange={() => setMode('real')} /> 实录
           </label>
           <label>
-            <input type="radio" name="mode" checked={mode === 'auto'} onChange={() => setMode('auto')} /> 自动 / Auto
+            <input type="radio" name="mode" checked={mode === 'auto'} onChange={() => setMode('auto')} /> 自动
           </label>
         </div>
       </fieldset>
 
       <div className="card">
         <div className="card-title-row">
-          <h2>播放控制 / Playback Controls</h2>
+          <h2>播放控制</h2>
           <span className={`badge ${playbackState === 'playing' ? 'success' : playbackState === 'paused' ? 'warn' : 'info'}`}>
-            {playbackState === 'playing' ? 'Playing' : playbackState === 'paused' ? 'Paused' : 'Stopped'}
+            {playbackState === 'playing' ? '播放中' : playbackState === 'paused' ? '已暂停' : '已停止'}
           </span>
         </div>
         <div className="inline-actions">
           <button type="button" className="btn-primary" onClick={togglePlayPause}>
-            {playbackState === 'playing' ? 'Pause' : playbackState === 'paused' ? 'Resume' : 'Play'}
+            {playbackState === 'playing' ? '暂停' : playbackState === 'paused' ? '继续' : '播放'}
           </button>
           <button type="button" onClick={handleStop}>
-            Stop
+            停止
           </button>
         </div>
         <p style={{ marginTop: 8 }}>
-          当前小节 / Current bar: {currentBar} · 当前拍 / Beat: {currentBeat}
+          当前小节：{currentBar} · 当前拍：{currentBeat}
         </p>
-        <div className="bar-progress" aria-label="Current bar progress indicator">
+        <div className="bar-progress" aria-label="当前小节进度">
           <div className="bar-progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
-        <div className="beat-indicator" aria-label="1-2-3-4 beat indicator">
+        <div className="beat-indicator" aria-label="1-2-3-4 节拍指示">
           {[1, 2, 3, 4].map((beat) => (
             <span key={beat} className={`beat-dot${currentBeat === beat ? ' active' : ''}`}>
               {beat}
@@ -256,17 +256,17 @@ export function BackingPage() {
       </div>
 
       <div className="card grid-3">
-        <p>Playback source: {playback === 'real' ? 'Real Track' : 'Synth'}</p>
-        <p>Selected preset: {preset}</p>
-        <p>Bar 2 chord: {progression[1].degree}</p>
-        <p>Bar 12 chord: {progression[11].degree}</p>
+        <p>播放源：{playback === 'real' ? '实录音轨' : '合成'}</p>
+        <p>所选预设：{preset}</p>
+        <p>第 2 小节和弦：{progression[1].degree}</p>
+        <p>第 12 小节和弦：{progression[11].degree}</p>
       </div>
 
       <div className="card">
-        <h2>导入本地实录伴奏 / Import local real track</h2>
+        <h2>导入本地实录伴奏</h2>
         <form onSubmit={handleTrackImport} className="grid-3">
           <label className="control">
-            Name
+            名称
             <input
               aria-label="Track name"
               value={newTrackName}
@@ -276,7 +276,7 @@ export function BackingPage() {
           </label>
 
           <label className="control">
-            Key
+            调性
             <select aria-label="Track key" value={newTrackKey} onChange={(e) => setNewTrackKey(e.target.value as MusicalKey)}>
               {CHROMATIC_KEYS.map((key) => (
                 <option key={key} value={key}>
@@ -299,20 +299,20 @@ export function BackingPage() {
           </label>
 
           <label className="control">
-            File
+            文件
             <input aria-label="Track file" type="file" accept="audio/*" onChange={handleTrackFileChange} />
           </label>
 
           <div className="inline-actions" style={{ alignItems: 'end' }}>
-            <button type="submit">Import Track</button>
+            <button type="submit">导入音轨</button>
           </div>
         </form>
       </div>
 
       <div className="card">
-        <h3>Imported tracks</h3>
+        <h3>已导入音轨</h3>
         {tracks.length === 0 ? (
-          <p className="empty-state">No tracks imported yet.</p>
+          <p className="empty-state">还没有导入音轨。</p>
         ) : (
           <ul className="list">
             {tracks.map((track) => (
@@ -322,7 +322,7 @@ export function BackingPage() {
                     {track.name} - {track.key} @ {track.bpm} BPM
                   </strong>
                   <button type="button" onClick={() => deleteTrack(track.id)}>
-                    Delete
+                    删除
                   </button>
                 </div>
                 <p className="muted">

@@ -36,7 +36,7 @@ describe('ChordFretboardPage', () => {
     expect(container.querySelector('[data-chord-highlight="yes"][data-tone-type="chord-tone"]')).toBeInTheDocument()
 
     expect(container.querySelector('td')?.textContent).toContain('0:')
-    expect(screen.getByText('Legend / 图例')).toBeInTheDocument()
+    expect(screen.getByText('图例')).toBeInTheDocument()
     expect(screen.getByLabelText('Fingering hint')).toBeInTheDocument()
   })
 

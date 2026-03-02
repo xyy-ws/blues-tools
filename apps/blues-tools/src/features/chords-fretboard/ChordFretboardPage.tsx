@@ -184,7 +184,7 @@ export function ChordFretboardPage() {
 
       <div className="card">
         <div className="inline-actions" style={{ marginBottom: 10 }}>
-          <span className="badge info">Legend / 图例</span>
+          <span className="badge info">图例</span>
           <span className="badge success">指法中的根音</span>
           <span className="badge warn">指法中的和弦音</span>
         </div>

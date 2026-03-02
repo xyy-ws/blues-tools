@@ -26,32 +26,32 @@ describe('BackingPage', () => {
   it('renders playback controls and handles play/pause(stop via toggle)/stop transitions', () => {
     renderPage()
 
-    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
-    expect(screen.getByText(/Current bar:\s*1/)).toBeInTheDocument()
-    expect(screen.getByText('Stopped')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '播放' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '停止' })).toBeInTheDocument()
+    expect(screen.getByText(/当前小节：\s*1/)).toBeInTheDocument()
+    expect(screen.getByText('已停止')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Play' }))
-    expect(screen.getByText('Playing')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Pause' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '播放' }))
+    expect(screen.getByText('播放中')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '暂停' })).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Pause' }))
-    expect(screen.getByText('Paused')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'Resume' })).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '暂停' }))
+    expect(screen.getByText('已暂停')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '继续' })).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Stop' }))
-    expect(screen.getByText('Stopped')).toBeInTheDocument()
-    expect(screen.getByText(/Current bar:\s*1/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '停止' }))
+    expect(screen.getByText('已停止')).toBeInTheDocument()
+    expect(screen.getByText(/当前小节：\s*1/)).toBeInTheDocument()
   })
 
   it('advances beat indicator while playing', () => {
     renderPage()
 
-    fireEvent.click(screen.getByRole('button', { name: 'Play' }))
+    fireEvent.click(screen.getByRole('button', { name: '播放' }))
     vi.advanceTimersByTime(1000)
 
-    expect(screen.getByLabelText('1-2-3-4 beat indicator')).toBeInTheDocument()
-    expect(screen.getByText(/当前拍 \/ Beat:/)).toBeInTheDocument()
+    expect(screen.getByLabelText('1-2-3-4 节拍指示')).toBeInTheDocument()
+    expect(screen.getByText(/当前拍：/)).toBeInTheDocument()
   })
 
   it('uses synth in auto mode when there is no matching real track and real when matched', () => {
@@ -59,7 +59,7 @@ describe('BackingPage', () => {
 
     renderPage()
 
-    expect(screen.getByText('Playback source: Synth')).toBeInTheDocument()
+    expect(screen.getByText('播放源：合成')).toBeInTheDocument()
 
     fireEvent.change(screen.getByLabelText('Track name'), { target: { value: 'C Jam' } })
     fireEvent.change(screen.getByLabelText('Track key'), { target: { value: 'C' } })
@@ -68,9 +68,9 @@ describe('BackingPage', () => {
     const file = new File(['audio'], 'c-jam.mp3', { type: 'audio/mpeg' })
     fireEvent.change(screen.getByLabelText('Track file'), { target: { files: [file] } })
 
-    fireEvent.click(screen.getByRole('button', { name: 'Import Track' }))
+    fireEvent.click(screen.getByRole('button', { name: '导入音轨' }))
 
-    expect(screen.getByText('Playback source: Real Track')).toBeInTheDocument()
+    expect(screen.getByText('播放源：实录音轨')).toBeInTheDocument()
     expect(screen.getByText(/自动模式：已匹配实录音轨/)).toBeInTheDocument()
   })
 })

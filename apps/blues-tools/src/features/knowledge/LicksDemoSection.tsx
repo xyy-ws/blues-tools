@@ -96,10 +96,10 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
 
   const statusLabel =
     state === 'idle'
-      ? '已停止 Stopped'
+      ? '已停止'
       : state === 'paused'
-        ? `已暂停 Paused (${mode === 'lick' ? 'Lick' : 'Backing only'})`
-        : `播放中 Playing (${mode === 'lick' ? 'Lick' : 'Backing only'})`
+        ? `已暂停（${mode === 'lick' ? '乐句' : '仅伴奏'}）`
+        : `播放中（${mode === 'lick' ? '乐句' : '仅伴奏'}）`
 
   return (
     <article className="card" aria-label={`${lick.name} demo card`}>
@@ -143,7 +143,7 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
             })}
           </div>
           <p className="muted helper-text">
-            当前拍 Current beat: {Math.min(currentStep?.beat ?? 0, totalBeats)} / {totalBeats}
+            当前拍： {Math.min(currentStep?.beat ?? 0, totalBeats)} / {totalBeats}
           </p>
         </section>
       </div>
@@ -154,9 +154,9 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
 
       <div className="card card-nested controls-panel">
         <div className="card-title-row">
-          <strong className="subsection-title">控制 Controls</strong>
+          <strong className="subsection-title">练习控制</strong>
           <label className="control-inline">
-            <span className="control-label">速度 Speed</span>
+            <span className="control-label">速度</span>
             <select
               aria-label={`${lick.name} speed`}
               value={speed}
@@ -172,36 +172,36 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         </div>
         <div className="inline-actions button-group">
           <button type="button" className="btn-primary" onClick={() => onPlay('lick')}>
-            播放 Play
+            播放
           </button>
           <button type="button" onClick={() => onPlay('backing-only')}>
-            只播放伴奏 / Backing only
+            只播放伴奏
           </button>
           <button type="button" onClick={onPause}>
-            暂停 Pause
+            暂停
           </button>
           <button type="button" onClick={onStop}>
-            停止 Stop
+            停止
           </button>
         </div>
       </div>
 
       <p className="practice-tip">
-        <strong>练习提示 Practice tip:</strong> {lick.practiceTip}
+        <strong>练习提示：</strong> {lick.practiceTip}
       </p>
 
       <div className="list-item real-demo-card">
-        <strong>真实示范 / Real performance</strong>
+        <strong>真实示范</strong>
         <p className="muted helper-text">
-          将来可接入真实演奏音频或视频。Real take slot for future recording.
+          将来可接入真实演奏音频或视频。
         </p>
         {lick.realDemoUrl ? (
           <a href={lick.realDemoUrl} target="_blank" rel="noreferrer">
-            打开真实示范 Open real demo
+            打开真实示范
           </a>
         ) : (
           <button type="button" disabled>
-            真实示范即将上线 Real demo coming soon
+            真实示范即将上线
           </button>
         )}
       </div>
@@ -223,14 +223,14 @@ export function LicksDemoSection() {
   return (
     <section className="page" aria-label="Licks demo section">
       <div>
-        <h2 className="section-title">乐句演示 Licks Demo v1</h2>
+        <h2 className="section-title">乐句演示 v1</h2>
         <p className="muted helper-text">选择一个乐句进行练习（自动发声 + 指板高亮 + 速度控制）</p>
       </div>
 
       <div className="card card-controls">
         <label className="control">
-          <span className="control-label">选择乐句 / Select lick</span>
-          <select aria-label="Select lick" value={selectedLickId} onChange={(e) => setSelectedLickId(e.target.value)}>
+          <span className="control-label">选择乐句</span>
+          <select aria-label="选择乐句" value={selectedLickId} onChange={(e) => setSelectedLickId(e.target.value)}>
             {DEMO_LICKS.map((lick) => (
               <option key={lick.id} value={lick.id}>
                 {lick.name}

@@ -1,8 +1,8 @@
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 
 const topLevelNavItems = [
-  { to: '/', label: '全局首页 Global Home', end: true },
-  { to: '/home', label: '布鲁斯主页 Blues Dashboard', end: true },
+  { to: '/', label: '全局首页', end: true },
+  { to: '/home', label: '布鲁斯主页', end: true },
 ]
 
 const bluesToolNavItems = [

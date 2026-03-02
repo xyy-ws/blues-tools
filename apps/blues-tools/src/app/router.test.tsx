@@ -15,7 +15,7 @@ describe('AppRouter', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('heading', { name: '首页 / Home' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '首页' })).toBeInTheDocument()
   })
 
   it('routes to Blues Home page from /home', () => {
@@ -25,7 +25,7 @@ describe('AppRouter', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('heading', { name: '布鲁斯主页 / Blues Home' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '布鲁斯主页' })).toBeInTheDocument()
   })
 
   it('shows two-level nav active state clearly', () => {
@@ -35,8 +35,8 @@ describe('AppRouter', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('link', { name: '布鲁斯主页 Blues Dashboard' })).toHaveClass('active')
-    expect(screen.getByRole('link', { name: '全局首页 Global Home' })).not.toHaveClass('active')
+    expect(screen.getByRole('link', { name: '布鲁斯主页' })).toHaveClass('active')
+    expect(screen.getByRole('link', { name: '全局首页' })).not.toHaveClass('active')
   })
 
   it('navigates from home Blues selection to style sub-home', () => {
@@ -46,9 +46,9 @@ describe('AppRouter', () => {
       </MemoryRouter>,
     )
 
-    fireEvent.click(screen.getByRole('link', { name: '布鲁斯 / Blues' }))
+    fireEvent.click(screen.getByRole('link', { name: '布鲁斯' }))
 
-    expect(screen.getByRole('heading', { name: '布鲁斯主页 / Blues Home' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '布鲁斯主页' })).toBeInTheDocument()
   })
 
   it('resolves Blues card href and navigation correctly with basename', () => {
@@ -58,11 +58,11 @@ describe('AppRouter', () => {
       </MemoryRouter>,
     )
 
-    const bluesCardLink = screen.getByRole('link', { name: '布鲁斯 / Blues' })
+    const bluesCardLink = screen.getByRole('link', { name: '布鲁斯' })
     expect(bluesCardLink).toHaveAttribute('href', '/blues/home')
 
     fireEvent.click(bluesCardLink)
-    expect(screen.getByRole('heading', { name: '布鲁斯主页 / Blues Home' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '布鲁斯主页' })).toBeInTheDocument()
   })
 
   it('routes to Knowledge page', () => {
@@ -72,6 +72,6 @@ describe('AppRouter', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('heading', { name: 'Knowledge' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '乐句库' })).toBeInTheDocument()
   })
 })

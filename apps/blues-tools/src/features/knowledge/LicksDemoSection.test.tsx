@@ -42,11 +42,11 @@ describe('LicksDemoSection', () => {
   it('uses selector and only shows selected lick details', () => {
     render(<LicksDemoSection />)
 
-    expect(screen.getByLabelText('Select lick')).toBeInTheDocument()
+    expect(screen.getByLabelText('选择乐句')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /Lick A/i })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /Lick B/i })).not.toBeInTheDocument()
 
-    fireEvent.change(screen.getByLabelText('Select lick'), { target: { value: 'lick-b' } })
+    fireEvent.change(screen.getByLabelText('选择乐句'), { target: { value: 'lick-b' } })
     expect(screen.getByRole('heading', { name: /Lick B/i })).toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: /Lick A/i })).not.toBeInTheDocument()
   })
@@ -57,18 +57,18 @@ describe('LicksDemoSection', () => {
 
     render(<LicksDemoSection />)
 
-    fireEvent.click(screen.getByRole('button', { name: '播放 Play' }))
-    expect(screen.getByText('播放中 Playing (Lick)')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '播放' }))
+    expect(screen.getByText('播放中（乐句）')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: '只播放伴奏 / Backing only' }))
-    expect(screen.getByText('播放中 Playing (Backing only)')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '只播放伴奏' }))
+    expect(screen.getByText('播放中（仅伴奏）')).toBeInTheDocument()
 
     vi.advanceTimersByTime(300)
-    fireEvent.click(screen.getByRole('button', { name: '暂停 Pause' }))
-    expect(screen.getByText('已暂停 Paused (Backing only)')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '暂停' }))
+    expect(screen.getByText('已暂停（仅伴奏）')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: '停止 Stop' }))
-    expect(screen.getByText('已停止 Stopped')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: '停止' }))
+    expect(screen.getByText('已停止')).toBeInTheDocument()
 
   })
 })
