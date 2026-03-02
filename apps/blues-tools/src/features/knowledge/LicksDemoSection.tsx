@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { DEMO_BPM, DEMO_LICKS, type BluesLick } from './licksDemo'
 
 type PlaybackState = 'idle' | 'playing' | 'paused'
@@ -6,6 +7,18 @@ type PlaybackMode = 'lick' | 'backing-only'
 
 const SPEED_OPTIONS = [0.5, 0.75, 1] as const
 const STRINGS = ['e', 'B', 'G', 'D', 'A', 'E']
+const TWELVE_BARS = Array.from({ length: 12 }, (_, i) => i + 1)
+
+export function buildLickPracticeUrl(lick: BluesLick, bar: number) {
+  const params = new URLSearchParams({
+    key: 'A',
+    bpm: String(DEMO_BPM),
+    preset: 'standard-12',
+    bar: String(bar),
+    lickId: lick.id,
+  })
+  return `/backing?${params.toString()}`
+}
 
 function playTone(frequency: number, durationMs: number) {
   const AudioCtor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext
@@ -31,16 +44,22 @@ function playTone(frequency: number, durationMs: number) {
 }
 
 function LickPlayerCard({ lick }: { lick: BluesLick }) {
+  const navigate = useNavigate()
   const [state, setState] = useState<PlaybackState>('idle')
   const [mode, setMode] = useState<PlaybackMode>('lick')
   const [speed, setSpeed] = useState<(typeof SPEED_OPTIONS)[number]>(1)
   const [stepIndex, setStepIndex] = useState(0)
+  const [targetBar, setTargetBar] = useState(lick.scenario.recommendedBars[0] ?? 1)
   const timeoutRef = useRef<number | null>(null)
 
   const totalBeats = useMemo(() => lick.steps.reduce((sum, step) => sum + step.durationBeats, 0), [lick.steps])
   const currentStep = lick.steps[stepIndex]
   const currentBeat = currentStep?.beat ?? totalBeats
   const progressPercent = state === 'idle' ? 0 : Math.min((currentBeat / totalBeats) * 100, 100)
+
+  useEffect(() => {
+    setTargetBar(lick.scenario.recommendedBars[0] ?? 1)
+  }, [lick.id, lick.scenario.recommendedBars])
 
   useEffect(() => {
     if (state !== 'playing') return
@@ -116,6 +135,31 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         <span className="badge warn">律动：{lick.feel}</span>
       </div>
 
+      <section className="card card-nested" aria-label="12 小节推荐位置">
+        <h4 className="subsection-title">12 小节推荐位置</h4>
+        <div className="inline-actions" style={{ flexWrap: 'wrap' }}>
+          {TWELVE_BARS.map((bar) => {
+            const isRecommended = lick.scenario.recommendedBars.includes(bar)
+            const isSelected = targetBar === bar
+            return (
+              <button
+                key={bar}
+                type="button"
+                aria-label={`第 ${bar} 小节`}
+                className={`tag-chip${isRecommended ? '' : ' tag-chip-muted'}`}
+                style={{ borderWidth: isSelected ? 2 : 1, borderColor: isSelected ? 'var(--brand)' : undefined }}
+                onClick={() => setTargetBar(bar)}
+              >
+                {bar}
+              </button>
+            )
+          })}
+        </div>
+        <p className="muted helper-text">
+          用途：{lick.scenario.useCases.join(' / ')} · 什么时候用：{lick.scenario.whenToUse}
+        </p>
+      </section>
+
       <div className="grid-2">
         <section>
           <h4 className="subsection-title">六线谱示例</h4>
@@ -182,6 +226,19 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
           </button>
           <button type="button" onClick={onStop}>
             停止
+          </button>
+        </div>
+
+        <div className="inline-actions button-group" style={{ marginTop: 8 }}>
+          <button type="button" onClick={() => navigate(buildLickPracticeUrl(lick, targetBar))}>
+            用在当前小节
+          </button>
+          <button
+            type="button"
+            className="btn-primary"
+            onClick={() => navigate(buildLickPracticeUrl(lick, lick.scenario.recommendedBars[0] ?? 1))}
+          >
+            跳到推荐小节练习
           </button>
         </div>
       </div>

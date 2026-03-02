@@ -26,12 +26,15 @@ export function BackingPage() {
     const key = searchParams.get('key') as MusicalKey | null
     const bpm = Number(searchParams.get('bpm'))
     const preset = searchParams.get('preset') as ProgressionPreset | null
+    const bar = Number(searchParams.get('bar'))
 
     return {
       ...stored,
       selectedKey: key && CHROMATIC_KEYS.includes(key) ? key : stored.selectedKey,
       bpm: Number.isFinite(bpm) && bpm >= 40 && bpm <= 220 ? bpm : stored.bpm,
       preset: preset && PROGRESSION_PRESETS.some((item) => item.id === preset) ? preset : stored.preset,
+      bar: Number.isFinite(bar) && bar >= 1 && bar <= BAR_COUNT ? bar : 1,
+      lickId: searchParams.get('lickId') ?? '',
     }
   })
 
@@ -51,7 +54,7 @@ export function BackingPage() {
   const [playbackState, setPlaybackState] = useState<'stopped' | 'playing' | 'paused'>('stopped')
   const [currentSource, setCurrentSource] = useState<'synth' | 'real'>('synth')
   const [errorReason, setErrorReason] = useState('无')
-  const [currentBar, setCurrentBar] = useState(1)
+  const [currentBar, setCurrentBar] = useState(initial.bar)
   const [currentBeat, setCurrentBeat] = useState(1)
 
   const clickPlayerRef = useRef(createBackingClickPlayer())
@@ -210,6 +213,7 @@ export function BackingPage() {
       <div aria-live="polite">
         <p>{`当前播放源（合成/实录）：${currentSource === 'real' ? '实录' : '合成'}`}</p>
         <p>{`错误原因：${errorReason}`}</p>
+        {initial.lickId ? <p>{`练习来源乐句：${initial.lickId}`}</p> : null}
       </div>
 
       <div className="card">

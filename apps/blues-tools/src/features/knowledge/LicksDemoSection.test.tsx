@@ -1,6 +1,8 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { LicksDemoSection } from './LicksDemoSection'
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
+import { LicksDemoSection, buildLickPracticeUrl } from './LicksDemoSection'
+import { DEMO_LICKS } from './licksDemo'
 
 class AudioContextMock {
   currentTime = 0
@@ -32,6 +34,11 @@ class AudioContextMock {
   }
 }
 
+function LocationProbe() {
+  const location = useLocation()
+  return <p data-testid="location">{location.pathname + location.search}</p>
+}
+
 afterEach(() => {
   cleanup()
   vi.useRealTimers()
@@ -40,7 +47,11 @@ afterEach(() => {
 
 describe('LicksDemoSection', () => {
   it('uses selector and only shows selected lick details', () => {
-    render(<LicksDemoSection />)
+    render(
+      <MemoryRouter>
+        <LicksDemoSection />
+      </MemoryRouter>,
+    )
 
     expect(screen.getByLabelText('选择乐句')).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: /乐句 A/i })).toBeInTheDocument()
@@ -51,11 +62,28 @@ describe('LicksDemoSection', () => {
     expect(screen.queryByRole('heading', { name: /乐句 A/i })).not.toBeInTheDocument()
   })
 
+  it('shows 12-bar recommendation and chinese timing guidance', () => {
+    render(
+      <MemoryRouter>
+        <LicksDemoSection />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('button', { name: '第 1 小节' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: '第 12 小节' })).toBeInTheDocument()
+    expect(screen.getByText(/什么时候用：适合在第 1-2 小节先抛出主题/)).toBeInTheDocument()
+    expect(screen.getByText(/用途：开场/)).toBeInTheDocument()
+  })
+
   it('changes playback states with play, backing-only, pause and stop', () => {
     vi.useFakeTimers()
     vi.stubGlobal('AudioContext', AudioContextMock)
 
-    render(<LicksDemoSection />)
+    render(
+      <MemoryRouter>
+        <LicksDemoSection />
+      </MemoryRouter>,
+    )
 
     fireEvent.click(screen.getByRole('button', { name: '播放' }))
     expect(screen.getByText('播放中（乐句）')).toBeInTheDocument()
@@ -69,6 +97,24 @@ describe('LicksDemoSection', () => {
 
     fireEvent.click(screen.getByRole('button', { name: '停止' }))
     expect(screen.getByText('已停止')).toBeInTheDocument()
+  })
 
+  it('navigates to backing with recommended bar + key + bpm params', () => {
+    render(
+      <MemoryRouter initialEntries={['/knowledge']}>
+        <Routes>
+          <Route path="/knowledge" element={<LicksDemoSection />} />
+          <Route path="*" element={<LocationProbe />} />
+        </Routes>
+      </MemoryRouter>,
+    )
+
+    fireEvent.click(screen.getByRole('button', { name: '跳到推荐小节练习' }))
+    expect(screen.getByTestId('location')).toHaveTextContent('/backing?key=A&bpm=84&preset=standard-12&bar=1&lickId=lick-a')
+  })
+
+  it('builds practice url from selected lick and bar', () => {
+    const url = buildLickPracticeUrl(DEMO_LICKS[1], 11)
+    expect(url).toBe('/backing?key=A&bpm=84&preset=standard-12&bar=11&lickId=lick-b')
   })
 })

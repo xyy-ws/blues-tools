@@ -7,6 +7,14 @@ export interface LickStep {
   frequency: number
 }
 
+export type LickUseCase = '开场' | '回应' | '过门' | '收尾'
+
+export interface LickScenario {
+  recommendedBars: number[]
+  useCases: LickUseCase[]
+  whenToUse: string
+}
+
 export interface BluesLick {
   id: string
   name: string
@@ -18,6 +26,7 @@ export interface BluesLick {
   realDemoUrl?: string
   tabLines: string[]
   steps: LickStep[]
+  scenario: LickScenario
 }
 
 export const DEMO_BPM = 84
@@ -53,6 +62,11 @@ export const DEMO_LICKS: BluesLick[] = [
       { id: 'a11', string: 1, fret: 5, beat: 10, durationBeats: 1, frequency: 329.63 },
       { id: 'a12', string: 2, fret: 8, beat: 11, durationBeats: 1, frequency: 293.66 },
     ],
+    scenario: {
+      recommendedBars: [1, 2, 5, 6],
+      useCases: ['开场', '回应'],
+      whenToUse: '适合在第 1-2 小节先抛出主题，或在第 5-6 小节做呼应答句。',
+    },
     realDemoUrl: '',
   },
   {
@@ -84,6 +98,11 @@ export const DEMO_LICKS: BluesLick[] = [
       { id: 'b10', string: 3, fret: 7, beat: 9, durationBeats: 1, frequency: 220 },
       { id: 'b11', string: 4, fret: 9, beat: 10, durationBeats: 1, frequency: 185 },
     ],
+    scenario: {
+      recommendedBars: [9, 10, 11, 12],
+      useCases: ['过门', '收尾'],
+      whenToUse: '适合在第 9-10 小节推进能量，并在第 11-12 小节做回转收尾。',
+    },
     realDemoUrl: '',
   },
 ]

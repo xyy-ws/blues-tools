@@ -41,9 +41,9 @@ beforeEach(() => {
   vi.stubGlobal('Audio', AudioMock)
 })
 
-function renderPage() {
+function renderPage(initialEntries?: string[]) {
   render(
-    <MemoryRouter>
+    <MemoryRouter initialEntries={initialEntries}>
       <BackingPage />
     </MemoryRouter>,
   )
@@ -74,6 +74,14 @@ describe('BackingPage', () => {
     fireEvent.click(screen.getByRole('button', { name: '导入音轨' }))
     fireEvent.click(screen.getByRole('button', { name: '播放所选实录' }))
     await waitFor(() => expect(screen.getByText('当前播放源（合成/实录）：实录')).toBeInTheDocument())
+  })
+
+  it('accepts bar/key/bpm params from lick jump link', () => {
+    renderPage(['/backing?key=G&bpm=96&bar=11&lickId=lick-b'])
+    expect(screen.getByDisplayValue('G')).toBeInTheDocument()
+    expect(screen.getByDisplayValue('96')).toBeInTheDocument()
+    expect(screen.getByText('当前小节：11 · 当前拍：1')).toBeInTheDocument()
+    expect(screen.getByText('练习来源乐句：lick-b')).toBeInTheDocument()
   })
 
   it('shows extraction placeholder', () => {
