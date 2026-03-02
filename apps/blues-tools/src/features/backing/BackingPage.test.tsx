@@ -66,14 +66,50 @@ describe('BackingPage', () => {
     expect(screen.getByText('状态：stopped')).toBeInTheDocument()
   })
 
-  it('imports user real track and can play real', async () => {
+  it('uploads user track, shows success feedback, and can play real', async () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
     renderPage()
+
     fireEvent.change(screen.getByLabelText('Track name'), { target: { value: 'C Jam' } })
     fireEvent.change(screen.getByLabelText('Track file'), { target: { files: [new File(['audio'], 'c-jam.mp3', { type: 'audio/mpeg' })] } })
     fireEvent.click(screen.getByRole('button', { name: '导入音轨' }))
+
+    expect(screen.getByText(/上传成功：C Jam/)).toBeInTheDocument()
+    expect(screen.getByRole('option', { name: /C Jam（C \/ 90 BPM \/ custom）/ })).toBeInTheDocument()
+
     fireEvent.click(screen.getByRole('button', { name: '播放所选实录' }))
     await waitFor(() => expect(screen.getByText('当前播放源（合成/实录）：实录')).toBeInTheDocument())
+  })
+
+  it('shows validation errors for upload form', () => {
+    renderPage()
+
+    fireEvent.change(screen.getByLabelText('Track name'), { target: { value: 'No File Track' } })
+    fireEvent.click(screen.getByRole('button', { name: '导入音轨' }))
+    expect(screen.getByText('上传失败：请选择音频文件。')).toBeInTheDocument()
+
+    fireEvent.change(screen.getByLabelText('Track file'), { target: { files: [new File(['text'], 'notes.txt', { type: 'text/plain' })] } })
+    fireEvent.click(screen.getByRole('button', { name: '导入音轨' }))
+    expect(screen.getByText('上传失败：仅支持音频文件。')).toBeInTheDocument()
+  })
+
+  it('can delete uploaded track but not bundled tracks', () => {
+    vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
+    renderPage()
+
+    fireEvent.change(screen.getByLabelText('Track name'), { target: { value: 'Delete Me' } })
+    fireEvent.change(screen.getByLabelText('Track file'), { target: { files: [new File(['audio'], 'delete-me.mp3', { type: 'audio/mpeg' })] } })
+    fireEvent.click(screen.getByRole('button', { name: '导入音轨' }))
+
+    fireEvent.click(screen.getByRole('button', { name: '删除所选实录' }))
+    expect(screen.queryByRole('option', { name: /Delete Me/ })).not.toBeInTheDocument()
+    expect(screen.getByText('已删除：Delete Me')).toBeInTheDocument()
+    expect(screen.getByText('当前为内置伴奏，无法删除。')).toBeInTheDocument()
+  })
+
+  it('removes style selector from upload form', () => {
+    renderPage()
+    expect(screen.queryByLabelText('Track groove')).not.toBeInTheDocument()
   })
 
   it('accepts bar/key/bpm params from lick jump link', () => {

@@ -4,7 +4,7 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
 import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTracks } from '../../app/persistence/localState'
-import { BUNDLED_REAL_TRACKS, GROOVE_PROFILES, buildRealTrackId, type GrooveId, type RealTrack } from './backing'
+import { BUNDLED_REAL_TRACKS, GROOVE_PROFILES, buildRealTrackId, inferGrooveId, type GrooveId, type RealTrack } from './backing'
 import { createBackingClickPlayer } from './backingAudio'
 import { createPlaceholderBackingExtractorService } from './backingExtractor'
 
@@ -47,9 +47,9 @@ export function BackingPage() {
 
   const [newTrackName, setNewTrackName] = useState('')
   const [newTrackKey, setNewTrackKey] = useState<MusicalKey>('C')
-  const [newTrackGroove, setNewTrackGroove] = useState<GrooveId>('slow-shuffle')
   const [newTrackBpm, setNewTrackBpm] = useState(90)
   const [newTrackFile, setNewTrackFile] = useState<File | null>(null)
+  const [uploadFeedback, setUploadFeedback] = useState('')
 
   const [playbackState, setPlaybackState] = useState<'stopped' | 'playing' | 'paused'>('stopped')
   const [currentSource, setCurrentSource] = useState<'synth' | 'real'>('synth')
@@ -117,11 +117,24 @@ export function BackingPage() {
 
   function handleTrackImport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!newTrackName || !newTrackFile) return
+    const trimmedName = newTrackName.trim()
+    if (!trimmedName) {
+      setUploadFeedback('上传失败：请填写名称。')
+      return
+    }
+    if (!newTrackFile) {
+      setUploadFeedback('上传失败：请选择音频文件。')
+      return
+    }
+    if (!newTrackFile.type.startsWith('audio/')) {
+      setUploadFeedback('上传失败：仅支持音频文件。')
+      return
+    }
 
+    const inferredGroove = inferGrooveId(`${trimmedName} ${newTrackFile.name}`)
     const trackWithoutId = {
-      name: newTrackName,
-      grooveId: newTrackGroove,
+      name: trimmedName,
+      grooveId: inferredGroove,
       key: newTrackKey,
       bpm: newTrackBpm,
       fileName: newTrackFile.name,
@@ -139,17 +152,21 @@ export function BackingPage() {
     setSelectedRealTrackId(track.id)
     setNewTrackName('')
     setNewTrackFile(null)
+    const grooveName = GROOVE_PROFILES.find((item) => item.id === track.grooveId)?.displayName ?? '自定义'
+    setUploadFeedback(`上传成功：${track.name}（${grooveName}）`)
     event.currentTarget.reset()
   }
 
   function handleTrackFileChange(event: ChangeEvent<HTMLInputElement>) {
     setNewTrackFile(event.target.files?.[0] ?? null)
+    setUploadFeedback('')
   }
 
   function deleteTrack(id: string) {
     setTracks((existing) => {
       const track = existing.find((item) => item.id === id)
       if (track?.fileUrl) URL.revokeObjectURL(track.fileUrl)
+      if (track) setUploadFeedback(`已删除：${track.name}`)
       return existing.filter((item) => item.id !== id)
     })
     if (selectedRealTrackId === id) setSelectedRealTrackId('')
@@ -313,7 +330,7 @@ export function BackingPage() {
 
           <p>调号：{selectedRealTrack?.key ?? '-'}</p>
           <p>BPM：{selectedRealTrack?.bpm ?? '-'}</p>
-          <p>风格：{selectedRealTrack ? GROOVE_PROFILES.find((g) => g.id === selectedRealTrack.grooveId)?.displayName : '-'}</p>
+          <p>风格：{selectedRealTrack ? GROOVE_PROFILES.find((g) => g.id === selectedRealTrack.grooveId)?.displayName ?? '自定义 / Custom' : '-'}</p>
         </div>
 
         <div className="inline-actions">
@@ -321,7 +338,17 @@ export function BackingPage() {
             {currentSource === 'real' && playbackState === 'playing' ? '暂停' : '播放所选实录'}
           </button>
           <button type="button" onClick={stopCurrentSource}>停止</button>
+          <button
+            type="button"
+            onClick={() => selectedRealTrack && deleteTrack(selectedRealTrack.id)}
+            disabled={!selectedRealTrack || selectedRealTrack.id.startsWith('bundled-')}
+            title={selectedRealTrack?.id.startsWith('bundled-') ? '内置伴奏不可删除' : undefined}
+          >
+            删除所选实录
+          </button>
         </div>
+
+        {selectedRealTrack?.id.startsWith('bundled-') ? <p className="muted">当前为内置伴奏，无法删除。</p> : null}
       </div>
 
       <div className="card">
@@ -329,7 +356,7 @@ export function BackingPage() {
         <form onSubmit={handleTrackImport} className="grid-3">
           <label className="control">
             名称
-            <input aria-label="Track name" value={newTrackName} onChange={(e) => setNewTrackName(e.target.value)} required />
+            <input aria-label="Track name" value={newTrackName} onChange={(e) => setNewTrackName(e.target.value)} />
           </label>
 
           <label className="control">
@@ -349,25 +376,15 @@ export function BackingPage() {
           </label>
 
           <label className="control">
-            风格
-            <select aria-label="Track groove" value={newTrackGroove} onChange={(e) => setNewTrackGroove(e.target.value as GrooveId)}>
-              {GROOVE_PROFILES.map((groove) => (
-                <option key={groove.id} value={groove.id}>
-                  {groove.displayName}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="control">
             文件
-            <input aria-label="Track file" type="file" accept="audio/*" onChange={handleTrackFileChange} required />
+            <input aria-label="Track file" type="file" accept="audio/*" onChange={handleTrackFileChange} />
           </label>
 
           <div className="inline-actions" style={{ alignItems: 'end' }}>
             <button type="submit">导入音轨</button>
           </div>
         </form>
+        {uploadFeedback ? <p aria-live="polite">{uploadFeedback}</p> : null}
       </div>
 
       <div className="card">
@@ -384,25 +401,29 @@ export function BackingPage() {
 
       <div className="card">
         <h3>已导入音轨</h3>
-        {tracks.length === 0 ? (
+        {[...tracks, ...BUNDLED_REAL_TRACKS].length === 0 ? (
           <p className="empty-state">还没有导入音轨。</p>
         ) : (
           <ul className="list">
-            {tracks.map((track) => (
-              <li key={track.id} className="list-item">
-                <div className="card-title-row">
-                  <strong>
-                    {track.name} - {track.grooveId} - {track.key} @ {track.bpm} BPM
-                  </strong>
-                  <button type="button" onClick={() => deleteTrack(track.id)}>
-                    删除
-                  </button>
-                </div>
-                <p className="muted">
-                  {track.fileName}, {track.fileType}, {track.fileSize} bytes {track.fileUrl ? null : '（需重新选择本地文件以播放） '}
-                </p>
-              </li>
-            ))}
+            {[...tracks, ...BUNDLED_REAL_TRACKS].map((track) => {
+              const isBundled = track.id.startsWith('bundled-')
+              return (
+                <li key={track.id} className="list-item">
+                  <div className="card-title-row">
+                    <strong>
+                      {track.name} - {track.grooveId} - {track.key} @ {track.bpm} BPM
+                    </strong>
+                    <button type="button" onClick={() => deleteTrack(track.id)} disabled={isBundled} title={isBundled ? '内置伴奏不可删除' : undefined}>
+                      删除
+                    </button>
+                  </div>
+                  <p className="muted">
+                    {track.fileName}, {track.fileType}, {track.fileSize} bytes {track.fileUrl ? null : '（需重新选择本地文件以播放） '}
+                    {isBundled ? '（内置伴奏不可删除）' : ''}
+                  </p>
+                </li>
+              )
+            })}
           </ul>
         )}
       </div>

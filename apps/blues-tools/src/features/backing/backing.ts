@@ -2,7 +2,7 @@ import type { MusicalKey } from '../../domain/music/types'
 
 export type BackingMode = 'synth' | 'real' | 'auto'
 
-export type GrooveId = 'slow-shuffle' | 'chicago-shuffle' | 'texas-straight'
+export type GrooveId = 'slow-shuffle' | 'chicago-shuffle' | 'texas-straight' | 'custom'
 
 export interface GrooveProfile {
   id: GrooveId
@@ -12,6 +12,12 @@ export interface GrooveProfile {
 }
 
 export const GROOVE_PROFILES: GrooveProfile[] = [
+  {
+    id: 'custom',
+    displayName: '自定义 / Custom',
+    bpmRange: { min: 40, max: 220, recommended: 90 },
+    description: '上传素材自动识别失败时使用的默认风格标签。',
+  },
   {
     id: 'slow-shuffle',
     displayName: '慢速布鲁斯 Shuffle / Slow Blues Shuffle',
@@ -143,4 +149,12 @@ export function choosePlaybackSource(
 
 export function buildRealTrackId(track: Omit<RealTrack, 'id'>): string {
   return `${track.name}-${track.grooveId}-${track.key}-${track.bpm}-${track.fileName}`.toLowerCase().replaceAll(/\s+/g, '-')
+}
+
+export function inferGrooveId(input: string): GrooveId {
+  const text = input.toLowerCase()
+  if (text.includes('texas') || text.includes('straight') || text.includes('直八')) return 'texas-straight'
+  if (text.includes('chicago') || text.includes('芝加哥')) return 'chicago-shuffle'
+  if (text.includes('shuffle') || text.includes('slow') || text.includes('慢速')) return 'slow-shuffle'
+  return 'custom'
 }
