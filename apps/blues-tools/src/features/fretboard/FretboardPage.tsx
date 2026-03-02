@@ -21,40 +21,71 @@ export function FretboardPage() {
   const bluesNotes = useMemo(() => getBluesScaleNotes(key), [key])
 
   return (
-    <section>
+    <section className="page">
       <h1>指板 / Fretboard</h1>
       <p>状态提示：当前高亮为 {key} 小调布鲁斯音阶。</p>
-      <label>
-        Key
-        <select aria-label="Fretboard key" value={key} onChange={(e) => setKey(e.target.value as MusicalKey)}>
-          {CHROMATIC_KEYS.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </label>
 
-      <p>Blues scale notes: {bluesNotes.join(', ')}</p>
+      <div className="card grid-2">
+        <label className="control">
+          Key
+          <select aria-label="Fretboard key" value={key} onChange={(e) => setKey(e.target.value as MusicalKey)}>
+            {CHROMATIC_KEYS.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
+        <div>
+          <div className="badge info" style={{ marginBottom: 8 }}>
+            Active Key/Scale
+          </div>
+          <div>
+            <strong>{key} Blues Scale</strong>
+          </div>
+          <div className="muted">Blues scale notes: {bluesNotes.join(', ')}</div>
+        </div>
+      </div>
 
-      <table aria-label="Fretboard grid">
-        <tbody>
-          {STANDARD_TUNING.map((openString, stringIndex) => (
-            <tr key={`${openString}-${stringIndex}`}>
-              <th scope="row">String {6 - stringIndex} ({openString})</th>
-              {Array.from({ length: FRET_COUNT + 1 }).map((_, fret) => {
-                const note = getFretNote(openString, fret)
-                const inScale = bluesNotes.includes(note)
-                return (
-                  <td key={fret} data-scale-note={inScale ? 'yes' : 'no'}>
-                    {fret}:{note}
-                  </td>
-                )
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="card">
+        <div className="inline-actions" style={{ marginBottom: 8 }}>
+          <span className="badge success">Highlighted note = in scale</span>
+          <span className="badge info">Cell format: fret:note</span>
+        </div>
+        <div style={{ overflowX: 'auto' }}>
+          <table aria-label="Fretboard grid" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 4 }}>
+            <tbody>
+              {STANDARD_TUNING.map((openString, stringIndex) => (
+                <tr key={`${openString}-${stringIndex}`}>
+                  <th scope="row" style={{ textAlign: 'left', paddingRight: 8, whiteSpace: 'nowrap' }}>
+                    String {6 - stringIndex} ({openString})
+                  </th>
+                  {Array.from({ length: FRET_COUNT + 1 }).map((_, fret) => {
+                    const note = getFretNote(openString, fret)
+                    const inScale = bluesNotes.includes(note)
+                    return (
+                      <td
+                        key={fret}
+                        data-scale-note={inScale ? 'yes' : 'no'}
+                        style={{
+                          border: '1px solid var(--border)',
+                          borderRadius: 8,
+                          padding: '0.35rem 0.45rem',
+                          background: inScale ? 'rgba(77, 210, 168, 0.18)' : 'rgba(7, 15, 27, 0.72)',
+                          color: inScale ? '#ddfff4' : 'var(--muted)',
+                          minWidth: 52,
+                        }}
+                      >
+                        {fret}:{note}
+                      </td>
+                    )
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
   )
 }

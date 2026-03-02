@@ -25,41 +25,51 @@ export function KnowledgePage() {
   }, [query, tag])
 
   return (
-    <section>
+    <section className="page">
       <h1>Knowledge</h1>
 
-      <label>
-        Search
-        <input
-          aria-label="Search knowledge"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search concepts"
-        />
-      </label>
+      <div className="card grid-2">
+        <label className="control">
+          Search
+          <input
+            aria-label="Search knowledge"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search concepts"
+          />
+        </label>
 
-      <label>
-        Filter tag
-        <select aria-label="Filter tag" value={tag} onChange={(e) => setTag(e.target.value)}>
-          {tags.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
+        <label className="control">
+          Filter tag
+          <select aria-label="Filter tag" value={tag} onChange={(e) => setTag(e.target.value)}>
+            {tags.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      {filteredCards.length === 0 ? (
+        <p className="empty-state">No cards matched your filters.</p>
+      ) : (
+        <ul className="list">
+          {filteredCards.map((card) => (
+            <li key={card.id} className="list-item">
+              <h2>{card.title}</h2>
+              <p>{card.content}</p>
+              <div className="inline-actions">
+                {card.tags.map((item) => (
+                  <span className="badge info" key={`${card.id}-${item}`}>
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </li>
           ))}
-        </select>
-      </label>
-
-      <ul>
-        {filteredCards.map((card) => (
-          <li key={card.id}>
-            <h2>{card.title}</h2>
-            <p>{card.content}</p>
-            <small>{card.tags.join(', ')}</small>
-          </li>
-        ))}
-      </ul>
-
-      {filteredCards.length === 0 && <p>No cards matched your filters.</p>}
+        </ul>
+      )}
     </section>
   )
 }

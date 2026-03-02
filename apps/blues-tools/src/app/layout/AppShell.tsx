@@ -10,19 +10,29 @@ const navItems = [
 
 export function AppShell() {
   return (
-    <div>
-      <nav aria-label="Primary">
-        <ul>
-          {navItems.map((item) => (
-            <li key={item.to}>
-              <NavLink to={item.to}>{item.label}</NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <main>
+    <div className="app-shell">
+      <header className="app-header">
+        <div className="app-header-inner">
+          <div className="brand">🎸 Blues Tools</div>
+          <nav aria-label="Primary">
+            <ul className="nav-list">
+              {navItems.map((item) => (
+                <li key={item.to}>
+                  <NavLink className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`} to={item.to}>
+                    {item.label}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </div>
+      </header>
+      <main className="app-main">
         <Outlet />
       </main>
+      <footer className="app-footer">
+        <div className="app-footer-inner muted">Practice time · 12-bar aware · built for quick blues sessions</div>
+      </footer>
     </div>
   )
 }

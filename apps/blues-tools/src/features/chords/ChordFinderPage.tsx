@@ -16,35 +16,45 @@ export function ChordFinderPage() {
   const fingering = useMemo(() => getChordFingering(root, quality), [root, quality])
 
   return (
-    <section>
+    <section className="page">
       <h1>Chords</h1>
 
-      <label>
-        Root
-        <select aria-label="Chord root" value={root} onChange={(e) => setRoot(e.target.value as MusicalKey)}>
-          {CHROMATIC_KEYS.map((key) => (
-            <option key={key} value={key}>
-              {key}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className="card grid-2">
+        <label className="control">
+          Root
+          <select aria-label="Chord root" value={root} onChange={(e) => setRoot(e.target.value as MusicalKey)}>
+            {CHROMATIC_KEYS.map((key) => (
+              <option key={key} value={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+        </label>
 
-      <label>
-        Quality
-        <select aria-label="Chord quality" value={quality} onChange={(e) => setQuality(e.target.value as ChordQuality)}>
-          {Object.entries(QUALITY_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </label>
+        <label className="control">
+          Quality
+          <select aria-label="Chord quality" value={quality} onChange={(e) => setQuality(e.target.value as ChordQuality)}>
+            {Object.entries(QUALITY_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
 
-      <p>
-        Fingering for {root} {QUALITY_LABELS[quality]}: <strong>{fingering}</strong>
-      </p>
-      <p>Pattern format: EADGBe (x = mute).</p>
+      <article className="card">
+        <div className="card-title-row">
+          <h2>
+            {root} {QUALITY_LABELS[quality]}
+          </h2>
+          <span className="badge info">Chord Result</span>
+        </div>
+        <p>
+          Fingering for {root} {QUALITY_LABELS[quality]}: <strong>{fingering}</strong>
+        </p>
+        <p className="muted">Pattern format: EADGBe (x = mute).</p>
+      </article>
     </section>
   )
 }

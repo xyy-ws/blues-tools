@@ -44,56 +44,78 @@ export function ImprovPage() {
     [elapsedSeconds, preset, sessionKey],
   )
 
+  const bars = Array.from({ length: 12 }).map((_, index) => ({ index, active: index === barIndex }))
+
   return (
-    <section>
+    <section className="page">
       <h1>即兴 / Improv</h1>
       <p>状态提示：{isRunning ? '计时进行中' : '已暂停，可随时开始'}。</p>
 
-      <label>
-        Session key
-        <select aria-label="Session key" value={sessionKey} onChange={(e) => setSessionKey(e.target.value as MusicalKey)}>
-          {CHROMATIC_KEYS.map((key) => (
-            <option key={key} value={key}>
-              {key}
-            </option>
+      <div className="card grid-2">
+        <label className="control">
+          Session key
+          <select aria-label="Session key" value={sessionKey} onChange={(e) => setSessionKey(e.target.value as MusicalKey)}>
+            {CHROMATIC_KEYS.map((key) => (
+              <option key={key} value={key}>
+                {key}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="control">
+          Progression preset
+          <select
+            aria-label="Improv progression preset"
+            value={preset}
+            onChange={(e) => setPreset(e.target.value as ProgressionPreset)}
+          >
+            {PROGRESSION_PRESETS.map((progressionPreset) => (
+              <option key={progressionPreset.id} value={progressionPreset.id}>
+                {progressionPreset.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <div className="card">
+        <div className="card-title-row">
+          <h2>Timer Panel</h2>
+          <span className={`badge ${isRunning ? 'success' : 'warn'}`}>{isRunning ? 'RUNNING' : 'STOPPED'}</span>
+        </div>
+        <p>Timer: {elapsedSeconds}s</p>
+        <div className="inline-actions">
+          <button type="button" onClick={() => setIsRunning(true)}>
+            Start
+          </button>
+          <button type="button" onClick={() => setIsRunning(false)}>
+            Stop
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setIsRunning(false)
+              setElapsedSeconds(0)
+            }}
+          >
+            Reset
+          </button>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3>Chord Progression Strip</h3>
+        <div className="inline-actions">
+          {bars.map((bar) => (
+            <span key={bar.index} className={`badge ${bar.active ? 'success' : 'info'}`}>
+              Bar {bar.index + 1}
+            </span>
           ))}
-        </select>
-      </label>
-
-      <label>
-        Progression preset
-        <select
-          aria-label="Improv progression preset"
-          value={preset}
-          onChange={(e) => setPreset(e.target.value as ProgressionPreset)}
-        >
-          {PROGRESSION_PRESETS.map((progressionPreset) => (
-            <option key={progressionPreset.id} value={progressionPreset.id}>
-              {progressionPreset.label}
-            </option>
-          ))}
-        </select>
-      </label>
-
-      <p>Timer: {elapsedSeconds}s</p>
-      <button type="button" onClick={() => setIsRunning(true)}>
-        Start
-      </button>
-      <button type="button" onClick={() => setIsRunning(false)}>
-        Stop
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          setIsRunning(false)
-          setElapsedSeconds(0)
-        }}
-      >
-        Reset
-      </button>
-
-      <p>Current bar: {barIndex + 1} / 12</p>
-      <p>Current chord: {chordLabel}</p>
+        </div>
+        <p>Current bar: {barIndex + 1} / 12</p>
+        <p>Current chord: {chordLabel}</p>
+      </div>
     </section>
   )
 }

@@ -89,128 +89,154 @@ export function BackingPage() {
   }
 
   return (
-    <section>
+    <section className="page">
       <h1>伴奏 / Backing</h1>
-      <p aria-live="polite">状态提示：{playback === 'real' ? '已匹配本地音轨' : '当前使用合成伴奏'}</p>
+      <p aria-live="polite">
+        状态提示：{playback === 'real' ? '已匹配本地音轨' : '当前使用合成伴奏'}
+        <span className={`badge ${playback === 'real' ? 'success' : 'info'}`} style={{ marginLeft: 8 }}>
+          {playback === 'real' ? 'Real Track Active' : 'Synth Active'}
+        </span>
+      </p>
 
-      <label>
-        调性 / Key
-        <select aria-label="Key" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
-          {CHROMATIC_KEYS.map((key) => (
-            <option key={key} value={key}>
-              {key}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div className="card">
+        <div className="card-title-row">
+          <h2>Session Controls</h2>
+          <span className="badge warn">Source: {playback === 'real' ? 'Real Track' : 'Synth'}</span>
+        </div>
+        <div className="grid-3">
+          <label className="control">
+            调性 / Key
+            <select aria-label="Key" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
+              {CHROMATIC_KEYS.map((key) => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
+            </select>
+          </label>
 
-      <label>
-        BPM
-        <input
-          aria-label="BPM"
-          type="number"
-          min={40}
-          max={220}
-          value={bpm}
-          onChange={(e) => setBpm(Number(e.target.value))}
-        />
-      </label>
+          <label className="control">
+            BPM
+            <input
+              aria-label="BPM"
+              type="number"
+              min={40}
+              max={220}
+              value={bpm}
+              onChange={(e) => setBpm(Number(e.target.value))}
+            />
+          </label>
 
-      <label>
-        进行预设 / Progression preset
-        <select
-          aria-label="Progression preset"
-          value={preset}
-          onChange={(e) => setPreset(e.target.value as ProgressionPreset)}
-        >
-          {PROGRESSION_PRESETS.map((progressionPreset) => (
-            <option key={progressionPreset.id} value={progressionPreset.id}>
-              {progressionPreset.label}
-            </option>
-          ))}
-        </select>
-      </label>
+          <label className="control">
+            进行预设 / Progression preset
+            <select
+              aria-label="Progression preset"
+              value={preset}
+              onChange={(e) => setPreset(e.target.value as ProgressionPreset)}
+            >
+              {PROGRESSION_PRESETS.map((progressionPreset) => (
+                <option key={progressionPreset.id} value={progressionPreset.id}>
+                  {progressionPreset.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </div>
 
-      <fieldset>
+      <fieldset className="card">
         <legend>模式 / Mode</legend>
-        <label>
-          <input type="radio" name="mode" checked={mode === 'synth'} onChange={() => setMode('synth')} />
-          合成 / Synth
-        </label>
-        <label>
-          <input type="radio" name="mode" checked={mode === 'real'} onChange={() => setMode('real')} />
-          实录 / Real Track
-        </label>
-        <label>
-          <input type="radio" name="mode" checked={mode === 'auto'} onChange={() => setMode('auto')} />
-          自动 / Auto
-        </label>
+        <div className="inline-actions">
+          <label>
+            <input type="radio" name="mode" checked={mode === 'synth'} onChange={() => setMode('synth')} /> 合成 / Synth
+          </label>
+          <label>
+            <input type="radio" name="mode" checked={mode === 'real'} onChange={() => setMode('real')} /> 实录 / Real Track
+          </label>
+          <label>
+            <input type="radio" name="mode" checked={mode === 'auto'} onChange={() => setMode('auto')} /> 自动 / Auto
+          </label>
+        </div>
       </fieldset>
 
-      <p>Playback source: {playback === 'real' ? 'Real Track' : 'Synth'}</p>
-      <p>Selected preset: {preset}</p>
-      <p>Bar 2 chord: {progression[1].degree}</p>
-      <p>Bar 12 chord: {progression[11].degree}</p>
+      <div className="card grid-3">
+        <p>Playback source: {playback === 'real' ? 'Real Track' : 'Synth'}</p>
+        <p>Selected preset: {preset}</p>
+        <p>Bar 2 chord: {progression[1].degree}</p>
+        <p>Bar 12 chord: {progression[11].degree}</p>
+      </div>
 
-      <h2>导入本地实录伴奏 / Import local real track</h2>
-      <form onSubmit={handleTrackImport}>
-        <label>
-          Name
-          <input
-            aria-label="Track name"
-            value={newTrackName}
-            onChange={(e) => setNewTrackName(e.target.value)}
-            required
-          />
-        </label>
+      <div className="card">
+        <h2>导入本地实录伴奏 / Import local real track</h2>
+        <form onSubmit={handleTrackImport} className="grid-3">
+          <label className="control">
+            Name
+            <input
+              aria-label="Track name"
+              value={newTrackName}
+              onChange={(e) => setNewTrackName(e.target.value)}
+              required
+            />
+          </label>
 
-        <label>
-          Key
-          <select aria-label="Track key" value={newTrackKey} onChange={(e) => setNewTrackKey(e.target.value as MusicalKey)}>
-            {CHROMATIC_KEYS.map((key) => (
-              <option key={key} value={key}>
-                {key}
-              </option>
+          <label className="control">
+            Key
+            <select aria-label="Track key" value={newTrackKey} onChange={(e) => setNewTrackKey(e.target.value as MusicalKey)}>
+              {CHROMATIC_KEYS.map((key) => (
+                <option key={key} value={key}>
+                  {key}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="control">
+            BPM
+            <input
+              aria-label="Track bpm"
+              type="number"
+              min={40}
+              max={220}
+              value={newTrackBpm}
+              onChange={(e) => setNewTrackBpm(Number(e.target.value))}
+            />
+          </label>
+
+          <label className="control">
+            File
+            <input aria-label="Track file" type="file" accept="audio/*" onChange={handleTrackFileChange} />
+          </label>
+
+          <div className="inline-actions" style={{ alignItems: 'end' }}>
+            <button type="submit">Import Track</button>
+          </div>
+        </form>
+      </div>
+
+      <div className="card">
+        <h3>Imported tracks</h3>
+        {tracks.length === 0 ? (
+          <p className="empty-state">No tracks imported yet.</p>
+        ) : (
+          <ul className="list">
+            {tracks.map((track) => (
+              <li key={track.id} className="list-item">
+                <div className="card-title-row">
+                  <strong>
+                    {track.name} - {track.key} @ {track.bpm} BPM
+                  </strong>
+                  <button type="button" onClick={() => deleteTrack(track.id)}>
+                    Delete
+                  </button>
+                </div>
+                <p className="muted">
+                  {track.fileName}, {track.fileType}, {track.fileSize} bytes {track.fileUrl ? null : '（需重新选择本地文件以播放） '}
+                </p>
+              </li>
             ))}
-          </select>
-        </label>
-
-        <label>
-          BPM
-          <input
-            aria-label="Track bpm"
-            type="number"
-            min={40}
-            max={220}
-            value={newTrackBpm}
-            onChange={(e) => setNewTrackBpm(Number(e.target.value))}
-          />
-        </label>
-
-        <label>
-          File
-          <input aria-label="Track file" type="file" accept="audio/*" onChange={handleTrackFileChange} />
-        </label>
-
-        <button type="submit">Import Track</button>
-      </form>
-
-      <h3>Imported tracks</h3>
-      {tracks.length === 0 ? (
-        <p>No tracks imported yet.</p>
-      ) : (
-        <ul>
-          {tracks.map((track) => (
-            <li key={track.id}>
-              {track.name} - {track.key} @ {track.bpm} BPM ({track.fileName}, {track.fileType}, {track.fileSize} bytes){' '}
-              {track.fileUrl ? null : '（需重新选择本地文件以播放） '}
-              <button type="button" onClick={() => deleteTrack(track.id)}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+          </ul>
+        )}
+      </div>
     </section>
   )
 }
