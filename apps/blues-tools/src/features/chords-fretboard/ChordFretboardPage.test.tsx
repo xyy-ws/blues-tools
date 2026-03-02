@@ -24,10 +24,13 @@ describe('ChordFretboardPage', () => {
 
     const highlightedCells = container.querySelectorAll('[data-chord-highlight="yes"]')
     const typedCells = container.querySelectorAll('[data-tone-type]')
+    const nonHighlightCells = Array.from(container.querySelectorAll('td')).filter((cell) => !cell.hasAttribute('data-chord-highlight'))
 
     expect(highlightedCells.length).toBeGreaterThan(0)
     expect(typedCells.length).toBe(highlightedCells.length)
-    expect(container.querySelector('[data-chord-highlight="no"][data-tone-type]')).not.toBeInTheDocument()
+    expect(container.querySelector('[data-chord-highlight="no"]')).not.toBeInTheDocument()
+    expect(nonHighlightCells.length).toBeGreaterThan(0)
+    expect(nonHighlightCells.every((cell) => !cell.hasAttribute('data-tone-type'))).toBe(true)
 
     expect(container.querySelector('[data-chord-highlight="yes"][data-tone-type="root"]')).toBeInTheDocument()
     expect(container.querySelector('[data-chord-highlight="yes"][data-tone-type="chord-tone"]')).toBeInTheDocument()

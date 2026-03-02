@@ -211,8 +211,7 @@ export function ChordFretboardPage() {
                     return (
                       <td
                         key={fret}
-                        data-chord-highlight={isHighlighted ? 'yes' : 'no'}
-                        data-tone-type={toneTag}
+                        {...(isHighlighted ? { 'data-chord-highlight': 'yes', 'data-tone-type': toneTag } : {})}
                         style={{
                           border: '1px solid var(--border)',
                           borderRadius: 8,
