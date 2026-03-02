@@ -7,14 +7,14 @@ afterEach(() => {
 })
 
 describe('ChordFretboardPage', () => {
-  it('updates displayed pattern when chord selection changes', () => {
+  it('updates displayed pattern when inversion changes', () => {
     render(<ChordFretboardPage />)
 
-    const patternBefore = screen.getByText(/^指法：/).textContent
-    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'C' } })
-    const patternAfter = screen.getByText(/^指法：/).textContent
+    const before = screen.getByText(/当前按法变体：/).textContent
+    fireEvent.change(screen.getByLabelText('转位'), { target: { value: '1' } })
+    const after = screen.getByText(/当前按法变体：/).textContent
 
-    expect(patternAfter).not.toEqual(patternBefore)
+    expect(after).not.toEqual(before)
   })
 
   it('highlights only fingering positions and keeps tone types inside highlighted notes', () => {

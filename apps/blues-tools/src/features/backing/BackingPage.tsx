@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
 import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTracks } from '../../app/persistence/localState'
 import { buildRealTrackId, resolvePlayback, type BackingMode, type RealTrack } from './backing'
+import { createBackingClickPlayer } from './backingAudio'
 
 const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
   { id: 'standard-12', label: '标准 12 小节' },
@@ -45,6 +46,10 @@ export function BackingPage() {
   const [playbackState, setPlaybackState] = useState<'stopped' | 'playing' | 'paused'>('stopped')
   const [currentBar, setCurrentBar] = useState(1)
   const [currentBeat, setCurrentBeat] = useState(1)
+  const [audioStatus, setAudioStatus] = useState<'idle' | 'ready' | 'blocked' | 'fallback'>('idle')
+
+  const clickPlayerRef = useRef(createBackingClickPlayer())
+  const realAudioRef = useRef<HTMLAudioElement | null>(null)
 
   const playbackResolution = useMemo(
     () => resolvePlayback(mode, { key: selectedKey, bpm }, tracks),
@@ -53,6 +58,11 @@ export function BackingPage() {
 
   const progression = useMemo(() => getTwelveBarBluesProgression(selectedKey, preset), [preset, selectedKey])
   const playback = playbackResolution.resolved
+
+  const matchedTrack = useMemo(
+    () => tracks.find((track) => track.key === selectedKey && track.bpm === bpm) ?? null,
+    [tracks, selectedKey, bpm],
+  )
 
   useEffect(() => {
     const existing = loadState() ?? getDefaultState()
@@ -74,16 +84,28 @@ export function BackingPage() {
     const beatIntervalMs = Math.max(120, Math.round((60_000 / Math.max(bpm, 1)) * 0.75))
     const timer = window.setInterval(() => {
       setCurrentBeat((prevBeat) => {
-        if (prevBeat < BEATS_PER_BAR) {
-          return prevBeat + 1
+        const nextBeat = prevBeat < BEATS_PER_BAR ? prevBeat + 1 : 1
+        if (prevBeat >= BEATS_PER_BAR) {
+          setCurrentBar((prevBar) => (prevBar % BAR_COUNT) + 1)
         }
-        setCurrentBar((prevBar) => (prevBar % BAR_COUNT) + 1)
-        return 1
+
+        if (playback === 'synth') {
+          clickPlayerRef.current.playBeat(nextBeat === 1)
+        }
+
+        return nextBeat
       })
     }, beatIntervalMs)
 
     return () => window.clearInterval(timer)
-  }, [bpm, playbackState])
+  }, [bpm, playbackState, playback])
+
+  useEffect(() => {
+    return () => {
+      realAudioRef.current?.pause()
+      clickPlayerRef.current.dispose()
+    }
+  }, [])
 
   function handleTrackImport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -127,16 +149,51 @@ export function BackingPage() {
     })
   }
 
+  async function startPlayback() {
+    try {
+      const unlocked = await clickPlayerRef.current.ensureUnlocked()
+
+      if (playback === 'real' && matchedTrack?.fileUrl) {
+        if (!realAudioRef.current) {
+          realAudioRef.current = new Audio()
+          realAudioRef.current.loop = true
+        }
+
+        realAudioRef.current.src = matchedTrack.fileUrl
+        realAudioRef.current.currentTime = 0
+
+        try {
+          await realAudioRef.current.play()
+          setAudioStatus('ready')
+        } catch {
+          setAudioStatus(unlocked ? 'fallback' : 'blocked')
+        }
+      } else {
+        setAudioStatus(unlocked ? 'ready' : 'blocked')
+      }
+
+      setPlaybackState('playing')
+    } catch {
+      setAudioStatus('blocked')
+      setPlaybackState('playing')
+    }
+  }
+
   function togglePlayPause() {
     if (playbackState === 'playing') {
+      realAudioRef.current?.pause()
       setPlaybackState('paused')
       return
     }
 
-    setPlaybackState('playing')
+    void startPlayback()
   }
 
   function handleStop() {
+    realAudioRef.current?.pause()
+    if (realAudioRef.current) {
+      realAudioRef.current.currentTime = 0
+    }
     setPlaybackState('stopped')
     setCurrentBar(1)
     setCurrentBeat(1)
@@ -242,6 +299,10 @@ export function BackingPage() {
         </div>
         <p style={{ marginTop: 8 }}>
           当前小节：{currentBar} · 当前拍：{currentBeat}
+        </p>
+        <p className="muted" aria-label="音频状态">
+          音频状态：
+          {audioStatus === 'ready' ? '已解锁，可正常发声' : audioStatus === 'fallback' ? '实录播放失败，已回退节拍器提示' : audioStatus === 'blocked' ? '浏览器阻止音频，请再次点击播放' : '待启动'}
         </p>
         <div className="bar-progress" aria-label="当前小节进度">
           <div className="bar-progress-fill" style={{ width: `${progressPercent}%` }} />

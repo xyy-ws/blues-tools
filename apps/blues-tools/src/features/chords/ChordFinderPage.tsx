@@ -4,14 +4,20 @@ import type { MusicalKey } from '../../domain/music/types'
 import { getChordFingering, type ChordQuality } from './chords'
 
 const QUALITY_LABELS: Record<ChordQuality, string> = {
-  dominant7: 'Dominant 7',
-  minor7: 'Minor 7',
-  major: 'Major',
+  maj: 'Major',
+  m: 'Minor',
+  '7': 'Dominant 7',
+  maj7: 'Major 7',
+  m7: 'Minor 7',
+  m7b5: 'Minor 7♭5',
+  '9': 'Dominant 9',
+  maj9: 'Major 9',
+  m9: 'Minor 9',
 }
 
 export function ChordFinderPage() {
   const [root, setRoot] = useState<MusicalKey>('E')
-  const [quality, setQuality] = useState<ChordQuality>('dominant7')
+  const [quality, setQuality] = useState<ChordQuality>('7')
 
   const fingering = useMemo(() => getChordFingering(root, quality), [root, quality])
 

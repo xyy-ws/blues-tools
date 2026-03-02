@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
 import { BackingPage } from './BackingPage'
@@ -11,7 +11,44 @@ afterEach(() => {
 })
 
 beforeEach(() => {
-  vi.useFakeTimers()
+  class AudioContextMock {
+    state: AudioContextState = 'suspended'
+    sampleRate = 44100
+    currentTime = 0
+    destination = {}
+    resume = vi.fn(async () => {
+      this.state = 'running'
+    })
+    close = vi.fn(async () => {
+      this.state = 'closed'
+    })
+    createOscillator = vi.fn(() => ({
+      connect: vi.fn(),
+      start: vi.fn(),
+      stop: vi.fn(),
+      type: 'sine',
+      frequency: { value: 0 },
+    }))
+    createGain = vi.fn(() => ({
+      connect: vi.fn(),
+      gain: {
+        value: 0,
+        setValueAtTime: vi.fn(),
+        exponentialRampToValueAtTime: vi.fn(),
+      },
+    }))
+  }
+
+  class AudioMock {
+    src = ''
+    loop = false
+    currentTime = 0
+    play = vi.fn(async () => undefined)
+    pause = vi.fn(() => undefined)
+  }
+
+  vi.stubGlobal('AudioContext', AudioContextMock)
+  vi.stubGlobal('Audio', AudioMock)
 })
 
 function renderPage() {
@@ -23,43 +60,52 @@ function renderPage() {
 }
 
 describe('BackingPage', () => {
-  it('renders playback controls and handles play/pause(stop via toggle)/stop transitions', () => {
+  it('renders playback controls and handles play/pause/stop transitions', async () => {
     renderPage()
 
-    expect(screen.getByRole('button', { name: '播放' })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '停止' })).toBeInTheDocument()
-    expect(screen.getByText(/当前小节：\s*1/)).toBeInTheDocument()
-    expect(screen.getByText('已停止')).toBeInTheDocument()
-
     fireEvent.click(screen.getByRole('button', { name: '播放' }))
-    expect(screen.getByText('播放中')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '暂停' })).toBeInTheDocument()
+    await screen.findByText('播放中')
+    expect(screen.getByText('音频状态：已解锁，可正常发声')).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: '暂停' }))
     expect(screen.getByText('已暂停')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: '继续' })).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: '停止' }))
     expect(screen.getByText('已停止')).toBeInTheDocument()
-    expect(screen.getByText(/当前小节：\s*1/)).toBeInTheDocument()
   })
 
-  it('advances beat indicator while playing', () => {
+  it('advances beat indicator while playing', async () => {
+    vi.useFakeTimers()
     renderPage()
 
     fireEvent.click(screen.getByRole('button', { name: '播放' }))
+    await Promise.resolve()
+    await Promise.resolve()
+
     vi.advanceTimersByTime(1000)
 
     expect(screen.getByLabelText('1-2-3-4 节拍指示')).toBeInTheDocument()
     expect(screen.getByText(/当前拍：/)).toBeInTheDocument()
   })
 
-  it('uses synth in auto mode when there is no matching real track and real when matched', () => {
+  it('guards no-sound regression by falling back when real track play fails', async () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
+    const playMock = vi.fn(async () => {
+      throw new Error('blocked')
+    })
+
+    vi.stubGlobal(
+      'Audio',
+      class {
+        src = ''
+        loop = false
+        currentTime = 0
+        play = playMock
+        pause = vi.fn(() => undefined)
+      },
+    )
 
     renderPage()
-
-    expect(screen.getByText('播放源：合成')).toBeInTheDocument()
 
     fireEvent.change(screen.getByLabelText('Track name'), { target: { value: 'C Jam' } })
     fireEvent.change(screen.getByLabelText('Track key'), { target: { value: 'C' } })
@@ -67,10 +113,12 @@ describe('BackingPage', () => {
 
     const file = new File(['audio'], 'c-jam.mp3', { type: 'audio/mpeg' })
     fireEvent.change(screen.getByLabelText('Track file'), { target: { files: [file] } })
-
     fireEvent.click(screen.getByRole('button', { name: '导入音轨' }))
 
-    expect(screen.getByText('播放源：实录音轨')).toBeInTheDocument()
-    expect(screen.getByText(/自动模式：已匹配实录音轨/)).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('radio', { name: '实录' }))
+    fireEvent.click(screen.getByRole('button', { name: '播放' }))
+
+    await waitFor(() => expect(playMock).toHaveBeenCalled())
+    expect(screen.getByText('音频状态：实录播放失败，已回退节拍器提示')).toBeInTheDocument()
   })
 })

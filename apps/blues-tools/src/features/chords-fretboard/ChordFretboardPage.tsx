@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
-import { getChordFingerings, type ChordQuality, type RootString } from '../chords/chords'
+import { getChordFingerings, INVERSION_OPTIONS, QUALITY_INTERVALS, type ChordQuality, type Inversion, type RootString } from '../chords/chords'
 import { getFretNote, STANDARD_TUNING } from '../fretboard/fretboard'
 
 type FretRange = '0-7' | '0-12'
@@ -15,9 +15,22 @@ const DISPLAY_TUNING: Array<{ openString: MusicalKey; index: number }> = STANDAR
   .reverse()
 
 const QUALITY_LABELS: Record<ChordQuality, string> = {
-  dominant7: '属七和弦',
-  minor7: '小七和弦',
-  major: '大三和弦',
+  maj: '大三和弦',
+  m: '小三和弦',
+  '7': '属七和弦',
+  maj7: '大七和弦',
+  m7: '小七和弦',
+  m7b5: '半减七和弦',
+  '9': '属九和弦',
+  maj9: '大九和弦',
+  m9: '小九和弦',
+}
+
+const INVERSION_LABELS: Record<Inversion, string> = {
+  0: '原位（根音最低）',
+  1: '第一转位（3rd 最低）',
+  2: '第二转位（5th 最低）',
+  3: '第三转位（7th 最低）',
 }
 
 function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret: number }> {
@@ -30,17 +43,6 @@ function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret
       return { stringIndex, fret }
     })
     .filter((item): item is { stringIndex: number; fret: number } => item !== null)
-}
-
-function getChordToneSet(root: MusicalKey, quality: ChordQuality): Set<MusicalKey> {
-  const intervals: Record<ChordQuality, number[]> = {
-    major: [0, 4, 7],
-    minor7: [0, 3, 7, 10],
-    dominant7: [0, 4, 7, 10],
-  }
-
-  const rootIndex = CHROMATIC_KEYS.indexOf(root)
-  return new Set(intervals[quality].map((step) => CHROMATIC_KEYS[(rootIndex + step) % CHROMATIC_KEYS.length]))
 }
 
 function getFingeringHint(pattern: string): string {
@@ -69,14 +71,24 @@ function getFingeringHint(pattern: string): string {
 
 export function ChordFretboardPage() {
   const [root, setRoot] = useState<MusicalKey>('E')
-  const [quality, setQuality] = useState<ChordQuality>('dominant7')
+  const [quality, setQuality] = useState<ChordQuality>('7')
   const [rootString, setRootString] = useState<RootString>(6)
-  const [variantIndex, setVariantIndex] = useState(0)
+  const [voicingIndex, setVoicingIndex] = useState(0)
+  const [inversion, setInversion] = useState<Inversion>(0)
   const [fretRange, setFretRange] = useState<FretRange>('0-7')
 
-  const fingerings = useMemo(() => getChordFingerings(root, quality, rootString), [root, quality, rootString])
-  const selectedPattern = fingerings[variantIndex] ?? fingerings[0] ?? 'xxxxxx'
-  const chordTones = useMemo(() => getChordToneSet(root, quality), [quality, root])
+  const inversionOptions = INVERSION_OPTIONS[quality]
+  const resolvedInversion = inversionOptions.includes(inversion) ? inversion : 0
+
+  const fingerings = useMemo(
+    () => getChordFingerings(root, quality, rootString, resolvedInversion),
+    [root, quality, rootString, resolvedInversion],
+  )
+  const selectedPattern = fingerings[voicingIndex] ?? fingerings[0] ?? 'xxxxxx'
+  const chordTones = useMemo(() => {
+    const rootIndex = CHROMATIC_KEYS.indexOf(root)
+    return new Set(QUALITY_INTERVALS[quality].map((step) => CHROMATIC_KEYS[(rootIndex + step) % CHROMATIC_KEYS.length]))
+  }, [quality, root])
 
   const highlighted = useMemo(() => {
     const positions = getHighlightedFrets(selectedPattern)
@@ -89,7 +101,9 @@ export function ChordFretboardPage() {
   return (
     <section className="page">
       <h1 className="page-title">和弦与指板</h1>
-      <p className="muted helper-text">选择调性、和弦类型与指法变体，快速对照按法和指板位置。</p>
+      <p className="muted helper-text">
+        按法变体（Voicing）= 同一转位下的不同按法；转位（Inversion）= 低音音级变化（根音/三音/五音/七音）。
+      </p>
 
       <div className="card grid-3 card-controls">
         <label className="control">
@@ -99,7 +113,7 @@ export function ChordFretboardPage() {
             value={root}
             onChange={(e) => {
               setRoot(e.target.value as MusicalKey)
-              setVariantIndex(0)
+              setVoicingIndex(0)
             }}
           >
             {CHROMATIC_KEYS.map((key) => (
@@ -116,8 +130,10 @@ export function ChordFretboardPage() {
             aria-label="和弦性质"
             value={quality}
             onChange={(e) => {
-              setQuality(e.target.value as ChordQuality)
-              setVariantIndex(0)
+              const next = e.target.value as ChordQuality
+              setQuality(next)
+              setInversion(INVERSION_OPTIONS[next][0])
+              setVoicingIndex(0)
             }}
           >
             {Object.entries(QUALITY_LABELS).map(([value, label]) => (
@@ -135,7 +151,7 @@ export function ChordFretboardPage() {
             value={rootString}
             onChange={(e) => {
               setRootString(Number(e.target.value) as RootString)
-              setVariantIndex(0)
+              setVoicingIndex(0)
             }}
           >
             <option value={6}>第 6 弦</option>
@@ -145,8 +161,26 @@ export function ChordFretboardPage() {
         </label>
 
         <label className="control">
-          指法变体
-          <select aria-label="指法变体" value={variantIndex} onChange={(e) => setVariantIndex(Number(e.target.value))}>
+          转位（Inversion）
+          <select
+            aria-label="转位"
+            value={resolvedInversion}
+            onChange={(e) => {
+              setInversion(Number(e.target.value) as Inversion)
+              setVoicingIndex(0)
+            }}
+          >
+            {inversionOptions.map((inv) => (
+              <option key={inv} value={inv}>
+                {INVERSION_LABELS[inv]}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className="control">
+          按法变体（Voicing）
+          <select aria-label="按法变体" value={voicingIndex} onChange={(e) => setVoicingIndex(Number(e.target.value))}>
             {fingerings.map((_, index) => (
               <option key={index} value={index}>
                 变体 {index + 1}
@@ -172,10 +206,13 @@ export function ChordFretboardPage() {
           <span className="badge info">指法：{selectedPattern}</span>
         </div>
         <p>
-          当前指法：<strong>{selectedPattern}</strong>
+          当前转位：<strong>{INVERSION_LABELS[resolvedInversion]}</strong>
+        </p>
+        <p>
+          当前按法变体：<strong>变体 {voicingIndex + 1}</strong>（{selectedPattern}）
         </p>
         <p className="muted helper-text" style={{ marginBottom: 8 }}>
-          记谱格式为 EADGBe（x 表示闷音）。选中指法后，下方会高亮对应品位。
+          记谱格式为 EADGBe（x 表示闷音）。先选转位，再切换同转位下的按法变体。
         </p>
         <p className="muted" aria-label="按法建议">
           {fingeringHint}
