@@ -24,6 +24,8 @@ export function BackingPage() {
   const [newTrackKey, setNewTrackKey] = useState<MusicalKey>('C')
   const [newTrackBpm, setNewTrackBpm] = useState(90)
   const [newTrackFile, setNewTrackFile] = useState<File | null>(null)
+  const [playbackState, setPlaybackState] = useState<'stopped' | 'playing' | 'paused'>('stopped')
+  const [currentBar, setCurrentBar] = useState(1)
 
   const playback = useMemo(
     () => choosePlaybackSource(mode, { key: selectedKey, bpm }, tracks),
@@ -86,6 +88,20 @@ export function BackingPage() {
       }
       return existing.filter((item) => item.id !== id)
     })
+  }
+
+  function handlePlay() {
+    setPlaybackState('playing')
+    setCurrentBar((bar) => (bar === 1 ? 2 : bar))
+  }
+
+  function handlePause() {
+    setPlaybackState('paused')
+  }
+
+  function handleStop() {
+    setPlaybackState('stopped')
+    setCurrentBar(1)
   }
 
   return (
@@ -158,6 +174,27 @@ export function BackingPage() {
           </label>
         </div>
       </fieldset>
+
+      <div className="card">
+        <div className="card-title-row">
+          <h2>播放控制 / Playback Controls</h2>
+          <span className={`badge ${playbackState === 'playing' ? 'success' : playbackState === 'paused' ? 'warn' : 'info'}`}>
+            {playbackState === 'playing' ? 'Playing' : playbackState === 'paused' ? 'Paused' : 'Stopped'}
+          </span>
+        </div>
+        <div className="inline-actions">
+          <button type="button" onClick={handlePlay}>
+            Play
+          </button>
+          <button type="button" onClick={handlePause}>
+            Pause
+          </button>
+          <button type="button" onClick={handleStop}>
+            Stop
+          </button>
+        </div>
+        <p style={{ marginTop: 8 }}>当前小节 / Current bar: {currentBar}</p>
+      </div>
 
       <div className="card grid-3">
         <p>Playback source: {playback === 'real' ? 'Real Track' : 'Synth'}</p>

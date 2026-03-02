@@ -9,6 +9,27 @@ afterEach(() => {
 })
 
 describe('BackingPage', () => {
+  it('renders playback controls and handles play/pause/stop transitions', () => {
+    render(<BackingPage />)
+
+    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Pause' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Stop' })).toBeInTheDocument()
+    expect(screen.getByText(/Current bar:\s*1/)).toBeInTheDocument()
+    expect(screen.getByText('Stopped')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Play' }))
+    expect(screen.getByText('Playing')).toBeInTheDocument()
+    expect(screen.getByText(/Current bar:\s*2/)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Pause' }))
+    expect(screen.getByText('Paused')).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: 'Stop' }))
+    expect(screen.getByText('Stopped')).toBeInTheDocument()
+    expect(screen.getByText(/Current bar:\s*1/)).toBeInTheDocument()
+  })
+
   it('uses synth in auto mode when there is no matching real track and real when matched', () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
 

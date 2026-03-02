@@ -1,17 +1,31 @@
-import { render, screen } from '@testing-library/react'
+import { cleanup, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it } from 'vitest'
 import { AppRouter } from './router'
 
+afterEach(() => {
+  cleanup()
+})
+
 describe('AppRouter', () => {
-  it('routes to Backing page by default', () => {
+  it('routes to Home page by default', () => {
     render(
       <MemoryRouter initialEntries={['/']}>
         <AppRouter />
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('heading', { name: '伴奏 / Backing' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '首页 / Home' })).toBeInTheDocument()
+  })
+
+  it('routes to Home page from /home', () => {
+    render(
+      <MemoryRouter initialEntries={['/home']}>
+        <AppRouter />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('heading', { name: '首页 / Home' })).toBeInTheDocument()
   })
 
   it('routes to Knowledge page', () => {

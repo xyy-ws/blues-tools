@@ -17,6 +17,23 @@ const CHORD_FINGERINGS: Record<MusicalKey, Record<ChordQuality, string>> = {
   B: { dominant7: 'x21202', minor7: 'x20202', major: 'x24442' },
 }
 
+function shiftFrettedNotes(pattern: string, step: number): string {
+  return pattern
+    .split('')
+    .map((value) => {
+      if (value === 'x' || value === 'X' || value === '0') return value
+      const parsed = Number.parseInt(value, 10)
+      if (Number.isNaN(parsed)) return value
+      return String(Math.min(9, parsed + step))
+    })
+    .join('')
+}
+
+export function getChordFingerings(root: MusicalKey, quality: ChordQuality): string[] {
+  const base = CHORD_FINGERINGS[root][quality]
+  return [base, shiftFrettedNotes(base, 1), shiftFrettedNotes(base, 2), shiftFrettedNotes(base, 3), shiftFrettedNotes(base, 4)]
+}
+
 export function getChordFingering(root: MusicalKey, quality: ChordQuality): string {
-  return CHORD_FINGERINGS[root][quality]
+  return getChordFingerings(root, quality)[0]
 }
