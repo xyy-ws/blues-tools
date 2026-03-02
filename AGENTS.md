@@ -251,3 +251,13 @@ After each milestone completion:
 ### 6) Secrets Handling
 - Credentials must be stored/retrieved via Bitwarden.
 - Never persist plaintext secrets in repo or memory files.
+
+
+## Multi-Agent Auto-Collab Protocol (Planner)
+
+When user asks for autonomous team execution:
+- Planner MUST orchestrate with `sessions_spawn` and `sessions_send`.
+- Default chain: PLAN -> BUILDER -> VERIFIER -> (FAIL back to BUILDER) -> REPORT.
+- Keep loop bounded: max 2 repair rounds, then `BLOCKED`.
+- Every handoff must include acceptance criteria and required evidence.
+- Report only milestone receipts to user, not full internal chatter.
