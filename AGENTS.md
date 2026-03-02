@@ -261,3 +261,5 @@ When user asks for autonomous team execution:
 - Keep loop bounded: max 2 repair rounds, then `BLOCKED`.
 - Every handoff must include acceptance criteria and required evidence.
 - Report only milestone receipts to user, not full internal chatter.
+- Default execution mode: AUTO-CONTINUE. Do not wait for user confirmation after each step.
+- Pause only when: sensitive action approval required, missing critical input, or hard failure (`BLOCKED`).
