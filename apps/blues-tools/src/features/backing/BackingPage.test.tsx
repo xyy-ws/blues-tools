@@ -4,6 +4,7 @@ import { BackingPage } from './BackingPage'
 
 afterEach(() => {
   cleanup()
+  localStorage.clear()
   vi.restoreAllMocks()
 })
 
@@ -60,5 +61,51 @@ describe('BackingPage', () => {
     fireEvent.change(screen.getByLabelText('Progression preset'), { target: { value: 'quick-change' } })
     expect(screen.getByText('Bar 2 chord: IV')).toBeInTheDocument()
     expect(screen.getByText('Bar 12 chord: V')).toBeInTheDocument()
+  })
+
+  it('restores persisted backing settings and track metadata from localStorage', () => {
+    localStorage.setItem(
+      'blues-tools:state:v1',
+      JSON.stringify({
+        selectedKey: 'G',
+        bpm: 110,
+        preset: 'quick-change',
+        mode: 'real',
+        tracks: [
+          {
+            id: 'g-track',
+            name: 'G Shuffle',
+            key: 'G',
+            bpm: 110,
+            fileName: 'g-shuffle.mp3',
+            fileType: 'audio/mpeg',
+            fileSize: 1234,
+          },
+        ],
+      }),
+    )
+
+    render(<BackingPage />)
+
+    expect(screen.getByLabelText('Key', { selector: 'select[aria-label="Key"]' })).toHaveValue('G')
+    expect(screen.getByLabelText('BPM', { selector: 'input[aria-label="BPM"]' })).toHaveValue(110)
+    expect(screen.getByLabelText('Progression preset')).toHaveValue('quick-change')
+    expect(screen.getByText(/G Shuffle - G @ 110 BPM/)).toBeInTheDocument()
+    expect(screen.getByText(/需重新选择本地文件以播放/)).toBeInTheDocument()
+  })
+
+  it('persists selected settings when controls are updated', () => {
+    render(<BackingPage />)
+
+    fireEvent.change(screen.getByLabelText('Key', { selector: 'select[aria-label="Key"]' }), { target: { value: 'D' } })
+    fireEvent.change(screen.getByLabelText('BPM', { selector: 'input[aria-label="BPM"]' }), { target: { value: '120' } })
+    fireEvent.change(screen.getByLabelText('Progression preset'), { target: { value: 'turnaround' } })
+    fireEvent.click(screen.getByLabelText('实录 / Real Track'))
+
+    const persisted = JSON.parse(localStorage.getItem('blues-tools:state:v1') ?? '{}')
+    expect(persisted.selectedKey).toBe('D')
+    expect(persisted.bpm).toBe(120)
+    expect(persisted.preset).toBe('turnaround')
+    expect(persisted.mode).toBe('real')
   })
 })

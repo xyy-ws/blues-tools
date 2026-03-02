@@ -1,17 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
+import { getDefaultState, loadState, saveState } from '../../app/persistence/localState'
 import { getCurrentBarIndex, getCurrentChordLabel } from './improv'
 
 const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
-  { id: 'standard-12', label: 'Standard 12-bar' },
-  { id: 'quick-change', label: 'Quick change' },
-  { id: 'turnaround', label: 'Turnaround ending' },
+  { id: 'standard-12', label: '标准 12 小节 / Standard 12-bar' },
+  { id: 'quick-change', label: '快速换和弦 / Quick change' },
+  { id: 'turnaround', label: '结尾回转 / Turnaround ending' },
 ]
 
 export function ImprovPage() {
-  const [sessionKey, setSessionKey] = useState<MusicalKey>('C')
-  const [preset, setPreset] = useState<ProgressionPreset>('standard-12')
+  const [initial] = useState(() => loadState() ?? getDefaultState())
+  const [sessionKey, setSessionKey] = useState<MusicalKey>(initial.improvKey ?? 'C')
+  const [preset, setPreset] = useState<ProgressionPreset>(initial.improvPreset ?? 'standard-12')
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
 
@@ -27,6 +29,15 @@ export function ImprovPage() {
     return () => window.clearInterval(id)
   }, [isRunning])
 
+  useEffect(() => {
+    const existing = loadState() ?? getDefaultState()
+    saveState({
+      ...existing,
+      improvKey: sessionKey,
+      improvPreset: preset,
+    })
+  }, [sessionKey, preset])
+
   const barIndex = useMemo(() => getCurrentBarIndex(elapsedSeconds), [elapsedSeconds])
   const chordLabel = useMemo(
     () => getCurrentChordLabel(sessionKey, elapsedSeconds, preset),
@@ -35,7 +46,8 @@ export function ImprovPage() {
 
   return (
     <section>
-      <h1>Improv</h1>
+      <h1>即兴 / Improv</h1>
+      <p>状态提示：{isRunning ? '计时进行中' : '已暂停，可随时开始'}。</p>
 
       <label>
         Session key

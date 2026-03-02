@@ -1,18 +1,29 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
+import { getDefaultState, loadState, saveState } from '../../app/persistence/localState'
 import { getBluesScaleNotes, getFretNote, STANDARD_TUNING } from './fretboard'
 
 const FRET_COUNT = 12
 
 export function FretboardPage() {
-  const [key, setKey] = useState<MusicalKey>('E')
+  const [initial] = useState(() => loadState() ?? getDefaultState())
+  const [key, setKey] = useState<MusicalKey>(initial.fretboardKey ?? 'E')
+
+  useEffect(() => {
+    const existing = loadState() ?? getDefaultState()
+    saveState({
+      ...existing,
+      fretboardKey: key,
+    })
+  }, [key])
 
   const bluesNotes = useMemo(() => getBluesScaleNotes(key), [key])
 
   return (
     <section>
-      <h1>Fretboard</h1>
+      <h1>指板 / Fretboard</h1>
+      <p>状态提示：当前高亮为 {key} 小调布鲁斯音阶。</p>
       <label>
         Key
         <select aria-label="Fretboard key" value={key} onChange={(e) => setKey(e.target.value as MusicalKey)}>

@@ -1,21 +1,24 @@
-import { useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useMemo, useState, type ChangeEvent, type FormEvent } from 'react'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
+import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTracks } from '../../app/persistence/localState'
 import { buildRealTrackId, choosePlaybackSource, type BackingMode, type RealTrack } from './backing'
 
 const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
-  { id: 'standard-12', label: 'Standard 12-bar' },
-  { id: 'quick-change', label: 'Quick change' },
-  { id: 'turnaround', label: 'Turnaround ending' },
+  { id: 'standard-12', label: '标准 12 小节 / Standard 12-bar' },
+  { id: 'quick-change', label: '快速换和弦 / Quick change' },
+  { id: 'turnaround', label: '结尾回转 / Turnaround ending' },
 ]
 
 export function BackingPage() {
-  const [selectedKey, setSelectedKey] = useState<MusicalKey>('C')
-  const [bpm, setBpm] = useState(90)
-  const [preset, setPreset] = useState<ProgressionPreset>(PROGRESSION_PRESETS[0].id)
-  const [mode, setMode] = useState<BackingMode>('auto')
-  const [tracks, setTracks] = useState<RealTrack[]>([])
+  const [initial] = useState(() => loadState() ?? getDefaultState())
+
+  const [selectedKey, setSelectedKey] = useState<MusicalKey>(initial.selectedKey)
+  const [bpm, setBpm] = useState(initial.bpm)
+  const [preset, setPreset] = useState<ProgressionPreset>(initial.preset)
+  const [mode, setMode] = useState<BackingMode>(initial.mode)
+  const [tracks, setTracks] = useState<RealTrack[]>(toHydratedTracks(initial.tracks))
 
   const [newTrackName, setNewTrackName] = useState('')
   const [newTrackKey, setNewTrackKey] = useState<MusicalKey>('C')
@@ -28,6 +31,20 @@ export function BackingPage() {
   )
 
   const progression = useMemo(() => getTwelveBarBluesProgression(selectedKey, preset), [preset, selectedKey])
+
+  useEffect(() => {
+    const existing = loadState() ?? getDefaultState()
+    saveState({
+      selectedKey,
+      bpm,
+      preset,
+      mode,
+      tracks: toPersistedTracks(tracks),
+      improvKey: existing.improvKey,
+      improvPreset: existing.improvPreset,
+      fretboardKey: existing.fretboardKey,
+    })
+  }, [selectedKey, bpm, preset, mode, tracks])
 
   function handleTrackImport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -64,7 +81,7 @@ export function BackingPage() {
   function deleteTrack(id: string) {
     setTracks((existing) => {
       const track = existing.find((item) => item.id === id)
-      if (track) {
+      if (track?.fileUrl) {
         URL.revokeObjectURL(track.fileUrl)
       }
       return existing.filter((item) => item.id !== id)
@@ -73,10 +90,11 @@ export function BackingPage() {
 
   return (
     <section>
-      <h1>Backing</h1>
+      <h1>伴奏 / Backing</h1>
+      <p aria-live="polite">状态提示：{playback === 'real' ? '已匹配本地音轨' : '当前使用合成伴奏'}</p>
 
       <label>
-        Key
+        调性 / Key
         <select aria-label="Key" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
           {CHROMATIC_KEYS.map((key) => (
             <option key={key} value={key}>
@@ -99,7 +117,7 @@ export function BackingPage() {
       </label>
 
       <label>
-        Progression preset
+        进行预设 / Progression preset
         <select
           aria-label="Progression preset"
           value={preset}
@@ -114,32 +132,27 @@ export function BackingPage() {
       </label>
 
       <fieldset>
-        <legend>Mode</legend>
+        <legend>模式 / Mode</legend>
         <label>
-          <input
-            type="radio"
-            name="mode"
-            checked={mode === 'synth'}
-            onChange={() => setMode('synth')}
-          />
-          Synth
+          <input type="radio" name="mode" checked={mode === 'synth'} onChange={() => setMode('synth')} />
+          合成 / Synth
         </label>
         <label>
           <input type="radio" name="mode" checked={mode === 'real'} onChange={() => setMode('real')} />
-          Real Track
+          实录 / Real Track
         </label>
         <label>
           <input type="radio" name="mode" checked={mode === 'auto'} onChange={() => setMode('auto')} />
-          Auto
+          自动 / Auto
         </label>
       </fieldset>
 
-      <p aria-live="polite">Playback source: {playback === 'real' ? 'Real Track' : 'Synth'}</p>
+      <p>Playback source: {playback === 'real' ? 'Real Track' : 'Synth'}</p>
       <p>Selected preset: {preset}</p>
       <p>Bar 2 chord: {progression[1].degree}</p>
       <p>Bar 12 chord: {progression[11].degree}</p>
 
-      <h2>Import local real track</h2>
+      <h2>导入本地实录伴奏 / Import local real track</h2>
       <form onSubmit={handleTrackImport}>
         <label>
           Name
@@ -190,6 +203,7 @@ export function BackingPage() {
           {tracks.map((track) => (
             <li key={track.id}>
               {track.name} - {track.key} @ {track.bpm} BPM ({track.fileName}, {track.fileType}, {track.fileSize} bytes){' '}
+              {track.fileUrl ? null : '（需重新选择本地文件以播放） '}
               <button type="button" onClick={() => deleteTrack(track.id)}>
                 Delete
               </button>

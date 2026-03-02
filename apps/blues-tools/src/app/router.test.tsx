@@ -11,7 +11,7 @@ describe('AppRouter', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('heading', { name: 'Backing' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '伴奏 / Backing' })).toBeInTheDocument()
   })
 
   it('routes to Knowledge page', () => {
