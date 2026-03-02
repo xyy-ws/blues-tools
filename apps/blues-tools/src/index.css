@@ -14,8 +14,20 @@
   --radius: 14px;
   --shadow: 0 14px 32px rgba(1, 7, 15, 0.45);
 
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.45;
+  font-family:
+    'Inter',
+    'Noto Sans SC',
+    'PingFang SC',
+    'Microsoft YaHei',
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
+  line-height: 1.58;
   font-weight: 400;
   color: var(--text);
   font-synthesis: none;
@@ -57,6 +69,44 @@ p {
   margin-top: 0;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.32;
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: clamp(1.5rem, 1.15rem + 1.3vw, 2rem);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: clamp(1.16rem, 1.03rem + 0.55vw, 1.4rem);
+  font-weight: 650;
+}
+
+h3 {
+  font-size: 1.03rem;
+  font-weight: 620;
+}
+
+h4 {
+  font-size: 0.95rem;
+  font-weight: 610;
+}
+
+p,
+li,
+label,
+input,
+select,
+button {
+  line-height: 1.58;
+}
+
 button,
 input,
 select {
@@ -70,7 +120,7 @@ button {
   border-radius: 10px;
   border: 1px solid var(--border);
   background: #0b1627;
-  padding: 0.55rem 0.7rem;
+  padding: 0.58rem 0.78rem;
 }
 
 input:focus-visible,
@@ -82,18 +132,26 @@ button:focus-visible {
 
 button {
   cursor: pointer;
-  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease;
+  color: #d6e6ff;
+  background: rgba(13, 27, 44, 0.82);
+  border-color: rgba(77, 161, 255, 0.26);
+  transition: transform 120ms ease, border-color 120ms ease, background 120ms ease, color 120ms ease;
 }
 
 button:hover {
-  border-color: var(--accent);
+  border-color: rgba(111, 208, 255, 0.62);
+  background: rgba(16, 33, 55, 0.92);
 }
 
 .btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: linear-gradient(180deg, rgba(77, 161, 255, 0.32), rgba(77, 161, 255, 0.18));
-  border-color: rgba(77, 161, 255, 0.72);
+  border: 1px solid rgba(77, 161, 255, 0.72);
   color: #eaf5ff;
-  font-weight: 700;
+  font-weight: 640;
 }
 
 button:active {
@@ -132,6 +190,10 @@ button:active {
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.app-header-subrow {
+  padding-top: 0;
 }
 
 .brand {
@@ -183,12 +245,16 @@ button:active {
 }
 
 .app-main {
-  padding: 1rem 0 1.5rem;
+  padding: 1.1rem 0 1.8rem;
 }
 
 .page {
   display: grid;
-  gap: 1rem;
+  gap: 1.1rem;
+}
+
+.page-title {
+  margin-bottom: 0.15rem;
 }
 
 .card {
@@ -196,7 +262,13 @@ button:active {
   background: linear-gradient(180deg, rgba(20, 39, 65, 0.78), rgba(12, 24, 41, 0.78));
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 1rem;
+  padding: 1.1rem;
+}
+
+.card-nested {
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  background: linear-gradient(180deg, rgba(17, 34, 57, 0.88), rgba(10, 21, 37, 0.9));
 }
 
 .card-title-row {
@@ -205,6 +277,11 @@ button:active {
   justify-content: space-between;
   gap: 0.75rem;
   flex-wrap: wrap;
+}
+
+.card-title-row h3,
+.card-title-row strong {
+  margin: 0;
 }
 
 .muted {
@@ -225,7 +302,21 @@ button:active {
 
 .control {
   display: grid;
-  gap: 0.33rem;
+  gap: 0.42rem;
+}
+
+.control-label {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-weight: 560;
+  letter-spacing: 0.01em;
+}
+
+.control-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .badge {
@@ -257,9 +348,43 @@ button:active {
 
 .inline-actions {
   display: flex;
-  gap: 0.55rem;
+  gap: 0.6rem;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.button-group {
+  margin-top: 0.8rem;
+  gap: 0.62rem;
+}
+
+.meta-row {
+  margin-bottom: 0.82rem;
+}
+
+.tag-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 999px;
+  padding: 0.24rem 0.68rem;
+  font-size: 0.76rem;
+  font-weight: 570;
+  letter-spacing: 0.01em;
+  border: 1px solid rgba(77, 210, 168, 0.42);
+  color: #d7fff2;
+  background: rgba(77, 210, 168, 0.16);
+}
+
+.tag-chip-muted {
+  border-color: rgba(77, 161, 255, 0.4);
+  color: #ddedff;
+  background: rgba(77, 161, 255, 0.14);
+}
+
+.helper-text {
+  margin-top: 0.45rem;
+  margin-bottom: 0;
+  font-size: 0.88rem;
 }
 
 .list {
@@ -267,22 +392,122 @@ button:active {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.6rem;
+  gap: 0.8rem;
+}
+
+.list-tight {
+  gap: 0.54rem;
 }
 
 .list-item {
   border: 1px solid var(--border);
   border-radius: 10px;
   background: rgba(8, 18, 32, 0.74);
-  padding: 0.7rem;
+  padding: 0.85rem;
+}
+
+.task-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
 }
 
 .empty-state {
   border: 1px dashed var(--border);
   border-radius: 10px;
   color: var(--muted);
-  padding: 0.8rem;
+  padding: 0.9rem;
   text-align: center;
+}
+
+.card-controls {
+  padding: 1rem 1.05rem;
+}
+
+.section-title {
+  margin-bottom: 0.5rem;
+}
+
+.subsection-title {
+  margin-bottom: 0.45rem;
+}
+
+.item-title {
+  margin-bottom: 0.42rem;
+}
+
+.item-body {
+  margin-bottom: 0.72rem;
+}
+
+.knowledge-card .inline-actions:last-child {
+  margin-top: 0.82rem;
+}
+
+.spaced-list {
+  margin: 0 0 0.9rem;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.42rem;
+}
+
+.tab-block {
+  text-align: left;
+  margin: 0;
+  padding: 0.62rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: rgba(6, 14, 25, 0.6);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.fretboard-grid {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.fretboard-row {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.fretboard-string-label {
+  width: 1rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+
+.fretboard-fret {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 6px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--border);
+  background: rgba(7, 15, 27, 0.65);
+  color: var(--muted);
+  font-size: 0.67rem;
+}
+
+.fretboard-fret.active {
+  background: rgba(77, 161, 255, 0.35);
+  color: var(--text);
+  border-color: rgba(77, 161, 255, 0.85);
+}
+
+.controls-panel {
+  margin-top: 0.85rem;
+}
+
+.practice-tip {
+  margin: 0.85rem 0 0.55rem;
+}
+
+.real-demo-card {
+  margin-top: 0.2rem;
 }
 
 @media (max-width: 900px) {

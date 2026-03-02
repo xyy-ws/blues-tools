@@ -110,7 +110,7 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         <span className="badge info">{statusLabel}</span>
       </div>
 
-      <div className="inline-actions" style={{ marginBottom: '0.65rem' }}>
+      <div className="inline-actions meta-row">
         <span className="badge success">调 Key: {lick.key}</span>
         <span className="badge info">把位 Position: {lick.position}</span>
         <span className="badge warn">律动 Feel: {lick.feel}</span>
@@ -118,36 +118,22 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
 
       <div className="grid-2">
         <section>
-          <h4>TAB 谱例</h4>
-          <pre style={{ textAlign: 'left', margin: 0 }}>{lick.tabLines.join('\n')}</pre>
+          <h4 className="subsection-title">TAB 谱例</h4>
+          <pre className="tab-block">{lick.tabLines.join('\n')}</pre>
         </section>
 
         <section>
-          <h4>指板定位 Fretboard</h4>
-          <div role="grid" aria-label={`${lick.name} fretboard`} style={{ display: 'grid', gap: 4 }}>
+          <h4 className="subsection-title">指板定位 Fretboard</h4>
+          <div role="grid" aria-label={`${lick.name} fretboard`} className="fretboard-grid">
             {STRINGS.map((label, rowIndex) => {
               const stringNo = 1 + rowIndex
               return (
-                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <strong style={{ width: 16 }}>{label}</strong>
+                <div key={label} className="fretboard-row">
+                  <strong className="fretboard-string-label">{label}</strong>
                   {Array.from({ length: 13 }, (_, fret) => {
                     const active = currentStep?.string === stringNo && currentStep?.fret === fret && state !== 'idle'
                     return (
-                      <span
-                        key={`${label}-${fret}`}
-                        style={{
-                          width: 20,
-                          height: 20,
-                          borderRadius: 6,
-                          display: 'inline-flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          border: '1px solid var(--border)',
-                          background: active ? 'rgba(77, 161, 255, 0.35)' : 'rgba(7, 15, 27, 0.65)',
-                          color: active ? 'var(--text)' : 'var(--muted)',
-                          fontSize: 11,
-                        }}
-                      >
+                      <span key={`${label}-${fret}`} className={`fretboard-fret${active ? ' active' : ''}`}>
                         {fret}
                       </span>
                     )
@@ -156,7 +142,7 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
               )
             })}
           </div>
-          <p className="muted" style={{ marginTop: 8, marginBottom: 0 }}>
+          <p className="muted helper-text">
             当前拍 Current beat: {Math.min(currentStep?.beat ?? 0, totalBeats)} / {totalBeats}
           </p>
         </section>
@@ -166,16 +152,15 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         <div className="bar-progress-fill" style={{ width: `${progressPercent}%` }} />
       </div>
 
-      <div className="card" style={{ marginTop: 12, padding: 12 }}>
+      <div className="card card-nested controls-panel">
         <div className="card-title-row">
-          <strong>控制 Controls</strong>
-          <label>
-            速度 Speed
+          <strong className="subsection-title">控制 Controls</strong>
+          <label className="control-inline">
+            <span className="control-label">速度 Speed</span>
             <select
               aria-label={`${lick.name} speed`}
               value={speed}
               onChange={(e) => setSpeed(Number(e.target.value) as (typeof SPEED_OPTIONS)[number])}
-              style={{ marginLeft: 8 }}
             >
               {SPEED_OPTIONS.map((item) => (
                 <option key={item} value={item}>
@@ -185,7 +170,7 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
             </select>
           </label>
         </div>
-        <div className="inline-actions" style={{ marginTop: 8 }}>
+        <div className="inline-actions button-group">
           <button type="button" className="btn-primary" onClick={() => onPlay('lick')}>
             播放 Play
           </button>
@@ -201,13 +186,13 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         </div>
       </div>
 
-      <p style={{ marginTop: 12, marginBottom: 8 }}>
+      <p className="practice-tip">
         <strong>练习提示 Practice tip:</strong> {lick.practiceTip}
       </p>
 
-      <div className="list-item" style={{ marginTop: 4 }}>
+      <div className="list-item real-demo-card">
         <strong>真实示范 / Real performance</strong>
-        <p className="muted" style={{ margin: '6px 0 10px' }}>
+        <p className="muted helper-text">
           将来可接入真实演奏音频或视频。Real take slot for future recording.
         </p>
         {lick.realDemoUrl ? (
@@ -238,13 +223,13 @@ export function LicksDemoSection() {
   return (
     <section className="page" aria-label="Licks demo section">
       <div>
-        <h2>乐句演示 Licks Demo v1</h2>
-        <p className="muted">选择一个乐句进行练习（自动发声 + 指板高亮 + 速度控制）</p>
+        <h2 className="section-title">乐句演示 Licks Demo v1</h2>
+        <p className="muted helper-text">选择一个乐句进行练习（自动发声 + 指板高亮 + 速度控制）</p>
       </div>
 
-      <div className="card">
+      <div className="card card-controls">
         <label className="control">
-          选择乐句 / Select lick
+          <span className="control-label">选择乐句 / Select lick</span>
           <select aria-label="Select lick" value={selectedLickId} onChange={(e) => setSelectedLickId(e.target.value)}>
             {DEMO_LICKS.map((lick) => (
               <option key={lick.id} value={lick.id}>

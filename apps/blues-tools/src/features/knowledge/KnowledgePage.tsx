@@ -35,11 +35,11 @@ export function KnowledgePage() {
 
   return (
     <section className="page">
-      <h1>Knowledge</h1>
+      <h1 className="page-title">Knowledge</h1>
 
-      <div className="card grid-2">
+      <div className="card grid-2 card-controls">
         <label className="control">
-          Search
+          <span className="control-label">Search</span>
           <input
             aria-label="Search knowledge"
             value={query}
@@ -49,7 +49,7 @@ export function KnowledgePage() {
         </label>
 
         <label className="control">
-          Filter tag
+          <span className="control-label">Filter tag</span>
           <select aria-label="Filter tag" value={tag} onChange={(e) => setTag(e.target.value)}>
             {tags.map((item) => (
               <option key={item} value={item}>
@@ -61,11 +61,11 @@ export function KnowledgePage() {
       </div>
 
       <section className="card" aria-label="Today practice checklist">
-        <h2>今日练习任务 / Today practice</h2>
-        <ul className="list" style={{ marginTop: 10 }}>
+        <h2 className="section-title">今日练习任务 / Today practice</h2>
+        <ul className="list list-tight">
           {TODAY_TASKS.map((task) => (
             <li className="list-item" key={task}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <label className="task-check">
                 <input
                   type="checkbox"
                   checked={Boolean(taskChecks[task])}
@@ -83,31 +83,31 @@ export function KnowledgePage() {
       ) : (
         <ul className="list">
           {filteredCards.map((card) => (
-            <li key={card.id} className="list-item">
-              <h2>{card.title}</h2>
-              <p>{card.content}</p>
+            <li key={card.id} className="list-item knowledge-card">
+              <h2 className="item-title">{card.title}</h2>
+              <p className="item-body">{card.content}</p>
 
-              <div className="card" style={{ marginTop: 10 }}>
-                <h3>什么时候用 / Where in 12-bar</h3>
-                <p>{card.whereInTwelveBar}</p>
+              <div className="card card-nested">
+                <h3 className="subsection-title">什么时候用 / Where in 12-bar</h3>
+                <p className="item-body">{card.whereInTwelveBar}</p>
 
-                <h3>常见错误 / Common mistakes</h3>
-                <ul>
+                <h3 className="subsection-title">常见错误 / Common mistakes</h3>
+                <ul className="spaced-list">
                   {card.commonMistakes.map((mistake) => (
                     <li key={`${card.id}-${mistake}`}>{mistake}</li>
                   ))}
                 </ul>
 
-                <h3>相关乐句 / Related licks</h3>
+                <h3 className="subsection-title">相关乐句 / Related licks</h3>
                 <div className="inline-actions">
                   {card.relatedLicks.map((lick) => (
-                    <span className="badge success" key={`${card.id}-${lick}`}>
+                    <span className="tag-chip" key={`${card.id}-${lick}`}>
                       {lick}
                     </span>
                   ))}
                 </div>
 
-                <div className="inline-actions" style={{ marginTop: 10 }}>
+                <div className="inline-actions button-group">
                   <Link
                     className="btn-primary"
                     to={`/backing?key=${card.practiceLink.key}&bpm=${card.practiceLink.bpm}&preset=${card.practiceLink.progression}`}
@@ -119,7 +119,7 @@ export function KnowledgePage() {
 
               <div className="inline-actions">
                 {card.tags.map((item) => (
-                  <span className="badge info" key={`${card.id}-${item}`}>
+                  <span className="tag-chip tag-chip-muted" key={`${card.id}-${item}`}>
                     {item}
                   </span>
                 ))}

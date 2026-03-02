@@ -47,7 +47,7 @@ export function AppShell() {
             </ul>
           </nav>
         </div>
-        <div className="app-header-inner" style={{ paddingTop: 0 }}>
+        <div className="app-header-inner app-header-subrow">
           <span className={`badge ${onGlobalHome ? 'info' : 'success'}`}>
             {onGlobalHome ? 'Level 1 / 全局风格层' : 'Level 2 / Blues 工具层'}
           </span>
