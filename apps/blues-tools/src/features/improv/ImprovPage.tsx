@@ -1,10 +1,17 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
-import type { MusicalKey } from '../../domain/music/types'
+import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
 import { getCurrentBarIndex, getCurrentChordLabel } from './improv'
+
+const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
+  { id: 'standard-12', label: 'Standard 12-bar' },
+  { id: 'quick-change', label: 'Quick change' },
+  { id: 'turnaround', label: 'Turnaround ending' },
+]
 
 export function ImprovPage() {
   const [sessionKey, setSessionKey] = useState<MusicalKey>('C')
+  const [preset, setPreset] = useState<ProgressionPreset>('standard-12')
   const [elapsedSeconds, setElapsedSeconds] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
 
@@ -22,8 +29,8 @@ export function ImprovPage() {
 
   const barIndex = useMemo(() => getCurrentBarIndex(elapsedSeconds), [elapsedSeconds])
   const chordLabel = useMemo(
-    () => getCurrentChordLabel(sessionKey, elapsedSeconds),
-    [elapsedSeconds, sessionKey],
+    () => getCurrentChordLabel(sessionKey, elapsedSeconds, preset),
+    [elapsedSeconds, preset, sessionKey],
   )
 
   return (
@@ -36,6 +43,21 @@ export function ImprovPage() {
           {CHROMATIC_KEYS.map((key) => (
             <option key={key} value={key}>
               {key}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label>
+        Progression preset
+        <select
+          aria-label="Improv progression preset"
+          value={preset}
+          onChange={(e) => setPreset(e.target.value as ProgressionPreset)}
+        >
+          {PROGRESSION_PRESETS.map((progressionPreset) => (
+            <option key={progressionPreset.id} value={progressionPreset.id}>
+              {progressionPreset.label}
             </option>
           ))}
         </select>

@@ -12,4 +12,10 @@ describe('improv helpers', () => {
     expect(getCurrentChordLabel('C', 0)).toBe('I (C)')
     expect(getCurrentChordLabel('C', 32)).toBe('V (G)')
   })
+
+  it('uses preset-specific timeline for chord label', () => {
+    expect(getCurrentChordLabel('C', 4, 'standard-12')).toBe('I (C)')
+    expect(getCurrentChordLabel('C', 4, 'quick-change')).toBe('IV (F)')
+    expect(getCurrentChordLabel('C', 44, 'turnaround')).toBe('V (G)')
+  })
 })

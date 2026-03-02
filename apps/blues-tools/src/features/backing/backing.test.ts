@@ -1,7 +1,18 @@
 import { describe, expect, it } from 'vitest'
 import { buildRealTrackId, choosePlaybackSource, type RealTrack } from './backing'
 
-const tracks: RealTrack[] = [{ id: 'slow-c', name: 'Slow C', key: 'C', bpm: 90, fileName: 'slow-c.mp3' }]
+const tracks: RealTrack[] = [
+  {
+    id: 'slow-c',
+    name: 'Slow C',
+    key: 'C',
+    bpm: 90,
+    fileName: 'slow-c.mp3',
+    fileUrl: 'blob:slow-c',
+    fileType: 'audio/mpeg',
+    fileSize: 1234,
+  },
+]
 
 describe('choosePlaybackSource', () => {
   it('falls back to synth in auto mode when no matching track exists', () => {
@@ -17,8 +28,16 @@ describe('choosePlaybackSource', () => {
 
 describe('buildRealTrackId', () => {
   it('builds deterministic id from metadata', () => {
-    expect(buildRealTrackId({ name: 'My Jam', key: 'A', bpm: 100, fileName: 'jam.wav' })).toBe(
-      'my-jam-a-100-jam.wav',
-    )
+    expect(
+      buildRealTrackId({
+        name: 'My Jam',
+        key: 'A',
+        bpm: 100,
+        fileName: 'jam.wav',
+        fileUrl: 'blob:jam',
+        fileType: 'audio/wav',
+        fileSize: 10,
+      }),
+    ).toBe('my-jam-a-100-jam.wav')
   })
 })

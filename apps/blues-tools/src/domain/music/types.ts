@@ -14,6 +14,8 @@ export type MusicalKey =
 
 export type RomanDegree = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI' | 'VII'
 
+export type ProgressionPreset = 'standard-12' | 'quick-change' | 'turnaround'
+
 export interface ProgressionChord {
   degree: RomanDegree
   key: MusicalKey

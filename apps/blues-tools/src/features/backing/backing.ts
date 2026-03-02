@@ -8,6 +8,9 @@ export interface RealTrack {
   key: MusicalKey
   bpm: number
   fileName: string
+  fileUrl: string
+  fileType: string
+  fileSize: number
 }
 
 export interface BackingSelection {
