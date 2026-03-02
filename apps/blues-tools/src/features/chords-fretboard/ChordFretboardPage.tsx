@@ -15,9 +15,9 @@ const DISPLAY_TUNING: Array<{ openString: MusicalKey; index: number }> = STANDAR
   .reverse()
 
 const QUALITY_LABELS: Record<ChordQuality, string> = {
-  dominant7: '属七 / Dominant 7',
-  minor7: '小七 / Minor 7',
-  major: '大三 / Major',
+  dominant7: '属七和弦',
+  minor7: '小七和弦',
+  major: '大三和弦',
 }
 
 function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret: number }> {
@@ -50,21 +50,21 @@ function getFingeringHint(pattern: string): string {
     .map((value) => Number.parseInt(value, 10))
     .filter((value) => !Number.isNaN(value))
 
-  if (frets.length === 0) return '无可按品位 / No playable frets'
+  if (frets.length === 0) return '没有可按的品位。'
 
   const minFret = Math.min(...frets)
   const maxFret = Math.max(...frets)
   const span = maxFret - minFret
 
   if (maxFret <= 3) {
-    return '建议：食指负责低把位，常见开放和弦手型。/ Hint: index anchors low/open shape.'
+    return '建议：食指负责低把位，按开放和弦手型处理更稳。'
   }
 
   if (span <= 2) {
-    return `建议：食指横按第 ${minFret} 品，中/无名指补充。/ Hint: barre around fret ${minFret}.`
+    return `建议：食指横按第 ${minFret} 品，中指或无名指补位。`
   }
 
-  return '建议：一指一品（index-middle-ring-pinky）覆盖跨度。/ Hint: one finger per fret for wider stretch.'
+  return '建议：一指一品（食指-中指-无名指-小指）覆盖跨度。'
 }
 
 export function ChordFretboardPage() {
@@ -88,11 +88,12 @@ export function ChordFretboardPage() {
 
   return (
     <section className="page">
-      <h1>和弦 + 指板 / Chords + Fretboard</h1>
+      <h1 className="page-title">和弦与指板</h1>
+      <p className="muted helper-text">选择调性、和弦类型与指法变体，快速对照按法和指板位置。</p>
 
-      <div className="card grid-3">
+      <div className="card grid-3 card-controls">
         <label className="control">
-          Root
+          根音
           <select
             aria-label="Combined chord root"
             value={root}
@@ -110,9 +111,9 @@ export function ChordFretboardPage() {
         </label>
 
         <label className="control">
-          Quality
+          和弦性质
           <select
-            aria-label="Combined chord quality"
+            aria-label="和弦性质"
             value={quality}
             onChange={(e) => {
               setQuality(e.target.value as ChordQuality)
@@ -128,37 +129,37 @@ export function ChordFretboardPage() {
         </label>
 
         <label className="control">
-          根音弦 / Root string
+          根音所在弦
           <select
-            aria-label="Chord root string"
+            aria-label="根音弦"
             value={rootString}
             onChange={(e) => {
               setRootString(Number(e.target.value) as RootString)
               setVariantIndex(0)
             }}
           >
-            <option value={6}>6th string</option>
-            <option value={5}>5th string</option>
-            <option value={4}>4th string</option>
+            <option value={6}>第 6 弦</option>
+            <option value={5}>第 5 弦</option>
+            <option value={4}>第 4 弦</option>
           </select>
         </label>
 
         <label className="control">
-          指法变体 / Fingering variant
-          <select aria-label="Fingering variant" value={variantIndex} onChange={(e) => setVariantIndex(Number(e.target.value))}>
+          指法变体
+          <select aria-label="指法变体" value={variantIndex} onChange={(e) => setVariantIndex(Number(e.target.value))}>
             {fingerings.map((_, index) => (
               <option key={index} value={index}>
-                Variant {index + 1}
+                变体 {index + 1}
               </option>
             ))}
           </select>
         </label>
 
         <label className="control">
-          指板范围 / Fret range
+          指板范围
           <select aria-label="Fret range" value={fretRange} onChange={(e) => setFretRange(e.target.value as FretRange)}>
-            <option value="0-7">Focused 0-7</option>
-            <option value="0-12">Extended 0-12</option>
+            <option value="0-7">0–7 品（聚焦）</option>
+            <option value="0-12">0–12 品（扩展）</option>
           </select>
         </label>
       </div>
@@ -171,10 +172,10 @@ export function ChordFretboardPage() {
           <span className="badge info">Pattern: {selectedPattern}</span>
         </div>
         <p>
-          当前指法 / Current fingering: <strong>{selectedPattern}</strong>
+          当前指法：<strong>{selectedPattern}</strong>
         </p>
-        <p className="muted" style={{ marginBottom: 8 }}>
-          Pattern format: EADGBe (x = mute). 选中和弦会在下方指板高亮对应品位。
+        <p className="muted helper-text" style={{ marginBottom: 8 }}>
+          记谱格式为 EADGBe（x 表示闷音）。选中指法后，下方会高亮对应品位。
         </p>
         <p className="muted" aria-label="Fingering hint">
           {fingeringHint}
@@ -182,17 +183,17 @@ export function ChordFretboardPage() {
       </article>
 
       <div className="card">
-        <div className="inline-actions" style={{ marginBottom: 8 }}>
+        <div className="inline-actions" style={{ marginBottom: 10 }}>
           <span className="badge info">Legend / 图例</span>
-          <span className="badge success">Root in fingering 指法根音</span>
-          <span className="badge warn">Chord tone in fingering 指法和弦音</span>
+          <span className="badge success">指法中的根音</span>
+          <span className="badge warn">指法中的和弦音</span>
         </div>
         <div style={{ overflowX: 'auto' }}>
-          <table aria-label="Combined fretboard grid" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 4 }}>
+          <table aria-label="Combined fretboard grid" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 6 }}>
             <tbody>
               {DISPLAY_TUNING.map(({ openString, index: stringIndex }, displayIndex) => (
                 <tr key={`${openString}-${stringIndex}`}>
-                  <th scope="row" style={{ textAlign: 'left', paddingRight: 8, whiteSpace: 'nowrap' }}>
+                  <th scope="row" style={{ textAlign: 'left', paddingRight: 10, whiteSpace: 'nowrap' }}>
                     String {displayIndex + 1} ({openString})
                   </th>
                   {Array.from({ length: maxFret + 1 }).map((_, fret) => {
@@ -215,10 +216,10 @@ export function ChordFretboardPage() {
                         style={{
                           border: '1px solid var(--border)',
                           borderRadius: 8,
-                          padding: '0.35rem 0.45rem',
+                          padding: '0.42rem 0.56rem',
                           background: isHighlighted ? highlightColor : 'rgba(7, 15, 27, 0.72)',
                           color: isHighlighted ? '#dff0ff' : 'var(--muted)',
-                          minWidth: 52,
+                          minWidth: 60,
                         }}
                       >
                         {fret}:{note}

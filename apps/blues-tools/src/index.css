@@ -79,22 +79,22 @@ h4 {
 }
 
 h1 {
-  font-size: clamp(1.5rem, 1.15rem + 1.3vw, 2rem);
-  font-weight: 700;
+  font-size: clamp(1.58rem, 1.2rem + 1.45vw, 2.16rem);
+  font-weight: 730;
 }
 
 h2 {
-  font-size: clamp(1.16rem, 1.03rem + 0.55vw, 1.4rem);
-  font-weight: 650;
+  font-size: clamp(1.2rem, 1.05rem + 0.62vw, 1.52rem);
+  font-weight: 670;
 }
 
 h3 {
-  font-size: 1.03rem;
-  font-weight: 620;
+  font-size: 1.08rem;
+  font-weight: 630;
 }
 
 h4 {
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 610;
 }
 
@@ -120,7 +120,7 @@ button {
   border-radius: 10px;
   border: 1px solid var(--border);
   background: #0b1627;
-  padding: 0.58rem 0.78rem;
+  padding: 0.64rem 0.86rem;
 }
 
 input:focus-visible,
@@ -184,21 +184,28 @@ button:active {
 }
 
 .app-header-inner {
-  padding: 0.9rem 0;
+  padding: 1.05rem 0 0.85rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 1.1rem;
   flex-wrap: wrap;
 }
 
 .app-header-subrow {
-  padding-top: 0;
+  padding-top: 0.25rem;
+  padding-bottom: 0.9rem;
+}
+
+.app-footer-inner {
+  padding: 0.85rem 0;
+  font-size: 0.9rem;
 }
 
 .brand {
-  font-weight: 700;
-  letter-spacing: 0.03em;
+  font-weight: 730;
+  letter-spacing: 0.02em;
+  font-size: 1.02rem;
 }
 
 .nav-list {
@@ -207,12 +214,12 @@ button:active {
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.6rem;
 }
 
 .header-nav-stack {
   display: grid;
-  gap: 0.35rem;
+  gap: 0.5rem;
 }
 
 .nav-link {
@@ -221,7 +228,7 @@ button:active {
   display: inline-flex;
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 0.4rem 0.75rem;
+  padding: 0.46rem 0.88rem;
   font-size: 0.92rem;
 }
 
@@ -234,8 +241,8 @@ button:active {
 }
 
 .nav-list-secondary .nav-link {
-  font-size: 0.84rem;
-  opacity: 0.9;
+  font-size: 0.85rem;
+  opacity: 0.94;
 }
 
 .nav-link.active {
@@ -245,16 +252,16 @@ button:active {
 }
 
 .app-main {
-  padding: 1.1rem 0 1.8rem;
+  padding: 1.4rem 0 2.2rem;
 }
 
 .page {
   display: grid;
-  gap: 1.1rem;
+  gap: 1.35rem;
 }
 
 .page-title {
-  margin-bottom: 0.15rem;
+  margin-bottom: 0.25rem;
 }
 
 .card {
@@ -262,12 +269,12 @@ button:active {
   background: linear-gradient(180deg, rgba(20, 39, 65, 0.78), rgba(12, 24, 41, 0.78));
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  padding: 1.1rem;
+  padding: 1.35rem;
 }
 
 .card-nested {
-  margin-top: 0.9rem;
-  padding: 0.9rem;
+  margin-top: 1rem;
+  padding: 1rem;
   background: linear-gradient(180deg, rgba(17, 34, 57, 0.88), rgba(10, 21, 37, 0.9));
 }
 
@@ -290,25 +297,25 @@ button:active {
 
 .grid-2 {
   display: grid;
-  gap: 0.8rem;
+  gap: 1rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .grid-3 {
   display: grid;
-  gap: 0.8rem;
+  gap: 1rem;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .control {
   display: grid;
-  gap: 0.42rem;
+  gap: 0.55rem;
 }
 
 .control-label {
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   color: var(--muted);
-  font-weight: 560;
+  font-weight: 580;
   letter-spacing: 0.01em;
 }
 
@@ -382,9 +389,10 @@ button:active {
 }
 
 .helper-text {
-  margin-top: 0.45rem;
+  margin-top: 0.55rem;
   margin-bottom: 0;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
+  color: rgba(219, 232, 255, 0.76);
 }
 
 .list {
@@ -392,18 +400,18 @@ button:active {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.8rem;
+  gap: 0.95rem;
 }
 
 .list-tight {
-  gap: 0.54rem;
+  gap: 0.68rem;
 }
 
 .list-item {
   border: 1px solid var(--border);
   border-radius: 10px;
   background: rgba(8, 18, 32, 0.74);
-  padding: 0.85rem;
+  padding: 0.95rem;
 }
 
 .task-check {
