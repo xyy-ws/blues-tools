@@ -6,6 +6,7 @@ const navItems = [
   { to: '/chord-fretboard', label: '和弦+指板 Chord+Fretboard' },
   { to: '/improv', label: '即兴 Improv' },
   { to: '/knowledge', label: '乐句库 Knowledge' },
+  { to: '/substyles', label: '子风格库 Substyles' },
 ]
 
 export function AppShell() {

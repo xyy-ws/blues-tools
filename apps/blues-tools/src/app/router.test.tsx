@@ -63,4 +63,14 @@ describe('AppRouter', () => {
 
     expect(screen.getByRole('heading', { name: 'Knowledge' })).toBeInTheDocument()
   })
+
+  it('routes to Substyle Library page', () => {
+    render(
+      <MemoryRouter initialEntries={['/substyles']}>
+        <AppRouter />
+      </MemoryRouter>,
+    )
+
+    expect(screen.getByRole('heading', { name: '布鲁斯子风格库 / Blues Substyle Library' })).toBeInTheDocument()
+  })
 })

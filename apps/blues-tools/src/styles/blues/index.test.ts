@@ -7,6 +7,7 @@ describe('bluesStylePack', () => {
     expect(bluesStylePack.name).toBe('Blues')
     expect(bluesStylePack.rhythms.length).toBeGreaterThan(0)
     expect(bluesStylePack.knowledgeCards.length).toBeGreaterThan(0)
+    expect(bluesStylePack.substyles.length).toBeGreaterThanOrEqual(5)
   })
 
   it('exposes progression builder', () => {

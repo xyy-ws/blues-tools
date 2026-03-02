@@ -6,6 +6,7 @@ import { KnowledgePage } from '../features/knowledge/KnowledgePage'
 import { HomePage } from '../features/home/HomePage'
 import { BluesHomePage } from '../features/home/BluesHomePage'
 import { ChordFretboardPage } from '../features/chords-fretboard/ChordFretboardPage'
+import { SubstyleLibraryPage } from '../features/substyles/SubstyleLibraryPage'
 
 export function AppRouter() {
   return (
@@ -20,6 +21,7 @@ export function AppRouter() {
         <Route path="chords" element={<Navigate to="/chord-fretboard" replace />} />
         <Route path="improv" element={<ImprovPage />} />
         <Route path="knowledge" element={<KnowledgePage />} />
+        <Route path="substyles" element={<SubstyleLibraryPage />} />
       </Route>
     </Routes>
   )
