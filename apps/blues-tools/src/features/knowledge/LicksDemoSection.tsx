@@ -102,7 +102,7 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         : `播放中（${mode === 'lick' ? '乐句' : '仅伴奏'}）`
 
   return (
-    <article className="card" aria-label={`${lick.name} demo card`}>
+    <article className="card" aria-label={`${lick.name} 演示卡片`}>
       <div className="card-title-row">
         <h3>
           {lick.name} · {lick.subtitle}
@@ -111,9 +111,9 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
       </div>
 
       <div className="inline-actions meta-row">
-        <span className="badge success">调 Key: {lick.key}</span>
-        <span className="badge info">把位 Position: {lick.position}</span>
-        <span className="badge warn">律动 Feel: {lick.feel}</span>
+        <span className="badge success">调性：{lick.key}</span>
+        <span className="badge info">把位：{lick.position}</span>
+        <span className="badge warn">律动：{lick.feel}</span>
       </div>
 
       <div className="grid-2">
@@ -123,8 +123,8 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         </section>
 
         <section>
-          <h4 className="subsection-title">指板定位 Fretboard</h4>
-          <div role="grid" aria-label={`${lick.name} fretboard`} className="fretboard-grid">
+          <h4 className="subsection-title">指板定位</h4>
+          <div role="grid" aria-label={`${lick.name} 指板`} className="fretboard-grid">
             {STRINGS.map((label, rowIndex) => {
               const stringNo = 1 + rowIndex
               return (
@@ -148,7 +148,7 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
         </section>
       </div>
 
-      <div className="bar-progress" aria-label={`${lick.name} beat progress`}>
+      <div className="bar-progress" aria-label={`${lick.name} 拍子进度`}>
         <div className="bar-progress-fill" style={{ width: `${progressPercent}%` }} />
       </div>
 
@@ -158,7 +158,7 @@ function LickPlayerCard({ lick }: { lick: BluesLick }) {
           <label className="control-inline">
             <span className="control-label">速度</span>
             <select
-              aria-label={`${lick.name} speed`}
+              aria-label={`${lick.name} 速度`}
               value={speed}
               onChange={(e) => setSpeed(Number(e.target.value) as (typeof SPEED_OPTIONS)[number])}
             >
@@ -221,7 +221,7 @@ export function LicksDemoSection() {
   }
 
   return (
-    <section className="page" aria-label="Licks demo section">
+    <section className="page" aria-label="乐句演示区块">
       <div>
         <h2 className="section-title">乐句演示 v1</h2>
         <p className="muted helper-text">选择一个乐句进行练习（自动发声 + 指板高亮 + 速度控制）</p>

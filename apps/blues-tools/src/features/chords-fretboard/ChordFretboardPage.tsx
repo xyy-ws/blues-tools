@@ -95,7 +95,7 @@ export function ChordFretboardPage() {
         <label className="control">
           根音
           <select
-            aria-label="Combined chord root"
+            aria-label="和弦根音"
             value={root}
             onChange={(e) => {
               setRoot(e.target.value as MusicalKey)
@@ -157,7 +157,7 @@ export function ChordFretboardPage() {
 
         <label className="control">
           指板范围
-          <select aria-label="Fret range" value={fretRange} onChange={(e) => setFretRange(e.target.value as FretRange)}>
+          <select aria-label="指板范围" value={fretRange} onChange={(e) => setFretRange(e.target.value as FretRange)}>
             <option value="0-7">0–7 品（聚焦）</option>
             <option value="0-12">0–12 品（扩展）</option>
           </select>
@@ -169,7 +169,7 @@ export function ChordFretboardPage() {
           <h2>
             {root} {QUALITY_LABELS[quality]}
           </h2>
-          <span className="badge info">Pattern: {selectedPattern}</span>
+          <span className="badge info">指法：{selectedPattern}</span>
         </div>
         <p>
           当前指法：<strong>{selectedPattern}</strong>
@@ -177,7 +177,7 @@ export function ChordFretboardPage() {
         <p className="muted helper-text" style={{ marginBottom: 8 }}>
           记谱格式为 EADGBe（x 表示闷音）。选中指法后，下方会高亮对应品位。
         </p>
-        <p className="muted" aria-label="Fingering hint">
+        <p className="muted" aria-label="按法建议">
           {fingeringHint}
         </p>
       </article>
@@ -189,12 +189,12 @@ export function ChordFretboardPage() {
           <span className="badge warn">指法中的和弦音</span>
         </div>
         <div style={{ overflowX: 'auto' }}>
-          <table aria-label="Combined fretboard grid" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 6 }}>
+          <table aria-label="和弦指板网格" style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 6 }}>
             <tbody>
               {DISPLAY_TUNING.map(({ openString, index: stringIndex }, displayIndex) => (
                 <tr key={`${openString}-${stringIndex}`}>
                   <th scope="row" style={{ textAlign: 'left', paddingRight: 10, whiteSpace: 'nowrap' }}>
-                    String {displayIndex + 1} ({openString})
+                    第 {displayIndex + 1} 弦（{openString}）
                   </th>
                   {Array.from({ length: maxFret + 1 }).map((_, fret) => {
                     const note = getFretNote(openString, fret)

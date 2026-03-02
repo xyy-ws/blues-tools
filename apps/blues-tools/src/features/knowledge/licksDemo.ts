@@ -25,12 +25,12 @@ export const DEMO_BPM = 84
 export const DEMO_LICKS: BluesLick[] = [
   {
     id: 'lick-a',
-    name: 'Lick A',
-    subtitle: 'Beginner-friendly minor blues phrase',
-    key: 'A minor blues',
-    position: '5th position',
-    feel: 'Straight 8ths',
-    practiceTip: 'Keep your fingers close to the strings and focus on even timing.',
+    name: '乐句 A',
+    subtitle: '入门友好的小调蓝调乐句',
+    key: 'A 小调蓝调',
+    position: '第 5 把位',
+    feel: '直八律动',
+    practiceTip: '手指尽量贴近琴弦，优先保持节奏均匀。',
     tabLines: [
       'e|----------------5-8-5---|',
       'B|------------5-8-------8-|',
@@ -57,12 +57,12 @@ export const DEMO_LICKS: BluesLick[] = [
   },
   {
     id: 'lick-b',
-    name: 'Lick B',
-    subtitle: 'Expressive phrase with slide',
-    key: 'A minor blues',
-    position: '8th position',
-    feel: 'Shuffle feel',
-    practiceTip: 'On the slide, keep pressure steady and land right on the beat.',
+    name: '乐句 B',
+    subtitle: '带滑音的表现型乐句',
+    key: 'A 小调蓝调',
+    position: '第 8 把位',
+    feel: '摇摆律动',
+    practiceTip: '做滑音时保持按压力度稳定，并准确落在拍点上。',
     tabLines: [
       'e|-------------------------|',
       'B|-----------8/10--8------|',

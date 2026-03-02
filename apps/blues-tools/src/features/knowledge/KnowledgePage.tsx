@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom'
 import { bluesStylePack } from '../../styles/blues'
 import { LicksDemoSection } from './LicksDemoSection'
 
-const ALL_TAG = 'all'
+const ALL_TAG = '全部'
 
 const TODAY_TASKS = [
-  '5 分钟：跟伴奏做 Call & Response',
-  '5 分钟：Blue Notes 目标音（b3 / b5）',
-  '5 分钟：11-12 小节 Turnaround 收尾',
+  '5 分钟：跟伴奏做问句与答句练习',
+  '5 分钟：蓝调色彩音目标音（b3 / b5）',
+  '5 分钟：第 11-12 小节收尾练习',
 ]
 
 export function KnowledgePage() {

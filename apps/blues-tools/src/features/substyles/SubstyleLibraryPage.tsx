@@ -32,7 +32,7 @@ export function SubstyleLibraryPage() {
             aria-label="搜索子风格"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="例如：shuffle、slide、指弹"
+            placeholder="例如：摇摆、滑棒、指弹"
           />
         </label>
 

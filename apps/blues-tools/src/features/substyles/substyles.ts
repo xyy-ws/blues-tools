@@ -1,6 +1,6 @@
 import type { BluesSubstyle } from '../../styles/blues/substyles'
 
-export const ALL_SUBSTYLE_TAG = 'all'
+export const ALL_SUBSTYLE_TAG = '全部'
 
 export function filterSubstyles(substyles: BluesSubstyle[], query: string, tag: string) {
   const normalizedQuery = query.trim().toLowerCase()

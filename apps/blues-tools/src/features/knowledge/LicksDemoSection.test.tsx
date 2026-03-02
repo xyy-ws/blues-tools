@@ -43,12 +43,12 @@ describe('LicksDemoSection', () => {
     render(<LicksDemoSection />)
 
     expect(screen.getByLabelText('选择乐句')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /Lick A/i })).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: /Lick B/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /乐句 A/i })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /乐句 B/i })).not.toBeInTheDocument()
 
     fireEvent.change(screen.getByLabelText('选择乐句'), { target: { value: 'lick-b' } })
-    expect(screen.getByRole('heading', { name: /Lick B/i })).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: /Lick A/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /乐句 B/i })).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: /乐句 A/i })).not.toBeInTheDocument()
   })
 
   it('changes playback states with play, backing-only, pause and stop', () => {

@@ -15,10 +15,10 @@ describe('KnowledgePage', () => {
       </MemoryRouter>,
     )
 
-    fireEvent.change(screen.getByLabelText('搜索乐句知识'), { target: { value: 'blue notes' } })
-    expect(screen.getByRole('heading', { name: 'Blue Notes' })).toBeInTheDocument()
+    fireEvent.change(screen.getByLabelText('搜索乐句知识'), { target: { value: '蓝调色彩音' } })
+    expect(screen.getByRole('heading', { name: '蓝调色彩音' })).toBeInTheDocument()
 
-    fireEvent.change(screen.getByLabelText('筛选标签'), { target: { value: 'turnaround' } })
+    fireEvent.change(screen.getByLabelText('筛选标签'), { target: { value: '收尾' } })
     expect(screen.getByText('当前筛选条件下没有匹配卡片。')).toBeInTheDocument()
   })
 
@@ -37,7 +37,7 @@ describe('KnowledgePage', () => {
     expect(practiceLinks.length).toBeGreaterThanOrEqual(3)
     expect(practiceLinks[0]).toHaveAttribute('href', expect.stringContaining('/backing?key='))
 
-    expect(screen.getAllByText('Lick A').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getAllByText('Lick B').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('乐句 A').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('乐句 B').length).toBeGreaterThanOrEqual(1)
   })
 })
