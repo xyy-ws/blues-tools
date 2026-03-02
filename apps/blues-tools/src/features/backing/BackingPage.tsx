@@ -4,7 +4,15 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
 import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTracks } from '../../app/persistence/localState'
-import { buildRealTrackId, resolvePlayback, type BackingMode, type RealTrack } from './backing'
+import {
+  BUNDLED_REAL_TRACKS,
+  GROOVE_PROFILES,
+  buildRealTrackId,
+  resolvePlayback,
+  type BackingMode,
+  type GrooveId,
+  type RealTrack,
+} from './backing'
 import { createBackingClickPlayer } from './backingAudio'
 
 const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
@@ -37,10 +45,12 @@ export function BackingPage() {
   const [bpm, setBpm] = useState(initial.bpm)
   const [preset, setPreset] = useState<ProgressionPreset>(initial.preset)
   const [mode, setMode] = useState<BackingMode>(initial.mode)
+  const [selectedGroove, setSelectedGroove] = useState<GrooveId>('slow-shuffle')
   const [tracks, setTracks] = useState<RealTrack[]>(toHydratedTracks(initial.tracks))
 
   const [newTrackName, setNewTrackName] = useState('')
   const [newTrackKey, setNewTrackKey] = useState<MusicalKey>('C')
+  const [newTrackGroove, setNewTrackGroove] = useState<GrooveId>('slow-shuffle')
   const [newTrackBpm, setNewTrackBpm] = useState(90)
   const [newTrackFile, setNewTrackFile] = useState<File | null>(null)
   const [playbackState, setPlaybackState] = useState<'stopped' | 'playing' | 'paused'>('stopped')
@@ -51,18 +61,16 @@ export function BackingPage() {
   const clickPlayerRef = useRef(createBackingClickPlayer())
   const realAudioRef = useRef<HTMLAudioElement | null>(null)
 
+  const allTracks = useMemo(() => [...tracks, ...BUNDLED_REAL_TRACKS], [tracks])
+
   const playbackResolution = useMemo(
-    () => resolvePlayback(mode, { key: selectedKey, bpm }, tracks),
-    [bpm, mode, selectedKey, tracks],
+    () => resolvePlayback(mode, { key: selectedKey, bpm, grooveId: selectedGroove }, allTracks),
+    [allTracks, bpm, mode, selectedGroove, selectedKey],
   )
 
   const progression = useMemo(() => getTwelveBarBluesProgression(selectedKey, preset), [preset, selectedKey])
   const playback = playbackResolution.resolved
-
-  const matchedTrack = useMemo(
-    () => tracks.find((track) => track.key === selectedKey && track.bpm === bpm) ?? null,
-    [tracks, selectedKey, bpm],
-  )
+  const matchedTrack = playbackResolution.matchedTrack
 
   useEffect(() => {
     const existing = loadState() ?? getDefaultState()
@@ -115,6 +123,7 @@ export function BackingPage() {
 
     const trackWithoutId = {
       name: newTrackName,
+      grooveId: newTrackGroove,
       key: newTrackKey,
       bpm: newTrackBpm,
       fileName: newTrackFile.name,
@@ -153,7 +162,7 @@ export function BackingPage() {
     try {
       const unlocked = await clickPlayerRef.current.ensureUnlocked()
 
-      if (playback === 'real' && matchedTrack?.fileUrl) {
+      if (playback === 'real' && matchedTrack?.fileUrl && !matchedTrack.disabledReason) {
         if (!realAudioRef.current) {
           realAudioRef.current = new Audio()
           realAudioRef.current.loop = true
@@ -200,15 +209,16 @@ export function BackingPage() {
   }
 
   const progressPercent = (((currentBar - 1) * BEATS_PER_BAR + currentBeat) / (BAR_COUNT * BEATS_PER_BAR)) * 100
+  const selectedGrooveProfile = GROOVE_PROFILES.find((item) => item.id === selectedGroove)
   const sourceDetailText =
     mode === 'auto'
       ? playbackResolution.hasMatch
-        ? '自动模式：已匹配实录音轨'
-        : '自动模式：未匹配实录，使用合成'
+        ? '自动模式：实录伴奏已激活'
+        : '自动模式：未匹配到实录，回退到合成伴奏'
       : mode === 'real'
         ? playbackResolution.hasMatch
-          ? '实录模式：已匹配实录音轨'
-          : '实录模式：未匹配，临时回退合成'
+          ? '实录模式：实录伴奏已激活'
+          : '实录模式：未匹配到实录，回退到合成伴奏'
         : '合成模式：固定使用合成伴奏'
 
   return (
@@ -228,8 +238,28 @@ export function BackingPage() {
         </div>
         <div className="grid-3">
           <label className="control">
-            调性
-            <select aria-label="调性" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
+            伴奏律动
+            <select
+              aria-label="伴奏律动"
+              value={selectedGroove}
+              onChange={(e) => {
+                const grooveId = e.target.value as GrooveId
+                setSelectedGroove(grooveId)
+                const profile = GROOVE_PROFILES.find((item) => item.id === grooveId)
+                if (profile) setBpm(profile.bpmRange.recommended)
+              }}
+            >
+              {GROOVE_PROFILES.map((groove) => (
+                <option key={groove.id} value={groove.id}>
+                  {groove.displayName}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="control">
+            伴奏调性
+            <select aria-label="伴奏调性" value={selectedKey} onChange={(e) => setSelectedKey(e.target.value as MusicalKey)}>
               {CHROMATIC_KEYS.map((key) => (
                 <option key={key} value={key}>
                   {key}
@@ -239,9 +269,9 @@ export function BackingPage() {
           </label>
 
           <label className="control">
-            BPM
+            伴奏 BPM
             <input
-              aria-label="BPM"
+              aria-label="伴奏 BPM"
               type="number"
               min={40}
               max={220}
@@ -265,6 +295,9 @@ export function BackingPage() {
             </select>
           </label>
         </div>
+        <p className="muted" aria-label="律动说明">
+          {selectedGrooveProfile?.description}（建议 BPM {selectedGrooveProfile?.bpmRange.recommended}，范围 {selectedGrooveProfile?.bpmRange.min}-{selectedGrooveProfile?.bpmRange.max}）
+        </p>
       </div>
 
       <fieldset className="card">
@@ -318,6 +351,8 @@ export function BackingPage() {
 
       <div className="card grid-3">
         <p>播放源：{playback === 'real' ? '实录音轨' : '合成'}</p>
+        <p>已选律动：{selectedGrooveProfile?.displayName}</p>
+        <p>匹配音轨：{matchedTrack ? `${matchedTrack.name} (${matchedTrack.key} / ${matchedTrack.bpm})` : '未匹配'}</p>
         <p>所选预设：{preset}</p>
         <p>第 2 小节和弦：{progression[1].degree}</p>
         <p>第 12 小节和弦：{progression[11].degree}</p>
@@ -334,6 +369,17 @@ export function BackingPage() {
               onChange={(e) => setNewTrackName(e.target.value)}
               required
             />
+          </label>
+
+          <label className="control">
+            律动风格
+            <select aria-label="Track groove" value={newTrackGroove} onChange={(e) => setNewTrackGroove(e.target.value as GrooveId)}>
+              {GROOVE_PROFILES.map((groove) => (
+                <option key={groove.id} value={groove.id}>
+                  {groove.displayName}
+                </option>
+              ))}
+            </select>
           </label>
 
           <label className="control">
@@ -371,6 +417,20 @@ export function BackingPage() {
       </div>
 
       <div className="card">
+        <h3>内置实录 Groove</h3>
+        <ul className="list">
+          {BUNDLED_REAL_TRACKS.map((track) => (
+            <li key={track.id} className="list-item">
+              <strong>
+                {track.name} - {track.key} @ {track.bpm} BPM
+              </strong>
+              <p className="muted">{track.fileUrl}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="card">
         <h3>已导入音轨</h3>
         {tracks.length === 0 ? (
           <p className="empty-state">还没有导入音轨。</p>
@@ -380,7 +440,7 @@ export function BackingPage() {
               <li key={track.id} className="list-item">
                 <div className="card-title-row">
                   <strong>
-                    {track.name} - {track.key} @ {track.bpm} BPM
+                    {track.name} - {track.grooveId} - {track.key} @ {track.bpm} BPM
                   </strong>
                   <button type="button" onClick={() => deleteTrack(track.id)}>
                     删除

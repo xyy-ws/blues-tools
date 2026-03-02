@@ -1,11 +1,12 @@
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
-import type { BackingMode, RealTrack } from '../../features/backing/backing'
+import type { BackingMode, GrooveId, RealTrack } from '../../features/backing/backing'
 
 const STORAGE_KEY = 'blues-tools:state:v1'
 
 export interface PersistedTrackMetadata {
   id: string
   name: string
+  grooveId: GrooveId
   key: MusicalKey
   bpm: number
   fileName: string
@@ -48,16 +49,22 @@ export function loadState(): PersistedState | null {
   if (!raw) return null
 
   try {
-    return JSON.parse(raw) as PersistedState
+    const parsed = JSON.parse(raw) as PersistedState
+    parsed.tracks = (parsed.tracks ?? []).map((track) => ({
+      ...track,
+      grooveId: track.grooveId ?? 'slow-shuffle',
+    }))
+    return parsed
   } catch {
     return null
   }
 }
 
 export function toPersistedTracks(tracks: RealTrack[]): PersistedTrackMetadata[] {
-  return tracks.map(({ id, name, key, bpm, fileName, fileType, fileSize }) => ({
+  return tracks.map(({ id, name, grooveId, key, bpm, fileName, fileType, fileSize }) => ({
     id,
     name,
+    grooveId,
     key,
     bpm,
     fileName,
@@ -69,6 +76,7 @@ export function toPersistedTracks(tracks: RealTrack[]): PersistedTrackMetadata[]
 export function toHydratedTracks(tracks: PersistedTrackMetadata[] = []): RealTrack[] {
   return tracks.map((track) => ({
     ...track,
+    grooveId: track.grooveId ?? 'slow-shuffle',
     fileUrl: '',
   }))
 }

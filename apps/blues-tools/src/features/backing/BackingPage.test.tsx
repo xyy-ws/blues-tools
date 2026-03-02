@@ -88,6 +88,29 @@ describe('BackingPage', () => {
     expect(screen.getByText(/当前拍：/)).toBeInTheDocument()
   })
 
+  it('supports groove selection and resolves bundled real track in auto mode', () => {
+    renderPage()
+
+    fireEvent.click(screen.getByRole('radio', { name: '自动' }))
+    fireEvent.change(screen.getByLabelText('伴奏律动'), { target: { value: 'slow-shuffle' } })
+    fireEvent.change(screen.getByLabelText('伴奏调性'), { target: { value: 'C' } })
+
+    expect(screen.getByText(/状态提示：自动模式：实录伴奏已激活/)).toBeInTheDocument()
+    expect(screen.getByText(/匹配音轨：慢速布鲁斯 Shuffle · C/)).toBeInTheDocument()
+  })
+
+  it('shows fallback status when no groove/key/bpm real track is available', () => {
+    renderPage()
+
+    fireEvent.click(screen.getByRole('radio', { name: '实录' }))
+    fireEvent.change(screen.getByLabelText('伴奏律动'), { target: { value: 'texas-straight' } })
+    fireEvent.change(screen.getByLabelText('伴奏调性'), { target: { value: 'C' } })
+    fireEvent.change(screen.getByLabelText('伴奏 BPM'), { target: { value: '140' } })
+
+    expect(screen.getByText(/状态提示：实录模式：未匹配到实录，回退到合成伴奏/)).toBeInTheDocument()
+    expect(screen.getByText('当前来源：合成')).toBeInTheDocument()
+  })
+
   it('guards no-sound regression by falling back when real track play fails', async () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
     const playMock = vi.fn(async () => {

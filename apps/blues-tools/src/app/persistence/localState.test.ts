@@ -28,6 +28,7 @@ describe('localState persistence', () => {
       {
         id: 'x1',
         name: 'Jam',
+        grooveId: 'slow-shuffle',
         key: 'A',
         bpm: 95,
         fileName: 'jam.mp3',
@@ -42,5 +43,6 @@ describe('localState persistence', () => {
     const hydrated = toHydratedTracks(persisted)
     expect(hydrated[0].fileUrl).toBe('')
     expect(hydrated[0].name).toBe('Jam')
+    expect(hydrated[0].grooveId).toBe('slow-shuffle')
   })
 })
