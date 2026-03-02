@@ -18,14 +18,14 @@ describe('AppRouter', () => {
     expect(screen.getByRole('heading', { name: '首页 / Home' })).toBeInTheDocument()
   })
 
-  it('routes to Home page from /home', () => {
+  it('routes to Blues Home page from /home', () => {
     render(
       <MemoryRouter initialEntries={['/home']}>
         <AppRouter />
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('heading', { name: '首页 / Home' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '布鲁斯主页 / Blues Home' })).toBeInTheDocument()
   })
 
   it('navigates from home Blues selection to style sub-home', () => {
@@ -37,6 +37,20 @@ describe('AppRouter', () => {
 
     fireEvent.click(screen.getByRole('link', { name: '布鲁斯 / Blues' }))
 
+    expect(screen.getByRole('heading', { name: '布鲁斯主页 / Blues Home' })).toBeInTheDocument()
+  })
+
+  it('resolves Blues card href and navigation correctly with basename', () => {
+    render(
+      <MemoryRouter basename="/blues" initialEntries={['/blues/']}>
+        <AppRouter />
+      </MemoryRouter>,
+    )
+
+    const bluesCardLink = screen.getByRole('link', { name: '布鲁斯 / Blues' })
+    expect(bluesCardLink).toHaveAttribute('href', '/blues/home')
+
+    fireEvent.click(bluesCardLink)
     expect(screen.getByRole('heading', { name: '布鲁斯主页 / Blues Home' })).toBeInTheDocument()
   })
 

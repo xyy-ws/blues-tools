@@ -12,8 +12,8 @@ export function AppRouter() {
     <Routes>
       <Route path="/" element={<AppShell />}>
         <Route index element={<HomePage />} />
-        <Route path="home" element={<HomePage />} />
-        <Route path="blues/home" element={<BluesHomePage />} />
+        <Route path="home" element={<BluesHomePage />} />
+        <Route path="blues/home" element={<Navigate to="/home" replace />} />
         <Route path="backing" element={<BackingPage />} />
         <Route path="chord-fretboard" element={<ChordFretboardPage />} />
         <Route path="fretboard" element={<Navigate to="/chord-fretboard" replace />} />

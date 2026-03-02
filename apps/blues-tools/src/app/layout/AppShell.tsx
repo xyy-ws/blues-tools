@@ -1,7 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 
 const navItems = [
-  { to: '/home', label: '首页 Home' },
+  { to: '/', label: '首页 Home' },
   { to: '/backing', label: '伴奏 Backing' },
   { to: '/chord-fretboard', label: '和弦+指板 Chord+Fretboard' },
   { to: '/improv', label: '即兴 Improv' },

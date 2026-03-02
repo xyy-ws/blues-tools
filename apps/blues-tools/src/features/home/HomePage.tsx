@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-const STYLES = [{ id: 'blues', label: '布鲁斯 / Blues', status: '可用 / Available', to: '/blues/home' }]
+const STYLES = [{ id: 'blues', label: '布鲁斯 / Blues', status: '可用 / Available', to: '/home' }]
 
 export function HomePage() {
   return (
