@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { getChordFingering, getChordFingerings, INVERSION_OPTIONS } from './chords'
+import { getChordFingering, getChordFingerings, getChordVoicingOptions, INVERSION_OPTIONS } from './chords'
 
 describe('getChordFingering', () => {
   it('supports expanded chord qualities', () => {
@@ -26,5 +26,22 @@ describe('getChordFingering', () => {
     expect(secondInversion).not.toEqual(getChordFingerings('E', '9', 6, 0))
 
     expect(getChordFingerings('E', '9', 6, 3)).toEqual(getChordFingerings('E', '9', 6, 0))
+  })
+
+  it('returns source metadata for curated fingerings', () => {
+    const [entry] = getChordVoicingOptions('E', 'maj7', 6, 0)
+
+    expect(entry.source.sourceName.length).toBeGreaterThan(0)
+    expect(['method book', 'standard shape', 'common-practice']).toContain(entry.source.sourceType)
+    expect(['high', 'medium', 'low']).toContain(entry.source.confidenceLevel)
+    expect(entry.fallback).toBe(false)
+  })
+
+  it('labels unsupported inversions as approximate fallback entries', () => {
+    const fallbackEntries = getChordVoicingOptions('E', '9', 6, 3)
+
+    expect(fallbackEntries.length).toBeGreaterThan(0)
+    expect(fallbackEntries.every((entry) => entry.fallback)).toBe(true)
+    expect(fallbackEntries[0]?.note).toContain('回退到同根音弦的原位按法')
   })
 })

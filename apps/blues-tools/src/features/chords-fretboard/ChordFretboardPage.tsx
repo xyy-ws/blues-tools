@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
-import { getChordFingerings, INVERSION_OPTIONS, QUALITY_INTERVALS, type ChordQuality, type Inversion, type RootString } from '../chords/chords'
+import { getChordVoicingOptions, INVERSION_OPTIONS, QUALITY_INTERVALS, type ChordQuality, type Inversion, type RootString } from '../chords/chords'
 import { getFretNote, STANDARD_TUNING } from '../fretboard/fretboard'
 
 type FretRange = '0-7' | '0-12'
@@ -80,12 +80,13 @@ export function ChordFretboardPage() {
   const inversionOptions = INVERSION_OPTIONS[quality]
   const resolvedInversion = inversionOptions.includes(inversion) ? inversion : 0
 
-  const fingerings = useMemo(
-    () => getChordFingerings(root, quality, rootString, resolvedInversion),
+  const fingeringEntries = useMemo(
+    () => getChordVoicingOptions(root, quality, rootString, resolvedInversion),
     [root, quality, rootString, resolvedInversion],
   )
-  const selectedPattern = fingerings[voicingIndex] ?? fingerings[0] ?? 'xxxxxx'
-  const voicingConstrained = fingerings.length < 2
+  const selectedEntry = fingeringEntries[voicingIndex] ?? fingeringEntries[0]
+  const selectedPattern = selectedEntry?.pattern ?? 'xxxxxx'
+  const voicingConstrained = fingeringEntries.length < 2
   const chordTones = useMemo(() => {
     const rootIndex = CHROMATIC_KEYS.indexOf(root)
     return new Set(QUALITY_INTERVALS[quality].map((step) => CHROMATIC_KEYS[(rootIndex + step) % CHROMATIC_KEYS.length]))
@@ -187,7 +188,7 @@ export function ChordFretboardPage() {
             onChange={(e) => setVoicingIndex(Number(e.target.value))}
             disabled={voicingConstrained}
           >
-            {fingerings.map((_, index) => (
+            {fingeringEntries.map((_, index) => (
               <option key={index} value={index}>
                 变体 {index + 1}
               </option>
@@ -216,7 +217,13 @@ export function ChordFretboardPage() {
         </p>
         <p>
           当前按法变体：<strong>变体 {voicingIndex + 1}</strong>（{selectedPattern}）
+          {selectedEntry?.fallback ? <span className="badge warn" style={{ marginLeft: 8 }}>近似指型</span> : null}
         </p>
+        <p className="muted helper-text" aria-label="指型来源">
+          来源：{selectedEntry?.source.sourceName ?? '未标注'}（{selectedEntry?.source.sourceType ?? 'common-practice'}）｜可信度：
+          {selectedEntry?.source.confidenceLevel ?? 'low'}
+        </p>
+        <p className="muted helper-text">说明：{selectedEntry?.note ?? selectedEntry?.source.notes ?? '此按法来自可验证和弦资料。'}</p>
         {voicingConstrained ? (
           <p className="muted helper-text" role="status">
             当前转位仅有 1 个可用按法变体；可切换根音弦或转位以获得更多按法。
@@ -229,6 +236,13 @@ export function ChordFretboardPage() {
           {fingeringHint}
         </p>
       </article>
+
+      <div className="card">
+        <h3 style={{ marginTop: 0 }}>小提示：按法变体 vs 转位</h3>
+        <p className="muted helper-text" style={{ marginTop: 4 }}>
+          按法变体：低音不变，只是同一组音换一种更顺手的按法。转位：把和弦里的某个音（3rd/5th/7th）放到最低音，声音重心会明显改变。
+        </p>
+      </div>
 
       <div className="card">
         <div className="inline-actions" style={{ marginBottom: 10 }}>

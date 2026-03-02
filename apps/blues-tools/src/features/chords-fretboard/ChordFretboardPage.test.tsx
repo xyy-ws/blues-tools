@@ -54,6 +54,22 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByLabelText('按法建议')).toBeInTheDocument()
   })
 
+  it('shows source/confidence metadata for selected fingering', () => {
+    render(<ChordFretboardPage />)
+
+    expect(screen.getByLabelText('指型来源')).toHaveTextContent('来源：')
+    expect(screen.getByLabelText('指型来源')).toHaveTextContent('可信度：')
+  })
+
+  it('marks approximate fallback voicing clearly', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'C' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
+
+    expect(screen.getByText('近似指型')).toBeInTheDocument()
+  })
+
   it('renders string 1 on top and string 6 on bottom', () => {
     render(<ChordFretboardPage />)
 
