@@ -173,16 +173,16 @@ export function validateChordPlayability(pattern: string): PlayabilityValidation
   const nonZeroFrets = frets.filter((fret) => fret > 0)
   const hasOpenString = frets.includes(0)
 
-  if (activeStringIndices.length < 4) {
-    reasons.push(`too few active strings for strumming (${activeStringIndices.length})`)
+  if (activeStringIndices.length < 3) {
+    reasons.push(`too few active strings for practical voicing (${activeStringIndices.length})`)
   }
 
   if (activeStringIndices.length > 0) {
     const firstActive = activeStringIndices[0]
     const lastActive = activeStringIndices[activeStringIndices.length - 1]
     const hasInnerMuteGap = chars.slice(firstActive, lastActive + 1).some((char) => char.toLowerCase() === 'x')
-    if (hasInnerMuteGap) {
-      reasons.push('contains inner muted-string gaps (analysis-like distribution)')
+    if (hasInnerMuteGap && activeStringIndices.length < 4) {
+      reasons.push('contains inner muted-string gaps with too few anchor tones')
     }
   }
 

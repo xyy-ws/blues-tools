@@ -28,10 +28,15 @@ describe('chordValidation', () => {
     expect(result.status).toBe('FAIL')
   })
 
-  it('rejects non-strummable analysis-like distributions', () => {
-    const result = validateChordPlayability('0xx137')
+  it('still rejects clearly non-practical sparse gap shapes', () => {
+    const result = validateChordPlayability('x0x9x9')
     expect(result.status).toBe('FAIL')
-    expect(result.reasons.join(' ')).toContain('analysis-like distribution')
+    expect(result.reasons.join(' ')).toContain('too few anchor tones')
+  })
+
+  it('accepts practical compact voicings with muted bass strings', () => {
+    const result = validateChordPlayability('xx2434')
+    expect(result.status).toBe('PASS')
   })
 
   it('accepts common strummable chord shape', () => {

@@ -24,6 +24,18 @@ describe('standard chord library', () => {
     expect(inversions.length).toBeGreaterThan(0)
   })
 
+  it('includes practical root-string-4 options for common seventh-family contexts', () => {
+    expect(getRootStringOptions('D', '7')).toContain(4)
+    expect(getRootStringOptions('E', 'maj7')).toContain(4)
+    expect(getRootStringOptions('A', 'm7')).toContain(4)
+    expect(getChordVoicingOptions('E', '7', 4, 0).length).toBeGreaterThan(0)
+  })
+
+  it('returns multiple practical voicings for common contexts', () => {
+    expect(getChordVoicingOptions('E', '7', 6, 0).length).toBeGreaterThanOrEqual(2)
+    expect(getChordVoicingOptions('D', '7', 5, 0).length).toBeGreaterThanOrEqual(2)
+  })
+
   it('covers all 12 roots for core qualities with standard entries', () => {
     for (const root of CHROMATIC_KEYS) {
       for (const quality of CORE_QUALITIES) {

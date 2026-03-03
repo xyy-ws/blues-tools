@@ -238,4 +238,21 @@ export const CURATED_CHORD_SHAPES: CuratedChordShape[] = [
   { root: 'A', quality: '9', rootString: 5, inversion: 0, pattern: 'x02423', labelZh: 'A9 实用指型', sourceId: 'chordRocks', verificationStatus: '已校验', verificationNotes: '来源: Chord.rocks | tonal和弦音+可演奏性校验 PASS' },
   { root: 'A#', quality: '9', rootString: 5, inversion: 0, pattern: 'x13534', labelZh: 'A#9 实用指型', sourceId: 'chordRocks', verificationStatus: '已校验', verificationNotes: '来源: Chord.rocks | tonal和弦音+可演奏性校验 PASS' },
   { root: 'B', quality: '9', rootString: 5, inversion: 0, pattern: 'x24645', labelZh: 'B9 实用指型', sourceId: 'chordRocks', verificationStatus: '已校验', verificationNotes: '来源: Chord.rocks | tonal和弦音+可演奏性校验 PASS' },
+
+  // Root-string-4 practical voicings (top-4-string and compact shell forms)
+  { root: 'D', quality: 'maj', rootString: 4, inversion: 0, pattern: 'xx0232', labelZh: 'Dmaj D形实用指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference D-shape major | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'D', quality: 'm', rootString: 4, inversion: 0, pattern: 'xx0231', labelZh: 'Dm D形实用指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference D-shape minor | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'D', quality: '7', rootString: 4, inversion: 0, pattern: 'xx0212', labelZh: 'D7 D形实用指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference D-shape dominant7 | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'D', quality: 'maj7', rootString: 4, inversion: 0, pattern: 'xx0222', labelZh: 'Dmaj7 D形实用指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference D-shape maj7 | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'D', quality: 'm7', rootString: 4, inversion: 0, pattern: 'xx0211', labelZh: 'Dm7 D形实用指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference D-shape m7 | tonal和弦音+可演奏性校验 PASS' },
+
+  { root: 'E', quality: 'maj', rootString: 4, inversion: 0, pattern: 'xx2454', labelZh: 'Emaj 可移动D形指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference movable D-shape major | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'E', quality: 'm', rootString: 4, inversion: 0, pattern: 'xx2453', labelZh: 'Em 可移动D形指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference movable D-shape minor | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'E', quality: '7', rootString: 4, inversion: 0, pattern: 'xx2434', labelZh: 'E7 可移动D形指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference movable D-shape dominant7 | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'E', quality: 'maj7', rootString: 4, inversion: 0, pattern: 'xx2444', labelZh: 'Emaj7 可移动D形指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference movable D-shape maj7 | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'E', quality: 'm7', rootString: 4, inversion: 0, pattern: 'xx2433', labelZh: 'Em7 可移动D形指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference movable D-shape m7 | tonal和弦音+可演奏性校验 PASS' },
+
+  { root: 'A', quality: '7', rootString: 4, inversion: 0, pattern: 'xx5655', labelZh: 'A7 高频壳式指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference top-4 shell dominant7 | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'A', quality: 'maj7', rootString: 4, inversion: 0, pattern: 'xx6655', labelZh: 'Amaj7 高频壳式指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference top-4 shell maj7 | tonal和弦音+可演奏性校验 PASS' },
+  { root: 'A', quality: 'm7', rootString: 4, inversion: 0, pattern: 'xx5555', labelZh: 'Am7 高频壳式指型', sourceId: 'guitaristsReference', verificationStatus: '已校验', verificationNotes: '来源: Guitarists Reference top-4 shell m7 | tonal和弦音+可演奏性校验 PASS' },
 ]

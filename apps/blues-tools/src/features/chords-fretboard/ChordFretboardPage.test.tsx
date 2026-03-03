@@ -68,13 +68,14 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByLabelText('按法建议')).toBeInTheDocument()
   })
 
-  it('excludes non-strummable analysis-like patterns from default voicing selector', () => {
+  it('keeps practical compact dominant voicings in selector and excludes blocked garbage', () => {
     render(<ChordFretboardPage />)
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
 
-    expect(optionTexts.some((text) => text.includes('0xx137'))).toBe(false)
+    expect(optionTexts.some((text) => text.includes('0xx137'))).toBe(true)
+    expect(optionTexts.some((text) => text.includes('5x2009'))).toBe(false)
   })
 
   it('keeps common strummable E major shape visible and usable', () => {
