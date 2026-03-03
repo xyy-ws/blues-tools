@@ -71,6 +71,8 @@ describe('ChordFretboardPage', () => {
   it('keeps practical compact dominant voicings in selector and excludes blocked garbage', () => {
     render(<ChordFretboardPage />)
 
+    fireEvent.click(screen.getByRole('button', { name: /显示更多/ }))
+
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
 
@@ -100,6 +102,14 @@ describe('ChordFretboardPage', () => {
     expect(sourcePanel).toHaveTextContent('来源类型：')
     expect(sourcePanel).toHaveTextContent('可信度等级：')
     expect(sourcePanel).toHaveTextContent('校验状态：')
+  })
+
+  it('caps default displayed voicing count to top 5', () => {
+    render(<ChordFretboardPage />)
+
+    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    expect(voicingSelect.options.length).toBeGreaterThan(0)
+    expect(voicingSelect.options.length).toBeLessThanOrEqual(5)
   })
 
   it('shows generated list with dynamic count sorted by score', () => {
