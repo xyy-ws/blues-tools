@@ -5,6 +5,8 @@ describe('chordValidation', () => {
   it('derives target tones using tonaljs with sharp normalization', () => {
     expect(deriveTargetChordTones('D#', 'maj')).toEqual(['D#', 'G', 'A#'])
     expect(deriveTargetChordTones('A#', 'maj7')).toEqual(['A#', 'D', 'F', 'A'])
+    expect(deriveTargetChordTones('E', 'dim7')).toEqual(['E', 'G', 'A#', 'C#'])
+    expect(deriveTargetChordTones('A', 'sus2')).toEqual(['A', 'B', 'E'])
   })
 
   it('computes actual tones from fingering patterns', () => {

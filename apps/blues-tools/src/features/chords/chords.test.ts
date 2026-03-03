@@ -3,6 +3,7 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { CHORD_LIBRARY_VALIDATION_REPORT, getChordFingerings, getChordVoicingOptions, getInversionOptionsFor, getRootStringOptions, hasStandardChordShapes, type ChordQuality } from './chords'
 
 const CORE_QUALITIES: ChordQuality[] = ['maj', 'm', '7', 'maj7', 'm7']
+const EXPANDED_QUALITIES: ChordQuality[] = ['5', '6', 'm6', 'sus2', 'sus4', 'add9', 'dim', 'dim7', 'aug']
 
 describe('standard chord library', () => {
   it('returns curated standard entries with source metadata', () => {
@@ -47,6 +48,22 @@ describe('standard chord library', () => {
         expect(getChordFingerings(root, quality, rootStrings[0], inversions[0]).length, `${root} ${quality} should return fingering`).toBeGreaterThan(0)
       }
     }
+  })
+
+  it('provides representative standard voicings for newly supported practical quality families', () => {
+    for (const quality of EXPANDED_QUALITIES) {
+      expect(hasStandardChordShapes('E', quality) || hasStandardChordShapes('A', quality) || hasStandardChordShapes('D', quality)).toBe(true)
+    }
+
+    expect(getChordVoicingOptions('E', '5', 6, 0).length).toBeGreaterThan(0)
+    expect(getChordVoicingOptions('A', '6', 5, 0).length).toBeGreaterThan(0)
+    expect(getChordVoicingOptions('D', 'm6', 4, 0).length).toBeGreaterThan(0)
+    expect(getChordVoicingOptions('E', 'sus2', 6, 0).length).toBeGreaterThan(0)
+    expect(getChordVoicingOptions('A', 'sus4', 5, 0).length).toBeGreaterThan(0)
+    expect(getChordVoicingOptions('D', 'add9', 4, 0).length).toBeGreaterThan(0)
+    expect(getChordVoicingOptions('A', 'dim', 5, 0).length).toBeGreaterThan(0)
+    expect(getChordVoicingOptions('E', 'dim7', 6, 0).length).toBeGreaterThan(0)
+    expect(getChordVoicingOptions('E', 'aug', 6, 0).length).toBeGreaterThan(0)
   })
 
   it('excludes FAIL and WARN records from selector-facing dataset', () => {

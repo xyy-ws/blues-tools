@@ -2,7 +2,7 @@ import type { MusicalKey } from '../../domain/music/types'
 import { inferBassInversion, validateChordPattern, validateChordPlayability } from './chordValidation'
 import { CURATED_CHORD_SHAPES } from './curatedShapes'
 
-export type ChordQuality = 'maj' | 'm' | '7' | 'maj7' | 'm7' | 'm7b5' | '9' | 'maj9' | 'm9'
+export type ChordQuality = 'maj' | 'm' | '5' | '6' | 'm6' | 'sus2' | 'sus4' | 'add9' | 'dim' | 'dim7' | 'aug' | '7' | 'maj7' | 'm7' | 'm7b5' | '9' | 'maj9' | 'm9'
 export type RootString = 6 | 5 | 4
 export type Inversion = 0 | 1 | 2 | 3
 export type ChordInversion = 'root' | '1st' | '2nd'
@@ -85,6 +85,15 @@ const CHORD_SOURCES: Record<string, ChordSource> = {
 export const QUALITY_INTERVALS: Record<ChordQuality, number[]> = {
   maj: [0, 4, 7],
   m: [0, 3, 7],
+  '5': [0, 7],
+  '6': [0, 4, 7, 9],
+  m6: [0, 3, 7, 9],
+  sus2: [0, 2, 7],
+  sus4: [0, 5, 7],
+  add9: [0, 4, 7, 14],
+  dim: [0, 3, 6],
+  dim7: [0, 3, 6, 9],
+  aug: [0, 4, 8],
   '7': [0, 4, 7, 10],
   maj7: [0, 4, 7, 11],
   m7: [0, 3, 7, 10],
@@ -97,6 +106,15 @@ export const QUALITY_INTERVALS: Record<ChordQuality, number[]> = {
 export const INVERSION_OPTIONS: Record<ChordQuality, Inversion[]> = {
   maj: [0, 1, 2],
   m: [0, 1, 2],
+  '5': [0, 1],
+  '6': [0, 1, 2, 3],
+  m6: [0, 1, 2, 3],
+  sus2: [0, 1, 2],
+  sus4: [0, 1, 2],
+  add9: [0, 1, 2, 3],
+  dim: [0, 1, 2],
+  dim7: [0, 1, 2, 3],
+  aug: [0, 1, 2],
   '7': [0, 1, 2, 3],
   maj7: [0, 1, 2, 3],
   m7: [0, 1, 2, 3],
@@ -109,6 +127,15 @@ export const INVERSION_OPTIONS: Record<ChordQuality, Inversion[]> = {
 export const CHORD_QUALITY_LABELS: Record<ChordQuality, string> = {
   maj: '大三 (maj)',
   m: '小三 (m)',
+  '5': '五和弦 (5)',
+  '6': '大六 (6)',
+  m6: '小六 (m6)',
+  sus2: '挂二 (sus2)',
+  sus4: '挂四 (sus4)',
+  add9: '加九 (add9)',
+  dim: '减三 (dim)',
+  dim7: '减七 (dim7)',
+  aug: '增三 (aug)',
   '7': '属七 (7)',
   maj7: '大七 (maj7)',
   m7: '小七 (m7)',
