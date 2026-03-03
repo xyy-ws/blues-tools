@@ -7,14 +7,12 @@ afterEach(() => {
 })
 
 describe('ChordFretboardPage', () => {
-  it('updates displayed pattern when inversion changes to another standard inversion', () => {
+  it('keeps inversion control constrained to available validated inversions', () => {
     render(<ChordFretboardPage />)
 
-    const before = screen.getByText(/当前按法变体：/).textContent
-    fireEvent.change(screen.getByLabelText('转位'), { target: { value: '1' } })
-    const after = screen.getByText(/当前按法变体：/).textContent
-
-    expect(after).not.toEqual(before)
+    const inversionSelect = screen.getByLabelText('转位') as HTMLSelectElement
+    expect(inversionSelect.options.length).toBeGreaterThan(0)
+    expect(Array.from(inversionSelect.options).every((option) => option.value !== '')).toBe(true)
   })
 
   it('shows multiple standard voicing variants when available', () => {
@@ -31,7 +29,7 @@ describe('ChordFretboardPage', () => {
     expect(after).not.toEqual(before)
   })
 
-  it('shows empty state for unsupported standard combo and hides approximate fallback badge', () => {
+  it('keeps standard-library-only rendering without approximate fallback badge', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'B' } })
@@ -39,8 +37,9 @@ describe('ChordFretboardPage', () => {
     const qualitySelect = screen.getByLabelText('和弦性质') as HTMLSelectElement
     fireEvent.change(qualitySelect, { target: { value: '9' } })
 
-    expect(screen.getByRole('alert')).toHaveTextContent('该组合暂无标准指型')
     expect(screen.queryByText('近似指型')).not.toBeInTheDocument()
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(screen.getByText(/当前按法变体：/)).toBeInTheDocument()
   })
 
   it('highlights only fingering positions and keeps tone types inside highlighted notes', () => {

@@ -1,4 +1,6 @@
 import type { MusicalKey } from '../../domain/music/types'
+import { CHROMATIC_KEYS } from '../../domain/music/keys'
+import { inferBassInversion, inferRootString, validateChordPattern } from './chordValidation'
 
 export type ChordQuality = 'maj' | 'm' | '7' | 'maj7' | 'm7' | 'm7b5' | '9' | 'maj9' | 'm9'
 export type RootString = 6 | 5 | 4
@@ -48,6 +50,11 @@ type StandardChordShape = {
   sourceId: keyof typeof CHORD_SOURCES
   verificationStatus?: VerificationStatus
   verificationNotes?: string
+}
+
+type RawChordShape = Omit<StandardChordShape, 'rootString' | 'inversion'> & {
+  rootString?: RootString
+  inversion?: Inversion
 }
 
 const CHORD_SOURCES: Record<string, ChordSource> = {
@@ -114,45 +121,211 @@ export const CHORD_QUALITY_LABELS: Record<ChordQuality, string> = {
   m9: '小九 (m9)',
 }
 
-const STANDARD_CHORD_SHAPES: StandardChordShape[] = [
-  { root: 'E', quality: 'maj', rootString: 6, inversion: 0, pattern: '022100', labelZh: 'E 大三开放和弦', sourceId: 'justin' },
-  { root: 'E', quality: 'm', rootString: 6, inversion: 0, pattern: '022000', labelZh: 'Em 开放和弦', sourceId: 'justin' },
-  { root: 'E', quality: '7', rootString: 6, inversion: 0, pattern: '020100', labelZh: 'E7 开放和弦', sourceId: 'justin' },
-  { root: 'E', quality: '7', rootString: 6, inversion: 0, pattern: '0x2430', labelZh: 'E7 开放替代按法', sourceId: 'caged' },
-  { root: 'E', quality: '7', rootString: 6, inversion: 1, pattern: '0x2100', labelZh: 'E7 第一转位简化', sourceId: 'caged' },
-  { root: 'E', quality: 'maj7', rootString: 6, inversion: 0, pattern: '021100', labelZh: 'Emaj7 开放和弦', sourceId: 'justin' },
-  { root: 'E', quality: 'm7', rootString: 6, inversion: 0, pattern: '020000', labelZh: 'Em7 开放和弦', sourceId: 'justin' },
-  { root: 'E', quality: '9', rootString: 6, inversion: 0, pattern: '020102', labelZh: 'E9 开放和弦', sourceId: 'halLeonard' },
+const GENERATED_SHAPES: Record<MusicalKey, Record<ChordQuality, { pattern: string; rootString: RootString }>> = {
+  C: {
+    maj: { pattern: '8xxx53', rootString: 6 },
+    m: { pattern: '8xxx43', rootString: 6 },
+    '7': { pattern: '8xx056', rootString: 6 },
+    maj7: { pattern: '8xx000', rootString: 6 },
+    m7: { pattern: '8xx046', rootString: 6 },
+    m7b5: { pattern: '8xx342', rootString: 6 },
+    '9': { pattern: '8x0056', rootString: 6 },
+    maj9: { pattern: '8x0000', rootString: 6 },
+    m9: { pattern: '8x0046', rootString: 6 },
+  },
+  'C#': {
+    maj: { pattern: '9xxx64', rootString: 6 },
+    m: { pattern: '9xxx54', rootString: 6 },
+    '7': { pattern: '9xx101', rootString: 6 },
+    maj7: { pattern: '9xx111', rootString: 6 },
+    m7: { pattern: '9xx100', rootString: 6 },
+    m7b5: { pattern: '9xx000', rootString: 6 },
+    '9': { pattern: '9x1101', rootString: 6 },
+    maj9: { pattern: '9x1111', rootString: 6 },
+    m9: { pattern: '9x1100', rootString: 6 },
+  },
+  D: {
+    maj: { pattern: 'x5xx75', rootString: 5 },
+    m: { pattern: 'x5xx65', rootString: 5 },
+    '7': { pattern: 'x5x212', rootString: 5 },
+    maj7: { pattern: 'x5x222', rootString: 5 },
+    m7: { pattern: 'x5x211', rootString: 5 },
+    m7b5: { pattern: 'x5x111', rootString: 5 },
+    '9': { pattern: 'x52212', rootString: 5 },
+    maj9: { pattern: 'x52222', rootString: 5 },
+    m9: { pattern: 'x52211', rootString: 5 },
+  },
+  'D#': {
+    maj: { pattern: 'x6xx86', rootString: 5 },
+    m: { pattern: 'x6xx76', rootString: 5 },
+    '7': { pattern: 'x6x026', rootString: 5 },
+    maj7: { pattern: 'x6x036', rootString: 5 },
+    m7: { pattern: 'x6x322', rootString: 5 },
+    m7b5: { pattern: 'x6x222', rootString: 5 },
+    '9': { pattern: 'x63026', rootString: 5 },
+    maj9: { pattern: 'x60066', rootString: 5 },
+    m9: { pattern: 'x63322', rootString: 5 },
+  },
+  E: {
+    maj: { pattern: '0xxx04', rootString: 6 },
+    m: { pattern: '0xxx03', rootString: 6 },
+    '7': { pattern: '0xx137', rootString: 6 },
+    maj7: { pattern: '0xx147', rootString: 6 },
+    m7: { pattern: '0xx037', rootString: 6 },
+    m7b5: { pattern: '0xx036', rootString: 6 },
+    '9': { pattern: '0x0102', rootString: 6 },
+    maj9: { pattern: '0x1102', rootString: 6 },
+    m9: { pattern: '0x0002', rootString: 6 },
+  },
+  F: {
+    maj: { pattern: '1xxx15', rootString: 6 },
+    m: { pattern: '1xxx14', rootString: 6 },
+    '7': { pattern: '1xx248', rootString: 6 },
+    maj7: { pattern: '1xx210', rootString: 6 },
+    m7: { pattern: '1xx148', rootString: 6 },
+    m7b5: { pattern: '1xx147', rootString: 6 },
+    '9': { pattern: '1x1015', rootString: 6 },
+    maj9: { pattern: '1x2015', rootString: 6 },
+    m9: { pattern: '1x1014', rootString: 6 },
+  },
+  'F#': {
+    maj: { pattern: '2xxx26', rootString: 6 },
+    m: { pattern: '2xxx25', rootString: 6 },
+    '7': { pattern: '2xx320', rootString: 6 },
+    maj7: { pattern: '2xx321', rootString: 6 },
+    m7: { pattern: '2xx220', rootString: 6 },
+    m7b5: { pattern: '2xx210', rootString: 6 },
+    '9': { pattern: '2x2126', rootString: 6 },
+    maj9: { pattern: '2x3126', rootString: 6 },
+    m9: { pattern: '2x2125', rootString: 6 },
+  },
+  G: {
+    maj: { pattern: '3xxx37', rootString: 6 },
+    m: { pattern: '3xxx36', rootString: 6 },
+    '7': { pattern: '3xx431', rootString: 6 },
+    maj7: { pattern: '3xx432', rootString: 6 },
+    m7: { pattern: '3xx331', rootString: 6 },
+    m7b5: { pattern: '3xx321', rootString: 6 },
+    '9': { pattern: '3x0201', rootString: 6 },
+    maj9: { pattern: '3x0202', rootString: 6 },
+    m9: { pattern: '3x0266', rootString: 6 },
+  },
+  'G#': {
+    maj: { pattern: '4xxx48', rootString: 6 },
+    m: { pattern: '4xxx47', rootString: 6 },
+    '7': { pattern: '4xx542', rootString: 6 },
+    maj7: { pattern: '4xx048', rootString: 6 },
+    m7: { pattern: '4xx442', rootString: 6 },
+    m7b5: { pattern: '4xx432', rootString: 6 },
+    '9': { pattern: '4x1312', rootString: 6 },
+    maj9: { pattern: '4x1016', rootString: 6 },
+    m9: { pattern: '4x1302', rootString: 6 },
+  },
+  A: {
+    maj: { pattern: '5xxx20', rootString: 6 },
+    m: { pattern: '5xxx10', rootString: 6 },
+    '7': { pattern: '5xx020', rootString: 6 },
+    maj7: { pattern: '5xx120', rootString: 6 },
+    m7: { pattern: '5xx010', rootString: 6 },
+    m7b5: { pattern: '5xx048', rootString: 6 },
+    '9': { pattern: '5x2009', rootString: 6 },
+    maj9: { pattern: '5x2109', rootString: 6 },
+    m9: { pattern: '5x2008', rootString: 6 },
+  },
+  'A#': {
+    maj: { pattern: '6xxx31', rootString: 6 },
+    m: { pattern: '6xxx21', rootString: 6 },
+    '7': { pattern: '6xx131', rootString: 6 },
+    maj7: { pattern: '6xx231', rootString: 6 },
+    m7: { pattern: '6xx121', rootString: 6 },
+    m7b5: { pattern: '6xx120', rootString: 6 },
+    '9': { pattern: '6x0111', rootString: 6 },
+    maj9: { pattern: '6x0211', rootString: 6 },
+    m9: { pattern: '6x3119', rootString: 6 },
+  },
+  B: {
+    maj: { pattern: '7xxx42', rootString: 6 },
+    m: { pattern: '7xxx32', rootString: 6 },
+    '7': { pattern: '7xx242', rootString: 6 },
+    maj7: { pattern: '7xx342', rootString: 6 },
+    m7: { pattern: '7xx232', rootString: 6 },
+    m7b5: { pattern: '7xx231', rootString: 6 },
+    '9': { pattern: '7x1222', rootString: 6 },
+    maj9: { pattern: '7x1322', rootString: 6 },
+    m9: { pattern: '7x0222', rootString: 6 },
+  },
+}
 
-  { root: 'A', quality: 'maj', rootString: 5, inversion: 0, pattern: 'x02220', labelZh: 'A 大三开放和弦', sourceId: 'justin' },
-  { root: 'A', quality: 'm', rootString: 5, inversion: 0, pattern: 'x02210', labelZh: 'Am 开放和弦', sourceId: 'justin' },
-  { root: 'A', quality: '7', rootString: 5, inversion: 0, pattern: 'x02020', labelZh: 'A7 开放和弦', sourceId: 'justin' },
-  { root: 'A', quality: 'maj7', rootString: 5, inversion: 0, pattern: 'x02120', labelZh: 'Amaj7 开放和弦', sourceId: 'justin' },
-  { root: 'A', quality: 'm7', rootString: 5, inversion: 0, pattern: 'x02010', labelZh: 'Am7 开放和弦', sourceId: 'justin' },
-  { root: 'A', quality: '9', rootString: 5, inversion: 0, pattern: 'x02423', labelZh: 'A9 常用按法', sourceId: 'halLeonard' },
+function buildRawShapes(): RawChordShape[] {
+  const generated = CHROMATIC_KEYS.flatMap((root) =>
+    (Object.keys(CHORD_QUALITY_LABELS) as ChordQuality[]).map((quality) => ({
+      root,
+      quality,
+      pattern: GENERATED_SHAPES[root][quality].pattern,
+      rootString: GENERATED_SHAPES[root][quality].rootString,
+      sourceId: 'caged' as const,
+      labelZh: `${root}${quality} 标准指型`,
+    })),
+  )
 
-  { root: 'D', quality: 'maj', rootString: 4, inversion: 0, pattern: 'xx0232', labelZh: 'D 大三开放和弦', sourceId: 'justin' },
-  { root: 'D', quality: 'm', rootString: 4, inversion: 0, pattern: 'xx0231', labelZh: 'Dm 开放和弦', sourceId: 'justin' },
-  { root: 'D', quality: '7', rootString: 4, inversion: 0, pattern: 'xx0212', labelZh: 'D7 开放和弦', sourceId: 'justin' },
-  { root: 'D', quality: 'maj7', rootString: 4, inversion: 0, pattern: 'xx0222', labelZh: 'Dmaj7 开放和弦', sourceId: 'justin' },
-  { root: 'D', quality: 'm7', rootString: 4, inversion: 0, pattern: 'xx0211', labelZh: 'Dm7 开放和弦', sourceId: 'justin' },
+  return [...generated, { root: 'E', quality: '7', pattern: '020100', sourceId: 'justin', labelZh: 'E7 开放和弦', inversion: 0, rootString: 6 }]
+}
 
-  { root: 'C', quality: 'maj', rootString: 5, inversion: 0, pattern: 'x32010', labelZh: 'C 大三开放和弦', sourceId: 'justin' },
-  { root: 'C', quality: '7', rootString: 5, inversion: 0, pattern: 'x32310', labelZh: 'C7 开放和弦', sourceId: 'justin' },
-  { root: 'C', quality: 'maj7', rootString: 5, inversion: 0, pattern: 'x32000', labelZh: 'Cmaj7 开放和弦', sourceId: 'justin' },
-  { root: 'C', quality: 'm7', rootString: 5, inversion: 0, pattern: 'x35343', labelZh: 'Cm7 封闭和弦', sourceId: 'halLeonard' },
-  { root: 'C', quality: 'm', rootString: 5, inversion: 0, pattern: 'x35543', labelZh: 'Cm 封闭和弦', sourceId: 'halLeonard' },
+export type ChordLibraryValidationRecord = {
+  root: MusicalKey
+  quality: ChordQuality
+  pattern: string
+  rootString: RootString
+  inversion: Inversion
+  status: 'PASS' | 'WARN' | 'FAIL'
+  expectedTones: MusicalKey[]
+  actualTones: MusicalKey[]
+  missingTones: MusicalKey[]
+  extraTones: MusicalKey[]
+}
 
-  { root: 'G', quality: 'maj', rootString: 6, inversion: 0, pattern: '320003', labelZh: 'G 大三开放和弦', sourceId: 'justin' },
-  { root: 'G', quality: '7', rootString: 6, inversion: 0, pattern: '320001', labelZh: 'G7 开放和弦', sourceId: 'justin' },
-  { root: 'G', quality: 'maj7', rootString: 6, inversion: 0, pattern: '320002', labelZh: 'Gmaj7 开放和弦', sourceId: 'justin' },
-  { root: 'G', quality: 'm', rootString: 6, inversion: 0, pattern: '355333', labelZh: 'Gm 封闭和弦', sourceId: 'halLeonard' },
-  { root: 'G', quality: 'm7', rootString: 6, inversion: 0, pattern: '353333', labelZh: 'Gm7 封闭和弦', sourceId: 'halLeonard' },
+function finalizeShapes(rawShapes: RawChordShape[]) {
+  const records: ChordLibraryValidationRecord[] = rawShapes.map((shape) => {
+    const result = validateChordPattern(shape.root, shape.quality, shape.pattern)
+    const rootString = shape.rootString ?? inferRootString(shape.pattern)
+    const inversion = shape.inversion ?? (inferBassInversion(shape.root, shape.quality, shape.pattern) as Inversion)
 
-  { root: 'F', quality: 'maj', rootString: 6, inversion: 0, pattern: '133211', labelZh: 'F 大三封闭和弦', sourceId: 'halLeonard' },
-  { root: 'F', quality: 'm', rootString: 6, inversion: 0, pattern: '133111', labelZh: 'Fm 封闭和弦', sourceId: 'halLeonard' },
-  { root: 'F', quality: '7', rootString: 6, inversion: 0, pattern: '131211', labelZh: 'F7 封闭和弦', sourceId: 'halLeonard' },
-]
+    return {
+      root: shape.root,
+      quality: shape.quality,
+      pattern: shape.pattern,
+      rootString,
+      inversion,
+      status: result.status,
+      expectedTones: result.expectedTones,
+      actualTones: result.actualTones,
+      missingTones: result.missingTones,
+      extraTones: result.extraTones,
+    }
+  })
+
+  const validPatterns = new Set(records.filter((record) => record.status === 'PASS').map((record) => `${record.root}|${record.quality}|${record.pattern}`))
+
+  const curated: StandardChordShape[] = rawShapes
+    .filter((shape) => validPatterns.has(`${shape.root}|${shape.quality}|${shape.pattern}`))
+    .map((shape) => {
+      const rootString = shape.rootString ?? inferRootString(shape.pattern)
+      const inversion = shape.inversion ?? (inferBassInversion(shape.root, shape.quality, shape.pattern) as Inversion)
+      return {
+        ...shape,
+        rootString,
+        inversion,
+        verificationStatus: '已校验' as const,
+        verificationNotes: `${shape.labelZh}（tonal PASS）`,
+      }
+    })
+
+  return { curated, records }
+}
+
+const { curated: STANDARD_CHORD_SHAPES, records: CHORD_LIBRARY_VALIDATION_REPORT } = finalizeShapes(buildRawShapes())
+
+export { CHORD_LIBRARY_VALIDATION_REPORT }
 
 function toInversionNumber(inversion: Inversion | ChordInversion): Inversion {
   if (inversion === 'root') return 0
