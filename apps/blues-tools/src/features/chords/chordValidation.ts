@@ -20,6 +20,27 @@ export type PlayabilityValidationResult = {
 
 const OPEN_STRINGS: MusicalKey[] = ['E', 'A', 'D', 'G', 'B', 'E']
 
+const QUALITY_REQUIRED_TONE_INDEXES: Record<ChordQuality, number[]> = {
+  maj: [0, 1, 2],
+  m: [0, 1, 2],
+  '5': [0, 1],
+  '6': [0, 1, 3],
+  m6: [0, 1, 3],
+  sus2: [0, 1, 2],
+  sus4: [0, 1, 2],
+  add9: [0, 1, 2, 3],
+  dim: [0, 1, 2],
+  dim7: [0, 1, 2, 3],
+  aug: [0, 1, 2],
+  '7': [0, 1, 3],
+  maj7: [0, 1, 3],
+  m7: [0, 1, 3],
+  m7b5: [0, 1, 2, 3],
+  '9': [0, 1, 3, 4],
+  maj9: [0, 1, 3, 4],
+  m9: [0, 1, 3, 4],
+}
+
 const QUALITY_SUFFIX: Record<ChordQuality, string> = {
   maj: '',
   m: 'm',
@@ -127,20 +148,10 @@ export function validateChordPattern(root: MusicalKey, quality: ChordQuality, pa
   const missingTones = expectedTones.filter((tone) => !actualSet.has(tone))
   const extraTones = actualTones.filter((tone) => !expectedSet.has(tone))
 
-  const qualityHasNinth = quality === '9' || quality === 'maj9' || quality === 'm9'
-  const rootAndGuideTones = expectedTones.slice(0, 4)
-  const missingGuideTone = rootAndGuideTones.some((tone) => !actualSet.has(tone))
+  const requiredToneSet = new Set((QUALITY_REQUIRED_TONE_INDEXES[quality] ?? []).map((index) => expectedTones[index]).filter(Boolean))
+  const missingRequiredTones = [...requiredToneSet].filter((tone) => !actualSet.has(tone))
 
-  let status: TonalValidationStatus = 'PASS'
-  if (missingTones.length === 0 && extraTones.length === 0) {
-    status = 'PASS'
-  } else if (!missingGuideTone && qualityHasNinth && missingTones.every((tone) => tone === expectedTones[4]) && extraTones.length === 0) {
-    status = 'WARN'
-  } else if (missingTones.length === 0 && extraTones.length <= 1) {
-    status = 'WARN'
-  } else {
-    status = 'FAIL'
-  }
+  const status: TonalValidationStatus = extraTones.length === 0 && missingRequiredTones.length === 0 ? 'PASS' : 'FAIL'
 
   return {
     status,

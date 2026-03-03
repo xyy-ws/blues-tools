@@ -19,10 +19,21 @@ describe('chordValidation', () => {
     expect(result.missingTones).toEqual([])
   })
 
-  it('marks missing ninth extension as WARN for ninth chords', () => {
-    const result = validateChordPattern('E', '9', '020100')
-    expect(result.status).toBe('WARN')
-    expect(result.missingTones.length).toBeGreaterThan(0)
+  it('fails ninth-family chords that omit the required 9th extension tone', () => {
+    const result = validateChordPattern('C', '9', 'x32313')
+    expect(result.status).toBe('FAIL')
+    expect(result.missingTones).toContain('D')
+  })
+
+  it('accepts valid C9 voicing when the 9th is present', () => {
+    const result = validateChordPattern('C', '9', 'x32333')
+    expect(result.status).toBe('PASS')
+    expect(result.missingTones).toEqual([])
+  })
+
+  it('also enforces required 9th for maj9 and m9', () => {
+    expect(validateChordPattern('C', 'maj9', 'x32000').status).toBe('FAIL')
+    expect(validateChordPattern('C', 'm9', 'x3133x').status).toBe('FAIL')
   })
 
   it('marks major/minor quality mismatches as FAIL', () => {
