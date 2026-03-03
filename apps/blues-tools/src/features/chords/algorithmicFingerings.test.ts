@@ -22,8 +22,8 @@ describe('generateRankedFingerings', () => {
     expect(top.score).toBeGreaterThanOrEqual(bottom.score)
   })
 
-  it('clamps topN to 3~5', () => {
-    expect(generateRankedFingerings('E', '7', 6, 0, 1).length).toBeLessThanOrEqual(3)
-    expect(generateRankedFingerings('E', '7', 6, 0, 9).length).toBeLessThanOrEqual(5)
+  it('supports dynamic topN without fixed 3~5 constraint', () => {
+    expect(generateRankedFingerings('E', '7', 6, 0, 1).length).toBeLessThanOrEqual(1)
+    expect(generateRankedFingerings('E', '7', 6, 0, Number.POSITIVE_INFINITY).length).toBeGreaterThan(1)
   })
 })

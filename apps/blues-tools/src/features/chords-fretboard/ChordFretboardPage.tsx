@@ -123,7 +123,7 @@ export function ChordFretboardPage() {
   const fingeringEntries = useMemo(() => {
     if (!resolvedRootString || resolvedInversion === undefined) return []
     const curated = getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
-    const generated = getRankedGeneratedChordVoicings(root, quality, resolvedRootString, resolvedInversion, 5)
+    const generated = getRankedGeneratedChordVoicings(root, quality, resolvedRootString, resolvedInversion, 20)
     if (sourceFilter === 'curated') return curated
     if (sourceFilter === 'generated') return generated
     return [...generated, ...curated]
@@ -285,7 +285,7 @@ export function ChordFretboardPage() {
               当前转位：<strong>{INVERSION_LABELS[resolvedInversion ?? 0]}</strong>
             </p>
             <p>
-              当前按法变体：<strong>变体 {voicingIndex + 1}</strong>（{selectedPattern}）
+              当前按法变体：<strong>变体 {voicingIndex + 1} / {fingeringEntries.length}</strong>（{selectedPattern}）
               {selectedEntry?.sourceKind === 'generated' ? ' · 算法生成' : ' · 标准库'}
             </p>
             {selectedEntry?.sourceKind === 'generated' ? (
@@ -317,12 +317,12 @@ export function ChordFretboardPage() {
             </div>
             {voicingConstrained ? (
               <p className="muted helper-text" role="status">
-                当前转位仅有 1 个可用按法变体；可切换根音弦或转位以获得更多按法。
+                当前组合仅有 {fingeringEntries.length} 个通过严格校验的按法；可切换根音弦或转位以尝试更多按法。
               </p>
             ) : null}
           </>
         ) : (
-          <p className="muted helper-text" role="alert">该组合暂无标准指型</p>
+          <p className="muted helper-text" role="alert">该组合暂无通过严格校验的可用指型（0 个结果）。请切换根音、性质、根音弦或转位。</p>
         )}
         <p className="muted helper-text" style={{ marginBottom: 8 }}>
           记谱格式为 EADGBe（x 表示闷音）。先选转位，再切换同转位下的按法变体。

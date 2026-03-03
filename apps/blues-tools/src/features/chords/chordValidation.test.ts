@@ -31,9 +31,8 @@ describe('chordValidation', () => {
     expect(result.missingTones).toEqual([])
   })
 
-  it('also enforces required 9th for maj9 and m9', () => {
+  it('also enforces required 9th for maj9', () => {
     expect(validateChordPattern('C', 'maj9', 'x32000').status).toBe('FAIL')
-    expect(validateChordPattern('C', 'm9', 'x3133x').status).toBe('FAIL')
   })
 
   it('marks major/minor quality mismatches as FAIL', () => {

@@ -28,7 +28,7 @@ describe('ChordFretboardPage', () => {
       expect(after).not.toEqual(before)
     } else {
       expect(voicingSelect.disabled).toBe(true)
-      expect(screen.getByRole('status')).toHaveTextContent('仅有 1 个可用按法变体')
+      expect(screen.getByRole('status')).toHaveTextContent('仅有 1 个通过严格校验的按法')
     }
   })
 
@@ -102,17 +102,17 @@ describe('ChordFretboardPage', () => {
     expect(sourcePanel).toHaveTextContent('校验状态：')
   })
 
-  it('shows generated top list with 3-5 items sorted by score', () => {
+  it('shows generated list with dynamic count sorted by score', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'generated' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    expect(voicingSelect.options.length).toBeGreaterThanOrEqual(3)
-    expect(voicingSelect.options.length).toBeLessThanOrEqual(5)
+    expect(voicingSelect.options.length).toBeGreaterThan(0)
 
     const scores: number[] = []
-    for (let i = 0; i < voicingSelect.options.length; i += 1) {
+    const sampleCount = Math.min(voicingSelect.options.length, 8)
+    for (let i = 0; i < sampleCount; i += 1) {
       fireEvent.change(voicingSelect, { target: { value: String(i) } })
       const scoreText = within(screen.getByLabelText('评分摘要')).getByText(/评分/).textContent ?? ''
       const score = Number(scoreText.replace(/[^0-9.]/g, ''))
@@ -121,6 +121,19 @@ describe('ChordFretboardPage', () => {
 
     const sorted = [...scores].sort((a, b) => b - a)
     expect(scores).toEqual(sorted)
+  })
+
+  it('handles variant counts below 5 without UI break', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'E' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'add9' } })
+    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
+
+    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    expect(voicingSelect.options.length).toBeGreaterThan(0)
+    expect(voicingSelect.options.length).toBeLessThan(5)
+    expect(screen.getByText(/当前按法变体：/)).toHaveTextContent(new RegExp(`变体 1 / ${voicingSelect.options.length}`))
   })
 
   it('renders string 1 on top and string 6 on bottom', () => {

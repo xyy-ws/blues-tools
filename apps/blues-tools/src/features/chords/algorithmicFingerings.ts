@@ -93,7 +93,8 @@ function badgesFor(metrics: CandidateMetrics): string[] {
 }
 
 function clampTopN(topN: number): number {
-  return Math.max(3, Math.min(5, Math.round(topN)))
+  if (!Number.isFinite(topN)) return Number.MAX_SAFE_INTEGER
+  return Math.max(1, Math.round(topN))
 }
 
 const CACHE = new Map<string, GeneratedFingering[]>()
@@ -126,7 +127,7 @@ export function generateRankedFingerings(root: MusicalKey, quality: ChordQuality
       if (stringIndex === 6) {
         const pattern = partial.join('')
         const tonal = validateChordPattern(root, quality, pattern)
-        if (tonal.status === 'FAIL') return
+        if (tonal.status !== 'PASS') return
         const playability = validateChordPlayability(pattern)
         if (playability.status === 'FAIL') return
         if (inferBassInversion(root, quality, pattern) !== inversion) return
