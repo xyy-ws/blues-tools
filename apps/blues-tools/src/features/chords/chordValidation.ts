@@ -190,19 +190,19 @@ function validatePatternFormat(pattern: string): string[] {
 }
 
 export function validateChordPlayability(pattern: string): PlayabilityValidationResult {
-  if (NON_PLAYABLE_PATTERNS.has(pattern)) {
-    return { status: 'FAIL', reasons: ['blocked known unreliable shape'] }
-  }
-
   const formatReasons = validatePatternFormat(pattern)
   if (formatReasons.length > 0) {
     return { status: 'FAIL', reasons: formatReasons }
   }
 
+  if (NON_PLAYABLE_PATTERNS.has(pattern)) {
+    return { status: 'FAIL', reasons: ['blocked known unreliable shape'] }
+  }
+
   const chars = pattern.split('')
-  const activeStringIndices = chars.map((char, idx) => (char.toLowerCase() === 'x' ? null : idx)).filter((idx): idx is number => idx !== null)
+  const activeStringIndices = chars.map((char, idx) => (char === 'x' ? null : idx)).filter((idx): idx is number => idx !== null)
   const frets = chars
-    .map((char) => (char.toLowerCase() === 'x' ? null : Number.parseInt(char, 10)))
+    .map((char) => (char === 'x' ? null : Number.parseInt(char, 10)))
     .filter((fret): fret is number => fret !== null && !Number.isNaN(fret))
 
   if (frets.length === 0) {
@@ -220,7 +220,7 @@ export function validateChordPlayability(pattern: string): PlayabilityValidation
   if (activeStringIndices.length > 0) {
     const firstActive = activeStringIndices[0]
     const lastActive = activeStringIndices[activeStringIndices.length - 1]
-    const hasInnerMuteGap = chars.slice(firstActive, lastActive + 1).some((char) => char.toLowerCase() === 'x')
+    const hasInnerMuteGap = chars.slice(firstActive, lastActive + 1).some((char) => char === 'x')
     if (hasInnerMuteGap && activeStringIndices.length < 4) {
       reasons.push('contains inner muted-string gaps with too few anchor tones')
     }
