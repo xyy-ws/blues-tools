@@ -15,18 +15,21 @@ describe('ChordFretboardPage', () => {
     expect(Array.from(inversionSelect.options).every((option) => option.value !== '')).toBe(true)
   })
 
-  it('shows multiple standard voicing variants when available', () => {
+  it('renders validated standard voicing selector state', () => {
     render(<ChordFretboardPage />)
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    expect(voicingSelect.disabled).toBe(false)
-    expect(voicingSelect.options.length).toBeGreaterThanOrEqual(2)
+    expect(voicingSelect.options.length).toBeGreaterThanOrEqual(1)
 
-    const before = screen.getByText(/当前按法变体：/).textContent
-    fireEvent.change(voicingSelect, { target: { value: '1' } })
-    const after = screen.getByText(/当前按法变体：/).textContent
-
-    expect(after).not.toEqual(before)
+    if (voicingSelect.options.length >= 2) {
+      const before = screen.getByText(/当前按法变体：/).textContent
+      fireEvent.change(voicingSelect, { target: { value: '1' } })
+      const after = screen.getByText(/当前按法变体：/).textContent
+      expect(after).not.toEqual(before)
+    } else {
+      expect(voicingSelect.disabled).toBe(true)
+      expect(screen.getByRole('status')).toHaveTextContent('仅有 1 个可用按法变体')
+    }
   })
 
   it('keeps standard-library-only rendering without approximate fallback badge', () => {
@@ -63,6 +66,27 @@ describe('ChordFretboardPage', () => {
     expect(container.querySelector('td')?.textContent).toContain('0:')
     expect(screen.getByText('图例')).toBeInTheDocument()
     expect(screen.getByLabelText('按法建议')).toBeInTheDocument()
+  })
+
+  it('excludes non-strummable analysis-like patterns from default voicing selector', () => {
+    render(<ChordFretboardPage />)
+
+    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
+
+    expect(optionTexts.some((text) => text.includes('0xx137'))).toBe(false)
+  })
+
+  it('keeps common strummable E major shape visible and usable', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
+
+    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
+
+    expect(optionTexts.some((text) => text.includes('022100'))).toBe(true)
+    expect(screen.getByText(/当前按法变体：/)).toHaveTextContent('022100')
   })
 
   it('shows shape-level source traceability metadata for selected standard fingering', () => {

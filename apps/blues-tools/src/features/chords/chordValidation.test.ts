@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { computePatternTones, deriveTargetChordTones, validateChordPattern } from './chordValidation'
+import { computePatternTones, deriveTargetChordTones, validateChordPattern, validateChordPlayability } from './chordValidation'
 
 describe('chordValidation', () => {
   it('derives target tones using tonaljs with sharp normalization', () => {
@@ -26,5 +26,16 @@ describe('chordValidation', () => {
   it('marks major/minor quality mismatches as FAIL', () => {
     const result = validateChordPattern('E', 'maj', '022000')
     expect(result.status).toBe('FAIL')
+  })
+
+  it('rejects non-strummable analysis-like distributions', () => {
+    const result = validateChordPlayability('0xx137')
+    expect(result.status).toBe('FAIL')
+    expect(result.reasons.join(' ')).toContain('analysis-like distribution')
+  })
+
+  it('accepts common strummable chord shape', () => {
+    const result = validateChordPlayability('022100')
+    expect(result.status).toBe('PASS')
   })
 })

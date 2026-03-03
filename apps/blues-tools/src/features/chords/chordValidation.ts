@@ -160,6 +160,7 @@ export function validateChordPlayability(pattern: string): PlayabilityValidation
   }
 
   const chars = pattern.split('')
+  const activeStringIndices = chars.map((char, idx) => (char.toLowerCase() === 'x' ? null : idx)).filter((idx): idx is number => idx !== null)
   const frets = chars
     .map((char) => (char.toLowerCase() === 'x' ? null : Number.parseInt(char, 10)))
     .filter((fret): fret is number => fret !== null && !Number.isNaN(fret))
@@ -171,6 +172,19 @@ export function validateChordPlayability(pattern: string): PlayabilityValidation
   const reasons: string[] = []
   const nonZeroFrets = frets.filter((fret) => fret > 0)
   const hasOpenString = frets.includes(0)
+
+  if (activeStringIndices.length < 4) {
+    reasons.push(`too few active strings for strumming (${activeStringIndices.length})`)
+  }
+
+  if (activeStringIndices.length > 0) {
+    const firstActive = activeStringIndices[0]
+    const lastActive = activeStringIndices[activeStringIndices.length - 1]
+    const hasInnerMuteGap = chars.slice(firstActive, lastActive + 1).some((char) => char.toLowerCase() === 'x')
+    if (hasInnerMuteGap) {
+      reasons.push('contains inner muted-string gaps (analysis-like distribution)')
+    }
+  }
 
   if (nonZeroFrets.length > 0) {
     const minFret = Math.min(...nonZeroFrets)

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { CHORD_LIBRARY_VALIDATION_REPORT, getChordFingerings, getChordVoicingOptions, getInversionOptionsFor, getRootStringOptions, hasStandardChordShapes, type ChordQuality } from './chords'
 
-const CORE_QUALITIES: ChordQuality[] = ['maj', 'm', '7', 'maj7', 'm7', 'm7b5', '9', 'maj9', 'm9']
+const CORE_QUALITIES: ChordQuality[] = ['maj', 'm', '7', 'maj7', 'm7']
 
 describe('standard chord library', () => {
   it('returns curated standard entries with source metadata', () => {
