@@ -13,6 +13,11 @@ export type TonalValidationResult = {
   extraTones: MusicalKey[]
 }
 
+export type PlayabilityValidationResult = {
+  status: 'PASS' | 'FAIL'
+  reasons: string[]
+}
+
 const OPEN_STRINGS: MusicalKey[] = ['E', 'A', 'D', 'G', 'B', 'E']
 
 const QUALITY_SUFFIX: Record<ChordQuality, string> = {
@@ -145,4 +150,41 @@ export function inferRootString(pattern: string): RootString {
   if (firstActive <= 0) return 6
   if (firstActive === 1) return 5
   return 4
+}
+
+const NON_PLAYABLE_PATTERNS = new Set(['5x2009'])
+
+export function validateChordPlayability(pattern: string): PlayabilityValidationResult {
+  if (NON_PLAYABLE_PATTERNS.has(pattern)) {
+    return { status: 'FAIL', reasons: ['blocked known unreliable shape'] }
+  }
+
+  const chars = pattern.split('')
+  const frets = chars
+    .map((char) => (char.toLowerCase() === 'x' ? null : Number.parseInt(char, 10)))
+    .filter((fret): fret is number => fret !== null && !Number.isNaN(fret))
+
+  if (frets.length === 0) {
+    return { status: 'FAIL', reasons: ['no fretted notes'] }
+  }
+
+  const reasons: string[] = []
+  const nonZeroFrets = frets.filter((fret) => fret > 0)
+  const hasOpenString = frets.includes(0)
+
+  if (nonZeroFrets.length > 0) {
+    const minFret = Math.min(...nonZeroFrets)
+    const maxFret = Math.max(...nonZeroFrets)
+    const frettedSpan = maxFret - minFret
+
+    if (frettedSpan > 8) {
+      reasons.push(`fretted span too wide (${frettedSpan})`)
+    }
+
+    if (hasOpenString && maxFret > 9) {
+      reasons.push(`open-string + high-fret stretch not common-practice (max fret ${maxFret})`)
+    }
+  }
+
+  return reasons.length === 0 ? { status: 'PASS', reasons: [] } : { status: 'FAIL', reasons }
 }
