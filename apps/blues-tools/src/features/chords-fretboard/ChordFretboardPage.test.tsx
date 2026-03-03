@@ -7,7 +7,7 @@ afterEach(() => {
 })
 
 describe('ChordFretboardPage', () => {
-  it('updates displayed pattern when inversion changes', () => {
+  it('updates displayed pattern when inversion changes to another standard inversion', () => {
     render(<ChordFretboardPage />)
 
     const before = screen.getByText(/当前按法变体：/).textContent
@@ -17,7 +17,7 @@ describe('ChordFretboardPage', () => {
     expect(after).not.toEqual(before)
   })
 
-  it('offers multiple voicing variants and updates displayed pattern when voicing changes', () => {
+  it('shows multiple standard voicing variants when available', () => {
     render(<ChordFretboardPage />)
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
@@ -29,6 +29,18 @@ describe('ChordFretboardPage', () => {
     const after = screen.getByText(/当前按法变体：/).textContent
 
     expect(after).not.toEqual(before)
+  })
+
+  it('shows empty state for unsupported standard combo and hides approximate fallback badge', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'B' } })
+
+    const qualitySelect = screen.getByLabelText('和弦性质') as HTMLSelectElement
+    fireEvent.change(qualitySelect, { target: { value: '9' } })
+
+    expect(screen.getByRole('alert')).toHaveTextContent('该组合暂无标准指型')
+    expect(screen.queryByText('近似指型')).not.toBeInTheDocument()
   })
 
   it('highlights only fingering positions and keeps tone types inside highlighted notes', () => {
@@ -54,7 +66,7 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByLabelText('按法建议')).toBeInTheDocument()
   })
 
-  it('shows shape-level source traceability metadata for selected fingering', () => {
+  it('shows shape-level source traceability metadata for selected standard fingering', () => {
     render(<ChordFretboardPage />)
 
     const sourcePanel = screen.getByLabelText('指型来源追溯')
@@ -62,16 +74,6 @@ describe('ChordFretboardPage', () => {
     expect(sourcePanel).toHaveTextContent('来源类型：')
     expect(sourcePanel).toHaveTextContent('可信度等级：')
     expect(sourcePanel).toHaveTextContent('校验状态：')
-  })
-
-  it('marks approximate fallback voicing clearly and shows fallback reason warning', () => {
-    render(<ChordFretboardPage />)
-
-    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'C' } })
-    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
-
-    expect(screen.getByText('近似指型')).toBeInTheDocument()
-    expect(screen.getByRole('alert')).toHaveTextContent('近似/回退原因：')
   })
 
   it('renders string 1 on top and string 6 on bottom', () => {

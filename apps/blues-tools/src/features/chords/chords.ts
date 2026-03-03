@@ -1,12 +1,9 @@
 import type { MusicalKey } from '../../domain/music/types'
-import { CHROMATIC_KEYS } from '../../domain/music/keys'
 
 export type ChordQuality = 'maj' | 'm' | '7' | 'maj7' | 'm7' | 'm7b5' | '9' | 'maj9' | 'm9'
 export type RootString = 6 | 5 | 4
 export type Inversion = 0 | 1 | 2 | 3
 export type ChordInversion = 'root' | '1st' | '2nd'
-
-type PatternToken = number | 'x'
 
 export type ChordSourceType = '理论' | '指型参考' | '课程实践'
 export type ConfidenceLevel = 'high' | 'medium' | 'low'
@@ -41,56 +38,43 @@ export type ChordVoicingOption = {
   fallbackReason?: string
 }
 
-type VoicingTemplate = {
+type StandardChordShape = {
+  root: MusicalKey
+  quality: ChordQuality
   rootString: RootString
   inversion: Inversion
-  tokens: [PatternToken, PatternToken, PatternToken, PatternToken, PatternToken, PatternToken]
-  sourceId?: keyof typeof CHORD_SOURCES
+  pattern: string
+  labelZh: string
+  sourceId: keyof typeof CHORD_SOURCES
   verificationStatus?: VerificationStatus
   verificationNotes?: string
 }
 
 const CHORD_SOURCES: Record<string, ChordSource> = {
-  caged: {
-    id: 'caged',
-    title: 'CAGED open-position + movable voicing practice set',
-    publisherOrAuthor: 'Internal pedagogy baseline',
-    sourceName: 'CAGED 练习体系',
-    sourceType: '课程实践',
-    confidenceLevel: 'medium',
-  },
-  halLeonard: {
-    id: 'halLeonard',
-    title: 'Hal Leonard Guitar Method, Chord Dictionary section',
-    publisherOrAuthor: 'Will Schmid & Greg Koch',
-    sourceName: 'Hal Leonard Guitar Method',
-    sourceType: '理论',
-    confidenceLevel: 'high',
-  },
   justin: {
     id: 'justin',
     title: 'JustinGuitar Chord Library',
     publisherOrAuthor: 'Justin Sandercoe',
     url: 'https://www.justinguitar.com/chords',
-    sourceName: 'JustinGuitar Chord Library',
+    sourceName: 'JustinGuitar 和弦库',
     sourceType: '指型参考',
     confidenceLevel: 'high',
   },
-  mickeyBaker: {
-    id: 'mickeyBaker',
-    title: 'Mickey Baker’s Complete Course in Jazz Guitar (Book 1)',
-    publisherOrAuthor: 'Mickey Baker',
-    sourceName: 'Mickey Baker Jazz Guitar',
+  halLeonard: {
+    id: 'halLeonard',
+    title: 'Hal Leonard Guitar Method, Chord Dictionary section',
+    publisherOrAuthor: 'Will Schmid & Greg Koch',
+    sourceName: 'Hal Leonard 和弦字典',
     sourceType: '理论',
-    confidenceLevel: 'medium',
+    confidenceLevel: 'high',
   },
-  fallback: {
-    id: 'fallback',
-    title: 'Auto fallback: nearest playable root-position voicing',
-    publisherOrAuthor: 'blues-tools runtime fallback',
-    sourceName: '运行时回退近似',
+  caged: {
+    id: 'caged',
+    title: 'CAGED open-position + movable voicing practice set',
+    publisherOrAuthor: 'Internal pedagogy baseline',
+    sourceName: 'CAGED 教学整理',
     sourceType: '课程实践',
-    confidenceLevel: 'low',
+    confidenceLevel: 'medium',
   },
 }
 
@@ -130,155 +114,45 @@ export const CHORD_QUALITY_LABELS: Record<ChordQuality, string> = {
   m9: '小九 (m9)',
 }
 
-const VOICING_TEMPLATES: Record<RootString, Record<ChordQuality, VoicingTemplate[]>> = {
-  6: {
-    maj: [
-      { rootString: 6, inversion: 0, tokens: [0, 2, 2, 1, 0, 0] },
-      { rootString: 6, inversion: 1, tokens: [0, x(1), 2, 1, 0, x(1)] },
-      { rootString: 6, inversion: 2, tokens: [0, x(1), x(1), 1, 0, 0] },
-    ],
-    m: [
-      { rootString: 6, inversion: 0, tokens: [0, 2, 2, 0, 0, 0] },
-      { rootString: 6, inversion: 1, tokens: [0, x(1), 2, 0, 0, x(1)] },
-      { rootString: 6, inversion: 2, tokens: [0, x(1), x(1), 0, 0, 0] },
-    ],
-    '7': [
-      { rootString: 6, inversion: 0, tokens: [0, 2, 0, 1, 0, 0] },
-      { rootString: 6, inversion: 0, tokens: [0, x(1), 2, 1, 3, 0] },
-      { rootString: 6, inversion: 1, tokens: [0, x(1), 0, 1, 0, x(1)] },
-      { rootString: 6, inversion: 2, tokens: [0, x(1), x(1), 1, 0, 0] },
-      { rootString: 6, inversion: 3, tokens: [0, 2, 0, 1, 3, 0] },
-    ],
-    maj7: [
-      { rootString: 6, inversion: 0, tokens: [0, 2, 1, 1, 0, 0] },
-      { rootString: 6, inversion: 1, tokens: [0, x(1), 1, 1, 0, x(1)] },
-      { rootString: 6, inversion: 2, tokens: [0, x(1), x(1), 1, 0, 0] },
-      { rootString: 6, inversion: 3, tokens: [0, 2, 1, 1, 3, 0] },
-    ],
-    m7: [
-      { rootString: 6, inversion: 0, tokens: [0, 2, 0, 0, 0, 0] },
-      { rootString: 6, inversion: 1, tokens: [0, x(1), 0, 0, 0, x(1)] },
-      { rootString: 6, inversion: 2, tokens: [0, x(1), x(1), 0, 0, 0] },
-      { rootString: 6, inversion: 3, tokens: [0, 2, 0, 0, 3, 0] },
-    ],
-    m7b5: [
-      { rootString: 6, inversion: 0, tokens: [0, 1, 0, 0, 0, 0] },
-      { rootString: 6, inversion: 1, tokens: [0, x(1), 0, 0, 0, x(1)] },
-      { rootString: 6, inversion: 2, tokens: [0, x(1), x(1), 0, 0, 0] },
-      { rootString: 6, inversion: 3, tokens: [0, 1, 0, 0, 3, 0] },
-    ],
-    '9': [
-      { rootString: 6, inversion: 0, tokens: [0, 2, 0, 1, 0, 2] },
-      { rootString: 6, inversion: 1, tokens: [0, x(1), 0, 1, 2, 2] },
-      { rootString: 6, inversion: 2, tokens: [0, x(1), x(1), 1, 2, 2] },
-    ],
-    maj9: [{ rootString: 6, inversion: 0, tokens: [0, 2, 1, 1, 0, 2] }],
-    m9: [{ rootString: 6, inversion: 0, tokens: [0, 2, 0, 0, 0, 2] }],
-  },
-  5: {
-    maj: [
-      { rootString: 5, inversion: 0, tokens: ['x', 0, 2, 2, 2, 0] },
-      { rootString: 5, inversion: 1, tokens: ['x', 0, 2, 2, 0, 0] },
-      { rootString: 5, inversion: 2, tokens: ['x', 0, x(1), 2, 2, 0] },
-    ],
-    m: [
-      { rootString: 5, inversion: 0, tokens: ['x', 0, 2, 2, 1, 0] },
-      { rootString: 5, inversion: 1, tokens: ['x', 0, 2, 0, 1, 0] },
-      { rootString: 5, inversion: 2, tokens: ['x', 0, x(1), 2, 1, 0] },
-    ],
-    '7': [
-      { rootString: 5, inversion: 0, tokens: ['x', 0, 2, 0, 2, 0] },
-      { rootString: 5, inversion: 1, tokens: ['x', 0, 2, 0, 0, 0] },
-      { rootString: 5, inversion: 2, tokens: ['x', 0, x(1), 0, 2, 0] },
-      { rootString: 5, inversion: 3, tokens: ['x', 0, 2, 0, 2, 3] },
-    ],
-    maj7: [
-      { rootString: 5, inversion: 0, tokens: ['x', 0, 2, 1, 2, 0] },
-      { rootString: 5, inversion: 1, tokens: ['x', 0, 2, 1, 0, 0] },
-      { rootString: 5, inversion: 2, tokens: ['x', 0, x(1), 1, 2, 0] },
-      { rootString: 5, inversion: 3, tokens: ['x', 0, 2, 1, 2, 4] },
-    ],
-    m7: [
-      { rootString: 5, inversion: 0, tokens: ['x', 0, 2, 0, 1, 0] },
-      { rootString: 5, inversion: 1, tokens: ['x', 0, 2, 0, 0, 0] },
-      { rootString: 5, inversion: 2, tokens: ['x', 0, x(1), 0, 1, 0] },
-      { rootString: 5, inversion: 3, tokens: ['x', 0, 2, 0, 1, 3] },
-    ],
-    m7b5: [
-      { rootString: 5, inversion: 0, tokens: ['x', 0, 1, 0, 1, 0] },
-      { rootString: 5, inversion: 1, tokens: ['x', 0, 1, 0, 0, 0] },
-      { rootString: 5, inversion: 2, tokens: ['x', 0, x(1), 0, 1, 0] },
-      { rootString: 5, inversion: 3, tokens: ['x', 0, 1, 0, 1, 3] },
-    ],
-    '9': [
-      { rootString: 5, inversion: 0, tokens: ['x', 0, 2, 0, 2, 2] },
-      { rootString: 5, inversion: 1, tokens: ['x', 0, 2, 0, 0, 2] },
-      { rootString: 5, inversion: 2, tokens: ['x', 0, x(1), 0, 2, 2] },
-    ],
-    maj9: [{ rootString: 5, inversion: 0, tokens: ['x', 0, 2, 1, 2, 2] }],
-    m9: [{ rootString: 5, inversion: 0, tokens: ['x', 0, 2, 0, 1, 2] }],
-  },
-  4: {
-    maj: [
-      { rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 2, 3, 2] },
-      { rootString: 4, inversion: 1, tokens: ['x', 'x', 0, 2, 1, 2] },
-      { rootString: 4, inversion: 2, tokens: ['x', 'x', 0, 0, 1, 2] },
-    ],
-    m: [
-      { rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 2, 3, 1] },
-      { rootString: 4, inversion: 1, tokens: ['x', 'x', 0, 2, 1, 1] },
-      { rootString: 4, inversion: 2, tokens: ['x', 'x', 0, 0, 1, 1] },
-    ],
-    '7': [
-      { rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 2, 1, 2] },
-      { rootString: 4, inversion: 1, tokens: ['x', 'x', 0, 0, 1, 2] },
-      { rootString: 4, inversion: 2, tokens: ['x', 'x', 0, 2, 1, 0] },
-      { rootString: 4, inversion: 3, tokens: ['x', 'x', 0, 2, 4, 5] },
-    ],
-    maj7: [
-      { rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 2, 2, 2] },
-      { rootString: 4, inversion: 1, tokens: ['x', 'x', 0, 0, 2, 2] },
-      { rootString: 4, inversion: 2, tokens: ['x', 'x', 0, 2, 2, 0] },
-      { rootString: 4, inversion: 3, tokens: ['x', 'x', 0, 2, 5, 5] },
-    ],
-    m7: [
-      { rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 2, 1, 1] },
-      { rootString: 4, inversion: 1, tokens: ['x', 'x', 0, 0, 1, 1] },
-      { rootString: 4, inversion: 2, tokens: ['x', 'x', 0, 2, 1, 0] },
-      { rootString: 4, inversion: 3, tokens: ['x', 'x', 0, 2, 4, 4] },
-    ],
-    m7b5: [
-      { rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 1, 1, 1] },
-      { rootString: 4, inversion: 1, tokens: ['x', 'x', 0, 0, 1, 1] },
-      { rootString: 4, inversion: 2, tokens: ['x', 'x', 0, 1, 1, 0] },
-      { rootString: 4, inversion: 3, tokens: ['x', 'x', 0, 1, 4, 4] },
-    ],
-    '9': [
-      { rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 2, 1, 2] },
-      { rootString: 4, inversion: 1, tokens: ['x', 'x', 0, 0, 1, 2] },
-      { rootString: 4, inversion: 2, tokens: ['x', 'x', 0, 2, 1, 0] },
-    ],
-    maj9: [{ rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 2, 2, 2] }],
-    m9: [{ rootString: 4, inversion: 0, tokens: ['x', 'x', 0, 2, 1, 1] }],
-  },
-}
+const STANDARD_CHORD_SHAPES: StandardChordShape[] = [
+  { root: 'E', quality: 'maj', rootString: 6, inversion: 0, pattern: '022100', labelZh: 'E 大三开放和弦', sourceId: 'justin' },
+  { root: 'E', quality: 'm', rootString: 6, inversion: 0, pattern: '022000', labelZh: 'Em 开放和弦', sourceId: 'justin' },
+  { root: 'E', quality: '7', rootString: 6, inversion: 0, pattern: '020100', labelZh: 'E7 开放和弦', sourceId: 'justin' },
+  { root: 'E', quality: '7', rootString: 6, inversion: 0, pattern: '0x2430', labelZh: 'E7 开放替代按法', sourceId: 'caged' },
+  { root: 'E', quality: '7', rootString: 6, inversion: 1, pattern: '0x2100', labelZh: 'E7 第一转位简化', sourceId: 'caged' },
+  { root: 'E', quality: 'maj7', rootString: 6, inversion: 0, pattern: '021100', labelZh: 'Emaj7 开放和弦', sourceId: 'justin' },
+  { root: 'E', quality: 'm7', rootString: 6, inversion: 0, pattern: '020000', labelZh: 'Em7 开放和弦', sourceId: 'justin' },
+  { root: 'E', quality: '9', rootString: 6, inversion: 0, pattern: '020102', labelZh: 'E9 开放和弦', sourceId: 'halLeonard' },
 
-const ROOT_STRING_TO_OPEN_NOTE: Record<RootString, MusicalKey> = {
-  6: 'E',
-  5: 'A',
-  4: 'D',
-}
+  { root: 'A', quality: 'maj', rootString: 5, inversion: 0, pattern: 'x02220', labelZh: 'A 大三开放和弦', sourceId: 'justin' },
+  { root: 'A', quality: 'm', rootString: 5, inversion: 0, pattern: 'x02210', labelZh: 'Am 开放和弦', sourceId: 'justin' },
+  { root: 'A', quality: '7', rootString: 5, inversion: 0, pattern: 'x02020', labelZh: 'A7 开放和弦', sourceId: 'justin' },
+  { root: 'A', quality: 'maj7', rootString: 5, inversion: 0, pattern: 'x02120', labelZh: 'Amaj7 开放和弦', sourceId: 'justin' },
+  { root: 'A', quality: 'm7', rootString: 5, inversion: 0, pattern: 'x02010', labelZh: 'Am7 开放和弦', sourceId: 'justin' },
+  { root: 'A', quality: '9', rootString: 5, inversion: 0, pattern: 'x02423', labelZh: 'A9 常用按法', sourceId: 'halLeonard' },
 
-function x(_n: number): 'x' {
-  return 'x'
-}
+  { root: 'D', quality: 'maj', rootString: 4, inversion: 0, pattern: 'xx0232', labelZh: 'D 大三开放和弦', sourceId: 'justin' },
+  { root: 'D', quality: 'm', rootString: 4, inversion: 0, pattern: 'xx0231', labelZh: 'Dm 开放和弦', sourceId: 'justin' },
+  { root: 'D', quality: '7', rootString: 4, inversion: 0, pattern: 'xx0212', labelZh: 'D7 开放和弦', sourceId: 'justin' },
+  { root: 'D', quality: 'maj7', rootString: 4, inversion: 0, pattern: 'xx0222', labelZh: 'Dmaj7 开放和弦', sourceId: 'justin' },
+  { root: 'D', quality: 'm7', rootString: 4, inversion: 0, pattern: 'xx0211', labelZh: 'Dm7 开放和弦', sourceId: 'justin' },
 
-function getRootFret(root: MusicalKey, rootString: RootString): number {
-  const open = ROOT_STRING_TO_OPEN_NOTE[rootString]
-  const rootIndex = CHROMATIC_KEYS.indexOf(root)
-  const openIndex = CHROMATIC_KEYS.indexOf(open)
-  return (rootIndex - openIndex + CHROMATIC_KEYS.length) % CHROMATIC_KEYS.length
-}
+  { root: 'C', quality: 'maj', rootString: 5, inversion: 0, pattern: 'x32010', labelZh: 'C 大三开放和弦', sourceId: 'justin' },
+  { root: 'C', quality: '7', rootString: 5, inversion: 0, pattern: 'x32310', labelZh: 'C7 开放和弦', sourceId: 'justin' },
+  { root: 'C', quality: 'maj7', rootString: 5, inversion: 0, pattern: 'x32000', labelZh: 'Cmaj7 开放和弦', sourceId: 'justin' },
+  { root: 'C', quality: 'm7', rootString: 5, inversion: 0, pattern: 'x35343', labelZh: 'Cm7 封闭和弦', sourceId: 'halLeonard' },
+  { root: 'C', quality: 'm', rootString: 5, inversion: 0, pattern: 'x35543', labelZh: 'Cm 封闭和弦', sourceId: 'halLeonard' },
+
+  { root: 'G', quality: 'maj', rootString: 6, inversion: 0, pattern: '320003', labelZh: 'G 大三开放和弦', sourceId: 'justin' },
+  { root: 'G', quality: '7', rootString: 6, inversion: 0, pattern: '320001', labelZh: 'G7 开放和弦', sourceId: 'justin' },
+  { root: 'G', quality: 'maj7', rootString: 6, inversion: 0, pattern: '320002', labelZh: 'Gmaj7 开放和弦', sourceId: 'justin' },
+  { root: 'G', quality: 'm', rootString: 6, inversion: 0, pattern: '355333', labelZh: 'Gm 封闭和弦', sourceId: 'halLeonard' },
+  { root: 'G', quality: 'm7', rootString: 6, inversion: 0, pattern: '353333', labelZh: 'Gm7 封闭和弦', sourceId: 'halLeonard' },
+
+  { root: 'F', quality: 'maj', rootString: 6, inversion: 0, pattern: '133211', labelZh: 'F 大三封闭和弦', sourceId: 'halLeonard' },
+  { root: 'F', quality: 'm', rootString: 6, inversion: 0, pattern: '133111', labelZh: 'Fm 封闭和弦', sourceId: 'halLeonard' },
+  { root: 'F', quality: '7', rootString: 6, inversion: 0, pattern: '131211', labelZh: 'F7 封闭和弦', sourceId: 'halLeonard' },
+]
 
 function toInversionNumber(inversion: Inversion | ChordInversion): Inversion {
   if (inversion === 'root') return 0
@@ -287,47 +161,28 @@ function toInversionNumber(inversion: Inversion | ChordInversion): Inversion {
   return inversion
 }
 
-function renderPattern(template: VoicingTemplate, rootFret: number): string | null {
-  const rendered = template.tokens.map((token) => {
-    if (token === 'x') return 'x'
-    const fret = rootFret + token
-    if (fret < 0 || fret > 9) return null
-    return String(fret)
-  })
-
-  if (rendered.some((value) => value === null)) return null
-  return rendered.join('')
-}
-
-function sourceIdByQuality(quality: ChordQuality): keyof typeof CHORD_SOURCES {
-  if (quality === 'maj' || quality === 'm') return 'justin'
-  if (quality === '7' || quality === 'maj7' || quality === 'm7') return 'halLeonard'
-  return 'mickeyBaker'
-}
-
-function inferShapeSourceId(template: VoicingTemplate, quality: ChordQuality): keyof typeof CHORD_SOURCES {
-  if (template.sourceId) return template.sourceId
-  const mutedStrings = template.tokens.filter((token) => token === 'x').length
-  if (quality === '9' || quality === 'maj9' || quality === 'm9') return 'mickeyBaker'
-  if (template.inversion === 3) return 'halLeonard'
-  if (mutedStrings >= 2) return 'caged'
-  return sourceIdByQuality(quality)
-}
-
-function resolveTemplateSource(template: VoicingTemplate, quality: ChordQuality): ChordShapeSourceRef {
-  const source = CHORD_SOURCES[inferShapeSourceId(template, quality)]
-  const verificationStatus: VerificationStatus = template.verificationStatus ?? '已校验'
-  return {
-    source,
-    verificationStatus,
-    verificationNotes: template.verificationNotes ?? (verificationStatus === '近似' ? '该形态来自近似映射。' : undefined),
-  }
-}
-
 function confidenceBySource(source: ChordSource): number {
   if (source.confidenceLevel === 'high') return 0.92
   if (source.confidenceLevel === 'medium') return 0.84
   return 0.62
+}
+
+export function getRootStringOptions(root: MusicalKey, quality: ChordQuality): RootString[] {
+  return [...new Set(STANDARD_CHORD_SHAPES.filter((shape) => shape.root === root && shape.quality === quality).map((shape) => shape.rootString))] as RootString[]
+}
+
+export function getInversionOptionsFor(root: MusicalKey, quality: ChordQuality, rootString: RootString): Inversion[] {
+  return [
+    ...new Set(
+      STANDARD_CHORD_SHAPES
+        .filter((shape) => shape.root === root && shape.quality === quality && shape.rootString === rootString)
+        .map((shape) => shape.inversion),
+    ),
+  ] as Inversion[]
+}
+
+export function hasStandardChordShapes(root: MusicalKey, quality: ChordQuality): boolean {
+  return STANDARD_CHORD_SHAPES.some((shape) => shape.root === root && shape.quality === quality)
 }
 
 export function getChordVoicingOptions(
@@ -336,65 +191,30 @@ export function getChordVoicingOptions(
   rootString: RootString = 6,
   inversion: Inversion | ChordInversion = 0,
 ): ChordVoicingOption[] {
-  const rootFret = getRootFret(root, rootString)
   const inversionNumber = toInversionNumber(inversion)
-  const templates = VOICING_TEMPLATES[rootString][quality].filter((template) => template.inversion === inversionNumber)
+  const selected = STANDARD_CHORD_SHAPES.filter(
+    (shape) => shape.root === root && shape.quality === quality && shape.rootString === rootString && shape.inversion === inversionNumber,
+  )
 
-  const options = templates
-    .map((template) => {
-      const pattern = renderPattern(template, rootFret)
-      if (!pattern) return null
-      const shapeSource = resolveTemplateSource(template, quality)
-      return {
-        pattern,
-        inversion: inversionNumber,
-        source: shapeSource.source,
-        shapeSource,
-        confidence: confidenceBySource(shapeSource.source),
-        fallback: false,
-        isApproximateFallback: false,
-      }
-    })
-    .filter((entry): entry is ChordVoicingOption => entry !== null)
+  return selected.map((shape) => {
+    const source = CHORD_SOURCES[shape.sourceId]
+    const shapeSource: ChordShapeSourceRef = {
+      source,
+      verificationStatus: shape.verificationStatus ?? '已校验',
+      verificationNotes: shape.verificationNotes ?? shape.labelZh,
+    }
 
-  const deduped = options.filter((option, index) => options.findIndex((candidate) => candidate.pattern === option.pattern) === index).slice(0, 5)
-  if (deduped.length > 0) return deduped
-
-  if (inversionNumber !== 0) {
-    return getChordVoicingOptions(root, quality, rootString, 0).map((option) => ({
-      ...option,
-      inversion: inversionNumber,
-      source: CHORD_SOURCES.fallback,
-      shapeSource: {
-        source: CHORD_SOURCES.fallback,
-        verificationStatus: '近似',
-        verificationNotes: '当前转位暂无可验证指型，回退到原位可按形态。',
-      },
-      confidence: Math.min(0.65, option.confidence),
-      fallback: true,
-      note: '当前转位暂无稳定按法，先回退到同根音弦的原位按法。',
-      isApproximateFallback: true,
-      fallbackReason: '回退到原位近似按法：当前转位暂无稳定资料。',
-    }))
-  }
-
-  return [
-    {
-      pattern: 'xxxxxx',
-      inversion: 0,
-      source: CHORD_SOURCES.fallback,
-      shapeSource: {
-        source: CHORD_SOURCES.fallback,
-        verificationStatus: '近似',
-        verificationNotes: '无可用可按指型，使用占位模式提示切换参数。',
-      },
-      confidence: 0.1,
-      fallback: true,
-      note: '未找到可按弦组合，建议切换根音弦或和弦性质。',
-      isApproximateFallback: true,
-      fallbackReason: '回退到占位指法：当前组合无可用按法。',
-    },
-  ]
+    return {
+      pattern: shape.pattern,
+      inversion: shape.inversion,
+      source,
+      shapeSource,
+      confidence: confidenceBySource(source),
+      fallback: false,
+      note: shape.labelZh,
+      isApproximateFallback: false,
+    }
+  })
 }
 
 export function getChordFingeringEntries(
@@ -422,9 +242,4 @@ export function getChordFingering(
   inversion: Inversion | ChordInversion = 0,
 ): string {
   return getChordFingerings(root, quality, rootString, inversion)[0] ?? 'xxxxxx'
-}
-
-export function getChordToneSet(root: MusicalKey, quality: ChordQuality): Set<MusicalKey> {
-  const rootIndex = CHROMATIC_KEYS.indexOf(root)
-  return new Set(QUALITY_INTERVALS[quality].map((step) => CHROMATIC_KEYS[(rootIndex + step) % CHROMATIC_KEYS.length]))
 }

@@ -1,7 +1,16 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
-import { getChordVoicingOptions, INVERSION_OPTIONS, QUALITY_INTERVALS, type ChordQuality, type Inversion, type RootString } from '../chords/chords'
+import {
+  getChordVoicingOptions,
+  getInversionOptionsFor,
+  getRootStringOptions,
+  hasStandardChordShapes,
+  QUALITY_INTERVALS,
+  type ChordQuality,
+  type Inversion,
+  type RootString,
+} from '../chords/chords'
 import { getFretNote, STANDARD_TUNING } from '../fretboard/fretboard'
 
 type FretRange = '0-7' | '0-12'
@@ -77,16 +86,37 @@ export function ChordFretboardPage() {
   const [inversion, setInversion] = useState<Inversion>(0)
   const [fretRange, setFretRange] = useState<FretRange>('0-7')
 
-  const inversionOptions = INVERSION_OPTIONS[quality]
-  const resolvedInversion = inversionOptions.includes(inversion) ? inversion : 0
+  const playableRootStrings = useMemo(() => getRootStringOptions(root, quality), [quality, root])
+  const resolvedRootString = playableRootStrings.includes(rootString) ? rootString : playableRootStrings[0]
 
-  const fingeringEntries = useMemo(
-    () => getChordVoicingOptions(root, quality, rootString, resolvedInversion),
-    [root, quality, rootString, resolvedInversion],
+  const inversionOptions = useMemo(
+    () => (resolvedRootString ? getInversionOptionsFor(root, quality, resolvedRootString) : []),
+    [quality, resolvedRootString, root],
   )
+  const resolvedInversion = inversionOptions.includes(inversion) ? inversion : inversionOptions[0]
+
+  useEffect(() => {
+    if (resolvedRootString && rootString !== resolvedRootString) {
+      setRootString(resolvedRootString)
+      setVoicingIndex(0)
+    }
+  }, [resolvedRootString, rootString])
+
+  useEffect(() => {
+    if (resolvedInversion !== undefined && inversion !== resolvedInversion) {
+      setInversion(resolvedInversion)
+      setVoicingIndex(0)
+    }
+  }, [resolvedInversion, inversion])
+
+  const fingeringEntries = useMemo(() => {
+    if (!resolvedRootString || resolvedInversion === undefined) return []
+    return getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
+  }, [quality, resolvedInversion, resolvedRootString, root])
   const selectedEntry = fingeringEntries[voicingIndex] ?? fingeringEntries[0]
   const selectedPattern = selectedEntry?.pattern ?? 'xxxxxx'
   const voicingConstrained = fingeringEntries.length < 2
+  const hasStandardShape = fingeringEntries.length > 0
   const chordTones = useMemo(() => {
     const rootIndex = CHROMATIC_KEYS.indexOf(root)
     return new Set(QUALITY_INTERVALS[quality].map((step) => CHROMATIC_KEYS[(rootIndex + step) % CHROMATIC_KEYS.length]))
@@ -134,15 +164,17 @@ export function ChordFretboardPage() {
             onChange={(e) => {
               const next = e.target.value as ChordQuality
               setQuality(next)
-              setInversion(INVERSION_OPTIONS[next][0])
               setVoicingIndex(0)
             }}
           >
-            {Object.entries(QUALITY_LABELS).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
+            {Object.entries(QUALITY_LABELS).map(([value, label]) => {
+              const playable = hasStandardChordShapes(root, value as ChordQuality)
+              return (
+                <option key={value} value={value} disabled={!playable}>
+                  {label}{playable ? '' : '（暂无标准指型）'}
+                </option>
+              )
+            })}
           </select>
         </label>
 
@@ -150,15 +182,18 @@ export function ChordFretboardPage() {
           根音所在弦
           <select
             aria-label="根音弦"
-            value={rootString}
+            value={resolvedRootString ?? ''}
             onChange={(e) => {
               setRootString(Number(e.target.value) as RootString)
               setVoicingIndex(0)
             }}
+            disabled={playableRootStrings.length === 0}
           >
-            <option value={6}>第 6 弦</option>
-            <option value={5}>第 5 弦</option>
-            <option value={4}>第 4 弦</option>
+            {([6, 5, 4] as const).map((stringNo) => (
+              <option key={stringNo} value={stringNo} disabled={!playableRootStrings.includes(stringNo)}>
+                第 {stringNo} 弦{playableRootStrings.includes(stringNo) ? '' : '（无标准）'}
+              </option>
+            ))}
           </select>
         </label>
 
@@ -166,11 +201,12 @@ export function ChordFretboardPage() {
           转位（Inversion）
           <select
             aria-label="转位"
-            value={resolvedInversion}
+            value={resolvedInversion ?? ''}
             onChange={(e) => {
               setInversion(Number(e.target.value) as Inversion)
               setVoicingIndex(0)
             }}
+            disabled={inversionOptions.length === 0}
           >
             {inversionOptions.map((inv) => (
               <option key={inv} value={inv}>
@@ -212,48 +248,40 @@ export function ChordFretboardPage() {
           </h2>
           <span className="badge info">指法：{selectedPattern}</span>
         </div>
-        <p>
-          当前转位：<strong>{INVERSION_LABELS[resolvedInversion]}</strong>
-        </p>
-        <p>
-          当前按法变体：<strong>变体 {voicingIndex + 1}</strong>（{selectedPattern}）
-          {selectedEntry?.fallback ? <span className="badge warn" style={{ marginLeft: 8 }}>近似指型</span> : null}
-        </p>
-        <div
-          className="card-nested"
-          aria-label="指型来源追溯"
-          style={{
-            marginTop: 8,
-            borderColor: selectedEntry?.isApproximateFallback ? 'rgba(242, 194, 107, 0.55)' : undefined,
-            background: selectedEntry?.isApproximateFallback ? 'rgba(242, 194, 107, 0.1)' : undefined,
-          }}
-        >
-          <p className="muted helper-text" style={{ marginTop: 0 }}>
-            来源名称：<strong>{selectedEntry?.shapeSource.source.sourceName ?? '未标注'}</strong>
-          </p>
-          <p className="muted helper-text">来源类型：{selectedEntry?.shapeSource.source.sourceType ?? '课程实践'}</p>
-          <p className="muted helper-text">可信度等级：{selectedEntry?.shapeSource.source.confidenceLevel ?? 'low'}</p>
-          <p className="muted helper-text">校验状态：{selectedEntry?.shapeSource.verificationStatus ?? '近似'}</p>
-          {selectedEntry?.shapeSource.source.url ? (
-            <p className="muted helper-text">
-              Source Link：
-              <a href={selectedEntry.shapeSource.source.url} target="_blank" rel="noreferrer">
-                {selectedEntry.shapeSource.source.url}
-              </a>
+        {hasStandardShape ? (
+          <>
+            <p>
+              当前转位：<strong>{INVERSION_LABELS[resolvedInversion ?? 0]}</strong>
             </p>
-          ) : null}
-          <p className="muted helper-text">说明：{selectedEntry?.note ?? selectedEntry?.shapeSource.verificationNotes ?? selectedEntry?.source.notes ?? '此按法来自可验证和弦资料。'}</p>
-          {selectedEntry?.isApproximateFallback ? (
-            <p className="muted helper-text" role="alert" style={{ color: '#ffe7b8' }}>
-              ⚠ 近似/回退原因：{selectedEntry.fallbackReason ?? '当前组合暂无稳定来源。'}
+            <p>
+              当前按法变体：<strong>变体 {voicingIndex + 1}</strong>（{selectedPattern}）
             </p>
-          ) : null}
-        </div>
-        {voicingConstrained ? (
-          <p className="muted helper-text" role="status">
-            当前转位仅有 1 个可用按法变体；可切换根音弦或转位以获得更多按法。
-          </p>
-        ) : null}
+            <div className="card-nested" aria-label="指型来源追溯" style={{ marginTop: 8 }}>
+              <p className="muted helper-text" style={{ marginTop: 0 }}>
+                来源名称：<strong>{selectedEntry?.shapeSource.source.sourceName ?? '未标注'}</strong>
+              </p>
+              <p className="muted helper-text">来源类型：{selectedEntry?.shapeSource.source.sourceType ?? '课程实践'}</p>
+              <p className="muted helper-text">可信度等级：{selectedEntry?.shapeSource.source.confidenceLevel ?? 'low'}</p>
+              <p className="muted helper-text">校验状态：{selectedEntry?.shapeSource.verificationStatus ?? '已校验'}</p>
+              {selectedEntry?.shapeSource.source.url ? (
+                <p className="muted helper-text">
+                  Source Link：
+                  <a href={selectedEntry.shapeSource.source.url} target="_blank" rel="noreferrer">
+                    {selectedEntry.shapeSource.source.url}
+                  </a>
+                </p>
+              ) : null}
+              <p className="muted helper-text">说明：{selectedEntry?.note ?? selectedEntry?.shapeSource.verificationNotes ?? selectedEntry?.source.notes ?? '此按法来自可验证和弦资料。'}</p>
+            </div>
+            {voicingConstrained ? (
+              <p className="muted helper-text" role="status">
+                当前转位仅有 1 个可用按法变体；可切换根音弦或转位以获得更多按法。
+              </p>
+            ) : null}
+          </>
+        ) : (
+          <p className="muted helper-text" role="alert">该组合暂无标准指型</p>
+        )}
         <p className="muted helper-text" style={{ marginBottom: 8 }}>
           记谱格式为 EADGBe（x 表示闷音）。先选转位，再切换同转位下的按法变体。
         </p>
