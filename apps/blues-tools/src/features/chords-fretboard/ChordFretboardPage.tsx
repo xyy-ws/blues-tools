@@ -219,11 +219,36 @@ export function ChordFretboardPage() {
           当前按法变体：<strong>变体 {voicingIndex + 1}</strong>（{selectedPattern}）
           {selectedEntry?.fallback ? <span className="badge warn" style={{ marginLeft: 8 }}>近似指型</span> : null}
         </p>
-        <p className="muted helper-text" aria-label="指型来源">
-          来源：{selectedEntry?.source.sourceName ?? '未标注'}（{selectedEntry?.source.sourceType ?? 'common-practice'}）｜可信度：
-          {selectedEntry?.source.confidenceLevel ?? 'low'}
-        </p>
-        <p className="muted helper-text">说明：{selectedEntry?.note ?? selectedEntry?.source.notes ?? '此按法来自可验证和弦资料。'}</p>
+        <div
+          className="card-nested"
+          aria-label="指型来源追溯"
+          style={{
+            marginTop: 8,
+            borderColor: selectedEntry?.isApproximateFallback ? 'rgba(242, 194, 107, 0.55)' : undefined,
+            background: selectedEntry?.isApproximateFallback ? 'rgba(242, 194, 107, 0.1)' : undefined,
+          }}
+        >
+          <p className="muted helper-text" style={{ marginTop: 0 }}>
+            来源名称：<strong>{selectedEntry?.shapeSource.source.sourceName ?? '未标注'}</strong>
+          </p>
+          <p className="muted helper-text">来源类型：{selectedEntry?.shapeSource.source.sourceType ?? '课程实践'}</p>
+          <p className="muted helper-text">可信度等级：{selectedEntry?.shapeSource.source.confidenceLevel ?? 'low'}</p>
+          <p className="muted helper-text">校验状态：{selectedEntry?.shapeSource.verificationStatus ?? '近似'}</p>
+          {selectedEntry?.shapeSource.source.url ? (
+            <p className="muted helper-text">
+              Source Link：
+              <a href={selectedEntry.shapeSource.source.url} target="_blank" rel="noreferrer">
+                {selectedEntry.shapeSource.source.url}
+              </a>
+            </p>
+          ) : null}
+          <p className="muted helper-text">说明：{selectedEntry?.note ?? selectedEntry?.shapeSource.verificationNotes ?? selectedEntry?.source.notes ?? '此按法来自可验证和弦资料。'}</p>
+          {selectedEntry?.isApproximateFallback ? (
+            <p className="muted helper-text" role="alert" style={{ color: '#ffe7b8' }}>
+              ⚠ 近似/回退原因：{selectedEntry.fallbackReason ?? '当前组合暂无稳定来源。'}
+            </p>
+          ) : null}
+        </div>
         {voicingConstrained ? (
           <p className="muted helper-text" role="status">
             当前转位仅有 1 个可用按法变体；可切换根音弦或转位以获得更多按法。

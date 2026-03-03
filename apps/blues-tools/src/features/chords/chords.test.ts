@@ -32,8 +32,10 @@ describe('getChordFingering', () => {
     const [entry] = getChordVoicingOptions('E', 'maj7', 6, 0)
 
     expect(entry.source.sourceName.length).toBeGreaterThan(0)
-    expect(['method book', 'standard shape', 'common-practice']).toContain(entry.source.sourceType)
+    expect(['理论', '指型参考', '课程实践']).toContain(entry.source.sourceType)
     expect(['high', 'medium', 'low']).toContain(entry.source.confidenceLevel)
+    expect(entry.shapeSource.source.id.length).toBeGreaterThan(0)
+    expect(['已校验', '近似']).toContain(entry.shapeSource.verificationStatus)
     expect(entry.fallback).toBe(false)
   })
 
@@ -43,5 +45,6 @@ describe('getChordFingering', () => {
     expect(fallbackEntries.length).toBeGreaterThan(0)
     expect(fallbackEntries.every((entry) => entry.fallback)).toBe(true)
     expect(fallbackEntries[0]?.note).toContain('回退到同根音弦的原位按法')
+    expect(fallbackEntries[0]?.shapeSource.verificationStatus).toBe('近似')
   })
 })

@@ -54,20 +54,24 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByLabelText('按法建议')).toBeInTheDocument()
   })
 
-  it('shows source/confidence metadata for selected fingering', () => {
+  it('shows shape-level source traceability metadata for selected fingering', () => {
     render(<ChordFretboardPage />)
 
-    expect(screen.getByLabelText('指型来源')).toHaveTextContent('来源：')
-    expect(screen.getByLabelText('指型来源')).toHaveTextContent('可信度：')
+    const sourcePanel = screen.getByLabelText('指型来源追溯')
+    expect(sourcePanel).toHaveTextContent('来源名称：')
+    expect(sourcePanel).toHaveTextContent('来源类型：')
+    expect(sourcePanel).toHaveTextContent('可信度等级：')
+    expect(sourcePanel).toHaveTextContent('校验状态：')
   })
 
-  it('marks approximate fallback voicing clearly', () => {
+  it('marks approximate fallback voicing clearly and shows fallback reason warning', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'C' } })
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
 
     expect(screen.getByText('近似指型')).toBeInTheDocument()
+    expect(screen.getByRole('alert')).toHaveTextContent('近似/回退原因：')
   })
 
   it('renders string 1 on top and string 6 on bottom', () => {

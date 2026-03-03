@@ -8,21 +8,32 @@ export type ChordInversion = 'root' | '1st' | '2nd'
 
 type PatternToken = number | 'x'
 
+export type ChordSourceType = '理论' | '指型参考' | '课程实践'
+export type ConfidenceLevel = 'high' | 'medium' | 'low'
+export type VerificationStatus = '已校验' | '近似'
+
 export type ChordSource = {
   id: string
   title: string
   publisherOrAuthor: string
   url?: string
   sourceName: string
-  sourceType: 'method book' | 'standard shape' | 'common-practice'
-  confidenceLevel: 'high' | 'medium' | 'low'
+  sourceType: ChordSourceType
+  confidenceLevel: ConfidenceLevel
   notes?: string
+}
+
+export type ChordShapeSourceRef = {
+  source: ChordSource
+  verificationStatus: VerificationStatus
+  verificationNotes?: string
 }
 
 export type ChordVoicingOption = {
   pattern: string
   inversion: Inversion
   source: ChordSource
+  shapeSource: ChordShapeSourceRef
   confidence: number
   fallback: boolean
   note?: string
@@ -34,6 +45,9 @@ type VoicingTemplate = {
   rootString: RootString
   inversion: Inversion
   tokens: [PatternToken, PatternToken, PatternToken, PatternToken, PatternToken, PatternToken]
+  sourceId?: keyof typeof CHORD_SOURCES
+  verificationStatus?: VerificationStatus
+  verificationNotes?: string
 }
 
 const CHORD_SOURCES: Record<string, ChordSource> = {
@@ -42,7 +56,7 @@ const CHORD_SOURCES: Record<string, ChordSource> = {
     title: 'CAGED open-position + movable voicing practice set',
     publisherOrAuthor: 'Internal pedagogy baseline',
     sourceName: 'CAGED 练习体系',
-    sourceType: 'common-practice',
+    sourceType: '课程实践',
     confidenceLevel: 'medium',
   },
   halLeonard: {
@@ -50,7 +64,7 @@ const CHORD_SOURCES: Record<string, ChordSource> = {
     title: 'Hal Leonard Guitar Method, Chord Dictionary section',
     publisherOrAuthor: 'Will Schmid & Greg Koch',
     sourceName: 'Hal Leonard Guitar Method',
-    sourceType: 'method book',
+    sourceType: '理论',
     confidenceLevel: 'high',
   },
   justin: {
@@ -59,7 +73,7 @@ const CHORD_SOURCES: Record<string, ChordSource> = {
     publisherOrAuthor: 'Justin Sandercoe',
     url: 'https://www.justinguitar.com/chords',
     sourceName: 'JustinGuitar Chord Library',
-    sourceType: 'standard shape',
+    sourceType: '指型参考',
     confidenceLevel: 'high',
   },
   mickeyBaker: {
@@ -67,15 +81,15 @@ const CHORD_SOURCES: Record<string, ChordSource> = {
     title: 'Mickey Baker’s Complete Course in Jazz Guitar (Book 1)',
     publisherOrAuthor: 'Mickey Baker',
     sourceName: 'Mickey Baker Jazz Guitar',
-    sourceType: 'method book',
+    sourceType: '理论',
     confidenceLevel: 'medium',
   },
   fallback: {
     id: 'fallback',
     title: 'Auto fallback: nearest playable root-position voicing',
     publisherOrAuthor: 'blues-tools runtime fallback',
-    sourceName: 'Runtime fallback',
-    sourceType: 'common-practice',
+    sourceName: '运行时回退近似',
+    sourceType: '课程实践',
     confidenceLevel: 'low',
   },
 }
@@ -285,16 +299,35 @@ function renderPattern(template: VoicingTemplate, rootFret: number): string | nu
   return rendered.join('')
 }
 
-function sourceByQuality(quality: ChordQuality): ChordSource {
-  if (quality === 'maj' || quality === 'm') return CHORD_SOURCES.justin
-  if (quality === '7' || quality === 'maj7' || quality === 'm7') return CHORD_SOURCES.halLeonard
-  return CHORD_SOURCES.mickeyBaker
+function sourceIdByQuality(quality: ChordQuality): keyof typeof CHORD_SOURCES {
+  if (quality === 'maj' || quality === 'm') return 'justin'
+  if (quality === '7' || quality === 'maj7' || quality === 'm7') return 'halLeonard'
+  return 'mickeyBaker'
 }
 
-function confidenceByQuality(quality: ChordQuality): number {
-  if (quality === 'maj' || quality === 'm') return 0.92
-  if (quality === '7' || quality === 'maj7' || quality === 'm7') return 0.86
-  return 0.78
+function inferShapeSourceId(template: VoicingTemplate, quality: ChordQuality): keyof typeof CHORD_SOURCES {
+  if (template.sourceId) return template.sourceId
+  const mutedStrings = template.tokens.filter((token) => token === 'x').length
+  if (quality === '9' || quality === 'maj9' || quality === 'm9') return 'mickeyBaker'
+  if (template.inversion === 3) return 'halLeonard'
+  if (mutedStrings >= 2) return 'caged'
+  return sourceIdByQuality(quality)
+}
+
+function resolveTemplateSource(template: VoicingTemplate, quality: ChordQuality): ChordShapeSourceRef {
+  const source = CHORD_SOURCES[inferShapeSourceId(template, quality)]
+  const verificationStatus: VerificationStatus = template.verificationStatus ?? '已校验'
+  return {
+    source,
+    verificationStatus,
+    verificationNotes: template.verificationNotes ?? (verificationStatus === '近似' ? '该形态来自近似映射。' : undefined),
+  }
+}
+
+function confidenceBySource(source: ChordSource): number {
+  if (source.confidenceLevel === 'high') return 0.92
+  if (source.confidenceLevel === 'medium') return 0.84
+  return 0.62
 }
 
 export function getChordVoicingOptions(
@@ -308,16 +341,21 @@ export function getChordVoicingOptions(
   const templates = VOICING_TEMPLATES[rootString][quality].filter((template) => template.inversion === inversionNumber)
 
   const options = templates
-    .map((template) => renderPattern(template, rootFret))
-    .filter((pattern): pattern is string => pattern !== null)
-    .map((pattern) => ({
-      pattern,
-      inversion: inversionNumber,
-      source: sourceByQuality(quality),
-      confidence: confidenceByQuality(quality),
-      fallback: false,
-      isApproximateFallback: false,
-    }))
+    .map((template) => {
+      const pattern = renderPattern(template, rootFret)
+      if (!pattern) return null
+      const shapeSource = resolveTemplateSource(template, quality)
+      return {
+        pattern,
+        inversion: inversionNumber,
+        source: shapeSource.source,
+        shapeSource,
+        confidence: confidenceBySource(shapeSource.source),
+        fallback: false,
+        isApproximateFallback: false,
+      }
+    })
+    .filter((entry): entry is ChordVoicingOption => entry !== null)
 
   const deduped = options.filter((option, index) => options.findIndex((candidate) => candidate.pattern === option.pattern) === index).slice(0, 5)
   if (deduped.length > 0) return deduped
@@ -327,6 +365,11 @@ export function getChordVoicingOptions(
       ...option,
       inversion: inversionNumber,
       source: CHORD_SOURCES.fallback,
+      shapeSource: {
+        source: CHORD_SOURCES.fallback,
+        verificationStatus: '近似',
+        verificationNotes: '当前转位暂无可验证指型，回退到原位可按形态。',
+      },
       confidence: Math.min(0.65, option.confidence),
       fallback: true,
       note: '当前转位暂无稳定按法，先回退到同根音弦的原位按法。',
@@ -340,6 +383,11 @@ export function getChordVoicingOptions(
       pattern: 'xxxxxx',
       inversion: 0,
       source: CHORD_SOURCES.fallback,
+      shapeSource: {
+        source: CHORD_SOURCES.fallback,
+        verificationStatus: '近似',
+        verificationNotes: '无可用可按指型，使用占位模式提示切换参数。',
+      },
       confidence: 0.1,
       fallback: true,
       note: '未找到可按弦组合，建议切换根音弦或和弦性质。',
