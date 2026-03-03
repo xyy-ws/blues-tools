@@ -224,9 +224,9 @@ export function ChordFretboardPage() {
             onChange={(e) => setVoicingIndex(Number(e.target.value))}
             disabled={voicingConstrained}
           >
-            {fingeringEntries.map((_, index) => (
-              <option key={index} value={index}>
-                变体 {index + 1}
+            {fingeringEntries.map((entry, index) => (
+              <option key={`${entry.pattern}-${index}`} value={index}>
+                变体 {index + 1} · {entry.pattern} · {entry.source.sourceName}
               </option>
             ))}
           </select>

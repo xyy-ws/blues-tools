@@ -57,6 +57,15 @@ type RawChordShape = Omit<StandardChordShape, 'rootString' | 'inversion'> & {
   inversion?: Inversion
 }
 
+type MovableTemplate = {
+  root: MusicalKey
+  quality: ChordQuality
+  rootString: RootString
+  pattern: string
+  sourceId: keyof typeof CHORD_SOURCES
+  labelZh: string
+}
+
 const CHORD_SOURCES: Record<string, ChordSource> = {
   justin: {
     id: 'justin',
@@ -67,11 +76,30 @@ const CHORD_SOURCES: Record<string, ChordSource> = {
     sourceType: '指型参考',
     confidenceLevel: 'high',
   },
-  halLeonard: {
-    id: 'halLeonard',
-    title: 'Hal Leonard Guitar Method, Chord Dictionary section',
-    publisherOrAuthor: 'Will Schmid & Greg Koch',
-    sourceName: 'Hal Leonard 和弦字典',
+  chordRocks: {
+    id: 'chordRocks',
+    title: 'Chord.rocks practical guitar voicings',
+    publisherOrAuthor: 'chord.rocks',
+    url: 'https://chord.rocks/guitar/chords',
+    sourceName: 'Chord.rocks 实战指型',
+    sourceType: '指型参考',
+    confidenceLevel: 'high',
+  },
+  guitaristsReference: {
+    id: 'guitaristsReference',
+    title: 'Guitarists Reference chord forms',
+    publisherOrAuthor: 'Guitarists Reference',
+    url: 'https://www.guitaristsreference.com/',
+    sourceName: 'Guitarists Reference 常用和弦',
+    sourceType: '课程实践',
+    confidenceLevel: 'medium',
+  },
+  tonal: {
+    id: 'tonal',
+    title: 'TonalJS chord spellings and interval validation',
+    publisherOrAuthor: 'Tonal contributors',
+    url: 'https://github.com/tonaljs/tonal',
+    sourceName: 'TonalJS 音程校验',
     sourceType: '理论',
     confidenceLevel: 'high',
   },
@@ -256,6 +284,72 @@ const GENERATED_SHAPES: Record<MusicalKey, Record<ChordQuality, { pattern: strin
   },
 }
 
+const MOVABLE_TEMPLATES: MovableTemplate[] = [
+  { root: 'E', quality: 'maj', rootString: 6, pattern: '022100', sourceId: 'chordRocks', labelZh: 'E-shape 大三开放/横按指型' },
+  { root: 'E', quality: 'm', rootString: 6, pattern: '022000', sourceId: 'chordRocks', labelZh: 'E-shape 小三开放/横按指型' },
+  { root: 'E', quality: '7', rootString: 6, pattern: '020100', sourceId: 'justin', labelZh: 'E7 开放/蓝调核心指型' },
+  { root: 'E', quality: 'maj7', rootString: 6, pattern: '021100', sourceId: 'guitaristsReference', labelZh: 'Emaj7 开放指型' },
+  { root: 'E', quality: 'm7', rootString: 6, pattern: '020000', sourceId: 'chordRocks', labelZh: 'Em7 开放/横按指型' },
+  { root: 'E', quality: 'm7b5', rootString: 6, pattern: '0x2333', sourceId: 'guitaristsReference', labelZh: 'Em7♭5 实用封闭形' },
+  { root: 'E', quality: '9', rootString: 6, pattern: '020102', sourceId: 'chordRocks', labelZh: 'E9 开放常用指型' },
+  { root: 'E', quality: 'maj9', rootString: 6, pattern: '021102', sourceId: 'guitaristsReference', labelZh: 'Emaj9 开放常用指型' },
+  { root: 'E', quality: 'm9', rootString: 6, pattern: '020002', sourceId: 'guitaristsReference', labelZh: 'Em9 开放常用指型' },
+
+  { root: 'A', quality: 'maj', rootString: 5, pattern: 'x02220', sourceId: 'chordRocks', labelZh: 'A-shape 大三开放/横按指型' },
+  { root: 'A', quality: 'm', rootString: 5, pattern: 'x02210', sourceId: 'chordRocks', labelZh: 'A-shape 小三开放/横按指型' },
+  { root: 'A', quality: '7', rootString: 5, pattern: 'x02020', sourceId: 'justin', labelZh: 'A7 蓝调核心指型' },
+  { root: 'A', quality: 'maj7', rootString: 5, pattern: 'x02120', sourceId: 'guitaristsReference', labelZh: 'Amaj7 开放指型' },
+  { root: 'A', quality: 'm7', rootString: 5, pattern: 'x02010', sourceId: 'chordRocks', labelZh: 'Am7 开放/横按指型' },
+  { root: 'A', quality: 'm7b5', rootString: 5, pattern: 'x01011', sourceId: 'guitaristsReference', labelZh: 'Am7♭5 常用封闭形' },
+  { root: 'A', quality: '9', rootString: 5, pattern: 'x02423', sourceId: 'chordRocks', labelZh: 'A9 常用五弦根音形' },
+  { root: 'A', quality: 'maj9', rootString: 5, pattern: 'x02100', sourceId: 'guitaristsReference', labelZh: 'Amaj9 开放常用形' },
+  { root: 'A', quality: 'm9', rootString: 5, pattern: 'x02000', sourceId: 'guitaristsReference', labelZh: 'Am9 开放常用形' },
+]
+
+function canTranspose(pattern: string, semitone: number): boolean {
+  return pattern.split('').every((char) => {
+    if (char === 'x' || char === 'X') return true
+    const fret = Number.parseInt(char, 10)
+    if (Number.isNaN(fret)) return false
+    return fret + semitone >= 0 && fret + semitone <= 9
+  })
+}
+
+function transposePattern(pattern: string, semitone: number): string {
+  return pattern
+    .split('')
+    .map((char) => {
+      if (char === 'x' || char === 'X') return 'x'
+      const fret = Number.parseInt(char, 10)
+      return String(fret + semitone)
+    })
+    .join('')
+}
+
+function transposeMovableTemplates(): RawChordShape[] {
+  const result: RawChordShape[] = []
+
+  for (const template of MOVABLE_TEMPLATES) {
+    const templateIndex = CHROMATIC_KEYS.indexOf(template.root)
+    for (const targetRoot of CHROMATIC_KEYS) {
+      const targetIndex = CHROMATIC_KEYS.indexOf(targetRoot)
+      const semitone = (targetIndex - templateIndex + 12) % 12
+      if (!canTranspose(template.pattern, semitone)) continue
+
+      result.push({
+        root: targetRoot,
+        quality: template.quality,
+        pattern: transposePattern(template.pattern, semitone),
+        rootString: template.rootString,
+        sourceId: template.sourceId,
+        labelZh: `${targetRoot}${template.quality} ${template.labelZh}`,
+      })
+    }
+  }
+
+  return result
+}
+
 function buildRawShapes(): RawChordShape[] {
   const generated = CHROMATIC_KEYS.flatMap((root) =>
     (Object.keys(CHORD_QUALITY_LABELS) as ChordQuality[]).map((quality) => ({
@@ -268,7 +362,7 @@ function buildRawShapes(): RawChordShape[] {
     })),
   )
 
-  return [...generated, { root: 'E', quality: '7', pattern: '020100', sourceId: 'justin', labelZh: 'E7 开放和弦', inversion: 0, rootString: 6 }]
+  return [...generated, ...transposeMovableTemplates()]
 }
 
 export type ChordLibraryValidationRecord = {
@@ -282,6 +376,22 @@ export type ChordLibraryValidationRecord = {
   actualTones: MusicalKey[]
   missingTones: MusicalKey[]
   extraTones: MusicalKey[]
+}
+
+function shapeRank(pattern: string): number {
+  const frets = pattern
+    .split('')
+    .filter((char) => char !== 'x' && char !== 'X')
+    .map((char) => Number.parseInt(char, 10))
+    .filter((fret) => !Number.isNaN(fret))
+
+  if (frets.length === 0) return 999
+  const min = Math.min(...frets)
+  const max = Math.max(...frets)
+  const span = max - min
+  const openCount = frets.filter((fret) => fret === 0).length
+
+  return min * 10 + span * 2 - openCount
 }
 
 function finalizeShapes(rawShapes: RawChordShape[]) {
@@ -365,9 +475,10 @@ export function getChordVoicingOptions(
   inversion: Inversion | ChordInversion = 0,
 ): ChordVoicingOption[] {
   const inversionNumber = toInversionNumber(inversion)
-  const selected = STANDARD_CHORD_SHAPES.filter(
-    (shape) => shape.root === root && shape.quality === quality && shape.rootString === rootString && shape.inversion === inversionNumber,
-  )
+  const selected = STANDARD_CHORD_SHAPES
+    .filter((shape) => shape.root === root && shape.quality === quality && shape.rootString === rootString && shape.inversion === inversionNumber)
+    .slice()
+    .sort((a, b) => shapeRank(a.pattern) - shapeRank(b.pattern) || a.pattern.localeCompare(b.pattern))
 
   return selected.map((shape) => {
     const source = CHORD_SOURCES[shape.sourceId]

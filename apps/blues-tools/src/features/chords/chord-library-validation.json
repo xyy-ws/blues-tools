@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-03-03T02:53:22.473Z",
+  "generatedAt": "2026-03-03T03:10:03.423Z",
   "summary": {
-    "total": 109,
-    "pass": 109,
-    "warn": 0,
-    "fail": 0
+    "total": 250,
+    "pass": 225,
+    "warn": 9,
+    "fail": 16
   },
   "records": [
     {
@@ -2409,6 +2409,326 @@
     },
     {
       "root": "E",
+      "quality": "maj",
+      "pattern": "022100",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G#",
+        "B"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "maj",
+      "pattern": "133211",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "A",
+        "C"
+      ],
+      "actualTones": [
+        "F",
+        "C",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "maj",
+      "pattern": "244322",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A#",
+        "C#"
+      ],
+      "actualTones": [
+        "F#",
+        "C#",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "maj",
+      "pattern": "355433",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "B",
+        "D"
+      ],
+      "actualTones": [
+        "G",
+        "D",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "maj",
+      "pattern": "466544",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "C",
+        "D#"
+      ],
+      "actualTones": [
+        "G#",
+        "D#",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "maj",
+      "pattern": "577655",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "maj",
+      "pattern": "688766",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "maj",
+      "pattern": "799877",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "D#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "m",
+      "pattern": "022000",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G",
+        "B"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "m",
+      "pattern": "133111",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "G#",
+        "C"
+      ],
+      "actualTones": [
+        "F",
+        "C",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "m",
+      "pattern": "244222",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A",
+        "C#"
+      ],
+      "actualTones": [
+        "F#",
+        "C#",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "m",
+      "pattern": "355333",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "A#",
+        "D"
+      ],
+      "actualTones": [
+        "G",
+        "D",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "m",
+      "pattern": "466444",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "B",
+        "D#"
+      ],
+      "actualTones": [
+        "G#",
+        "D#",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "m",
+      "pattern": "577555",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C",
+        "E"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "m",
+      "pattern": "688666",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "C#",
+        "F"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "m",
+      "pattern": "799777",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D",
+        "F#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
       "quality": "7",
       "pattern": "020100",
       "rootString": 6,
@@ -2427,6 +2747,2859 @@
         "G#"
       ],
       "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "7",
+      "pattern": "131211",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "A",
+        "C",
+        "D#"
+      ],
+      "actualTones": [
+        "F",
+        "C",
+        "D#",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "7",
+      "pattern": "242322",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A#",
+        "C#",
+        "E"
+      ],
+      "actualTones": [
+        "F#",
+        "C#",
+        "E",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "7",
+      "pattern": "353433",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "B",
+        "D",
+        "F"
+      ],
+      "actualTones": [
+        "G",
+        "D",
+        "F",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "7",
+      "pattern": "464544",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "C",
+        "D#",
+        "F#"
+      ],
+      "actualTones": [
+        "G#",
+        "D#",
+        "F#",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "7",
+      "pattern": "575655",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E",
+        "G"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "7",
+      "pattern": "686766",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F",
+        "G#"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "G#",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "7",
+      "pattern": "797877",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#",
+        "A"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A",
+        "D#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "maj7",
+      "pattern": "021100",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G#",
+        "B",
+        "D#"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D#",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "maj7",
+      "pattern": "132211",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "A",
+        "C",
+        "E"
+      ],
+      "actualTones": [
+        "F",
+        "C",
+        "E",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "maj7",
+      "pattern": "243322",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A#",
+        "C#",
+        "F"
+      ],
+      "actualTones": [
+        "F#",
+        "C#",
+        "F",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "maj7",
+      "pattern": "354433",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "B",
+        "D",
+        "F#"
+      ],
+      "actualTones": [
+        "G",
+        "D",
+        "F#",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "maj7",
+      "pattern": "465544",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "C",
+        "D#",
+        "G"
+      ],
+      "actualTones": [
+        "G#",
+        "D#",
+        "G",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "maj7",
+      "pattern": "576655",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E",
+        "G#"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G#",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "maj7",
+      "pattern": "687766",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F",
+        "A"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "A",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "maj7",
+      "pattern": "798877",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#",
+        "A#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A#",
+        "D#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "m7",
+      "pattern": "020000",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G",
+        "B",
+        "D"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "m7",
+      "pattern": "131111",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "G#",
+        "C",
+        "D#"
+      ],
+      "actualTones": [
+        "F",
+        "C",
+        "D#",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "m7",
+      "pattern": "242222",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A",
+        "C#",
+        "E"
+      ],
+      "actualTones": [
+        "F#",
+        "C#",
+        "E",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "m7",
+      "pattern": "353333",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "A#",
+        "D",
+        "F"
+      ],
+      "actualTones": [
+        "G",
+        "D",
+        "F",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "m7",
+      "pattern": "464444",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "B",
+        "D#",
+        "F#"
+      ],
+      "actualTones": [
+        "G#",
+        "D#",
+        "F#",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "m7",
+      "pattern": "575555",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C",
+        "E",
+        "G"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "m7",
+      "pattern": "686666",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "C#",
+        "F",
+        "G#"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "G#",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "m7",
+      "pattern": "797777",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D",
+        "F#",
+        "A"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "m7b5",
+      "pattern": "0x2333",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G",
+        "A#",
+        "D"
+      ],
+      "actualTones": [
+        "E",
+        "A#",
+        "D",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "m7b5",
+      "pattern": "1x3444",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "G#",
+        "B",
+        "D#"
+      ],
+      "actualTones": [
+        "F",
+        "B",
+        "D#",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "m7b5",
+      "pattern": "2x4555",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A",
+        "C",
+        "E"
+      ],
+      "actualTones": [
+        "F#",
+        "C",
+        "E",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "m7b5",
+      "pattern": "3x5666",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "A#",
+        "C#",
+        "F"
+      ],
+      "actualTones": [
+        "G",
+        "C#",
+        "F",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "m7b5",
+      "pattern": "4x6777",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "B",
+        "D",
+        "F#"
+      ],
+      "actualTones": [
+        "G#",
+        "D",
+        "F#",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "m7b5",
+      "pattern": "5x7888",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C",
+        "D#",
+        "G"
+      ],
+      "actualTones": [
+        "A",
+        "D#",
+        "G",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "m7b5",
+      "pattern": "6x8999",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "C#",
+        "E",
+        "G#"
+      ],
+      "actualTones": [
+        "A#",
+        "E",
+        "G#",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "9",
+      "pattern": "020102",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G#",
+        "B",
+        "D",
+        "F#"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D",
+        "G#",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "9",
+      "pattern": "131213",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "A",
+        "C",
+        "D#",
+        "G"
+      ],
+      "actualTones": [
+        "F",
+        "C",
+        "D#",
+        "A",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "9",
+      "pattern": "242324",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A#",
+        "C#",
+        "E",
+        "G#"
+      ],
+      "actualTones": [
+        "F#",
+        "C#",
+        "E",
+        "A#",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "9",
+      "pattern": "353435",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "B",
+        "D",
+        "F",
+        "A"
+      ],
+      "actualTones": [
+        "G",
+        "D",
+        "F",
+        "B",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "9",
+      "pattern": "464546",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "C",
+        "D#",
+        "F#",
+        "A#"
+      ],
+      "actualTones": [
+        "G#",
+        "D#",
+        "F#",
+        "C",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "9",
+      "pattern": "575657",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E",
+        "G",
+        "B"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G",
+        "C#",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "9",
+      "pattern": "686768",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F",
+        "G#",
+        "C"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "G#",
+        "D",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "9",
+      "pattern": "797879",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#",
+        "A",
+        "C#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A",
+        "D#",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "maj9",
+      "pattern": "021102",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G#",
+        "B",
+        "D#",
+        "F#"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D#",
+        "G#",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "maj9",
+      "pattern": "132213",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "A",
+        "C",
+        "E",
+        "G"
+      ],
+      "actualTones": [
+        "F",
+        "C",
+        "E",
+        "A",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "maj9",
+      "pattern": "243324",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A#",
+        "C#",
+        "F",
+        "G#"
+      ],
+      "actualTones": [
+        "F#",
+        "C#",
+        "F",
+        "A#",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "maj9",
+      "pattern": "354435",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "B",
+        "D",
+        "F#",
+        "A"
+      ],
+      "actualTones": [
+        "G",
+        "D",
+        "F#",
+        "B",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "maj9",
+      "pattern": "465546",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "C",
+        "D#",
+        "G",
+        "A#"
+      ],
+      "actualTones": [
+        "G#",
+        "D#",
+        "G",
+        "C",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "maj9",
+      "pattern": "576657",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E",
+        "G#",
+        "B"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G#",
+        "C#",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "maj9",
+      "pattern": "687768",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F",
+        "A",
+        "C"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "A",
+        "D",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "maj9",
+      "pattern": "798879",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#",
+        "A#",
+        "C#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A#",
+        "D#",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "m9",
+      "pattern": "020002",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G",
+        "B",
+        "D",
+        "F#"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D",
+        "G",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F",
+      "quality": "m9",
+      "pattern": "131113",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F",
+        "G#",
+        "C",
+        "D#",
+        "G"
+      ],
+      "actualTones": [
+        "F",
+        "C",
+        "D#",
+        "G#",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "F#",
+      "quality": "m9",
+      "pattern": "242224",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "F#",
+        "A",
+        "C#",
+        "E",
+        "G#"
+      ],
+      "actualTones": [
+        "F#",
+        "C#",
+        "E",
+        "A",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G",
+      "quality": "m9",
+      "pattern": "353335",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G",
+        "A#",
+        "D",
+        "F",
+        "A"
+      ],
+      "actualTones": [
+        "G",
+        "D",
+        "F",
+        "A#",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "G#",
+      "quality": "m9",
+      "pattern": "464446",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "G#",
+        "B",
+        "D#",
+        "F#",
+        "A#"
+      ],
+      "actualTones": [
+        "G#",
+        "D#",
+        "F#",
+        "B",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "m9",
+      "pattern": "575557",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "B"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G",
+        "C",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "m9",
+      "pattern": "686668",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "C#",
+        "F",
+        "G#",
+        "C"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "G#",
+        "C#",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "m9",
+      "pattern": "797779",
+      "rootString": 6,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D",
+        "F#",
+        "A",
+        "C#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A",
+        "D",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C",
+      "quality": "maj",
+      "pattern": "x35553",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C",
+        "E",
+        "G"
+      ],
+      "actualTones": [
+        "C",
+        "G",
+        "E"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C#",
+      "quality": "maj",
+      "pattern": "x46664",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C#",
+        "F",
+        "G#"
+      ],
+      "actualTones": [
+        "C#",
+        "G#",
+        "F"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D",
+      "quality": "maj",
+      "pattern": "x57775",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D",
+        "F#",
+        "A"
+      ],
+      "actualTones": [
+        "D",
+        "A",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D#",
+      "quality": "maj",
+      "pattern": "x68886",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D#",
+        "G",
+        "A#"
+      ],
+      "actualTones": [
+        "D#",
+        "A#",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "maj",
+      "pattern": "x79997",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G#",
+        "B"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "maj",
+      "pattern": "x02220",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "maj",
+      "pattern": "x13331",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "maj",
+      "pattern": "x24442",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "D#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C",
+      "quality": "m",
+      "pattern": "x35543",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C",
+        "D#",
+        "G"
+      ],
+      "actualTones": [
+        "C",
+        "G",
+        "D#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C#",
+      "quality": "m",
+      "pattern": "x46654",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C#",
+        "E",
+        "G#"
+      ],
+      "actualTones": [
+        "C#",
+        "G#",
+        "E"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D",
+      "quality": "m",
+      "pattern": "x57765",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D",
+        "F",
+        "A"
+      ],
+      "actualTones": [
+        "D",
+        "A",
+        "F"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D#",
+      "quality": "m",
+      "pattern": "x68876",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D#",
+        "F#",
+        "A#"
+      ],
+      "actualTones": [
+        "D#",
+        "A#",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "m",
+      "pattern": "x79987",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G",
+        "B"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "m",
+      "pattern": "x02210",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C",
+        "E"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "m",
+      "pattern": "x13321",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "C#",
+        "F"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "m",
+      "pattern": "x24432",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D",
+        "F#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C",
+      "quality": "7",
+      "pattern": "x35353",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C",
+        "E",
+        "G",
+        "A#"
+      ],
+      "actualTones": [
+        "C",
+        "G",
+        "A#",
+        "E"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C#",
+      "quality": "7",
+      "pattern": "x46464",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C#",
+        "F",
+        "G#",
+        "B"
+      ],
+      "actualTones": [
+        "C#",
+        "G#",
+        "B",
+        "F"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D",
+      "quality": "7",
+      "pattern": "x57575",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D",
+        "F#",
+        "A",
+        "C"
+      ],
+      "actualTones": [
+        "D",
+        "A",
+        "C",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D#",
+      "quality": "7",
+      "pattern": "x68686",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D#",
+        "G",
+        "A#",
+        "C#"
+      ],
+      "actualTones": [
+        "D#",
+        "A#",
+        "C#",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "7",
+      "pattern": "x79797",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G#",
+        "B",
+        "D"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "7",
+      "pattern": "x02020",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E",
+        "G"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "7",
+      "pattern": "x13131",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F",
+        "G#"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "G#",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "7",
+      "pattern": "x24242",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#",
+        "A"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A",
+        "D#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C",
+      "quality": "maj7",
+      "pattern": "x35453",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C",
+        "E",
+        "G",
+        "B"
+      ],
+      "actualTones": [
+        "C",
+        "G",
+        "B",
+        "E"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C#",
+      "quality": "maj7",
+      "pattern": "x46564",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C#",
+        "F",
+        "G#",
+        "C"
+      ],
+      "actualTones": [
+        "C#",
+        "G#",
+        "C",
+        "F"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D",
+      "quality": "maj7",
+      "pattern": "x57675",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D",
+        "F#",
+        "A",
+        "C#"
+      ],
+      "actualTones": [
+        "D",
+        "A",
+        "C#",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D#",
+      "quality": "maj7",
+      "pattern": "x68786",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D#",
+        "G",
+        "A#",
+        "D"
+      ],
+      "actualTones": [
+        "D#",
+        "A#",
+        "D",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "maj7",
+      "pattern": "x79897",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G#",
+        "B",
+        "D#"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D#",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "maj7",
+      "pattern": "x02120",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E",
+        "G#"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G#",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "maj7",
+      "pattern": "x13231",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F",
+        "A"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "A",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "maj7",
+      "pattern": "x24342",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#",
+        "A#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A#",
+        "D#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C",
+      "quality": "m7",
+      "pattern": "x35343",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C",
+        "D#",
+        "G",
+        "A#"
+      ],
+      "actualTones": [
+        "C",
+        "G",
+        "A#",
+        "D#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C#",
+      "quality": "m7",
+      "pattern": "x46454",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C#",
+        "E",
+        "G#",
+        "B"
+      ],
+      "actualTones": [
+        "C#",
+        "G#",
+        "B",
+        "E"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D",
+      "quality": "m7",
+      "pattern": "x57565",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D",
+        "F",
+        "A",
+        "C"
+      ],
+      "actualTones": [
+        "D",
+        "A",
+        "C",
+        "F"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D#",
+      "quality": "m7",
+      "pattern": "x68676",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D#",
+        "F#",
+        "A#",
+        "C#"
+      ],
+      "actualTones": [
+        "D#",
+        "A#",
+        "C#",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "m7",
+      "pattern": "x79787",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "E",
+        "G",
+        "B",
+        "D"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "m7",
+      "pattern": "x02010",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C",
+        "E",
+        "G"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "m7",
+      "pattern": "x13121",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "C#",
+        "F",
+        "G#"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "G#",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "m7",
+      "pattern": "x24232",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D",
+        "F#",
+        "A"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A",
+        "D"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C",
+      "quality": "m7b5",
+      "pattern": "x34344",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "C",
+        "D#",
+        "F#",
+        "A#"
+      ],
+      "actualTones": [
+        "C",
+        "F#",
+        "A#",
+        "D#",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "G#"
+      ]
+    },
+    {
+      "root": "C#",
+      "quality": "m7b5",
+      "pattern": "x45455",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "C#",
+        "E",
+        "G",
+        "B"
+      ],
+      "actualTones": [
+        "C#",
+        "G",
+        "B",
+        "E",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "A"
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "m7b5",
+      "pattern": "x56566",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "D",
+        "F",
+        "G#",
+        "C"
+      ],
+      "actualTones": [
+        "D",
+        "G#",
+        "C",
+        "F",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "A#"
+      ]
+    },
+    {
+      "root": "D#",
+      "quality": "m7b5",
+      "pattern": "x67677",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "D#",
+        "F#",
+        "A",
+        "C#"
+      ],
+      "actualTones": [
+        "D#",
+        "A",
+        "C#",
+        "F#",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "B"
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "m7b5",
+      "pattern": "x78788",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "E",
+        "G",
+        "A#",
+        "D"
+      ],
+      "actualTones": [
+        "E",
+        "A#",
+        "D",
+        "G",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "C"
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "m7b5",
+      "pattern": "x89899",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "F",
+        "G#",
+        "B",
+        "D#"
+      ],
+      "actualTones": [
+        "F",
+        "B",
+        "D#",
+        "G#",
+        "C#"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "C#"
+      ]
+    },
+    {
+      "root": "A",
+      "quality": "m7b5",
+      "pattern": "x01011",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "A",
+        "C",
+        "D#",
+        "G"
+      ],
+      "actualTones": [
+        "A",
+        "D#",
+        "G",
+        "C",
+        "F"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "F"
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "m7b5",
+      "pattern": "x12122",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "A#",
+        "C#",
+        "E",
+        "G#"
+      ],
+      "actualTones": [
+        "A#",
+        "E",
+        "G#",
+        "C#",
+        "F#"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "F#"
+      ]
+    },
+    {
+      "root": "B",
+      "quality": "m7b5",
+      "pattern": "x23233",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "WARN",
+      "expectedTones": [
+        "B",
+        "D",
+        "F",
+        "A"
+      ],
+      "actualTones": [
+        "B",
+        "F",
+        "A",
+        "D",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": [
+        "G"
+      ]
+    },
+    {
+      "root": "C",
+      "quality": "9",
+      "pattern": "x35756",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C",
+        "E",
+        "G",
+        "A#",
+        "D"
+      ],
+      "actualTones": [
+        "C",
+        "G",
+        "D",
+        "E",
+        "A#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C#",
+      "quality": "9",
+      "pattern": "x46867",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "C#",
+        "F",
+        "G#",
+        "B",
+        "D#"
+      ],
+      "actualTones": [
+        "C#",
+        "G#",
+        "D#",
+        "F",
+        "B"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "D",
+      "quality": "9",
+      "pattern": "x57978",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "D",
+        "F#",
+        "A",
+        "C",
+        "E"
+      ],
+      "actualTones": [
+        "D",
+        "A",
+        "E",
+        "F#",
+        "C"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "9",
+      "pattern": "x02423",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E",
+        "G",
+        "B"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "B",
+        "C#",
+        "G"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "9",
+      "pattern": "x13534",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F",
+        "G#",
+        "C"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "C",
+        "D",
+        "G#"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "9",
+      "pattern": "x24645",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "PASS",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#",
+        "A",
+        "C#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "C#",
+        "D#",
+        "A"
+      ],
+      "missingTones": [],
+      "extraTones": []
+    },
+    {
+      "root": "C",
+      "quality": "maj9",
+      "pattern": "x35433",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "C",
+        "E",
+        "G",
+        "B",
+        "D"
+      ],
+      "actualTones": [
+        "C",
+        "G",
+        "B",
+        "D"
+      ],
+      "missingTones": [
+        "E"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "C#",
+      "quality": "maj9",
+      "pattern": "x46544",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "C#",
+        "F",
+        "G#",
+        "C",
+        "D#"
+      ],
+      "actualTones": [
+        "C#",
+        "G#",
+        "C",
+        "D#"
+      ],
+      "missingTones": [
+        "F"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "D",
+      "quality": "maj9",
+      "pattern": "x57655",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "D",
+        "F#",
+        "A",
+        "C#",
+        "E"
+      ],
+      "actualTones": [
+        "D",
+        "A",
+        "C#",
+        "E"
+      ],
+      "missingTones": [
+        "F#"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "D#",
+      "quality": "maj9",
+      "pattern": "x68766",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "D#",
+        "G",
+        "A#",
+        "D",
+        "F"
+      ],
+      "actualTones": [
+        "D#",
+        "A#",
+        "D",
+        "F"
+      ],
+      "missingTones": [
+        "G"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "maj9",
+      "pattern": "x79877",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "E",
+        "G#",
+        "B",
+        "D#",
+        "F#"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D#",
+        "F#"
+      ],
+      "missingTones": [
+        "G#"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "maj9",
+      "pattern": "x02100",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "A",
+        "C#",
+        "E",
+        "G#",
+        "B"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G#",
+        "B"
+      ],
+      "missingTones": [
+        "C#"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "maj9",
+      "pattern": "x13211",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "A#",
+        "D",
+        "F",
+        "A",
+        "C"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "A",
+        "C"
+      ],
+      "missingTones": [
+        "D"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "maj9",
+      "pattern": "x24322",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "B",
+        "D#",
+        "F#",
+        "A#",
+        "C#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A#",
+        "C#"
+      ],
+      "missingTones": [
+        "D#"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "C",
+      "quality": "m9",
+      "pattern": "x35333",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "C",
+        "D#",
+        "G",
+        "A#",
+        "D"
+      ],
+      "actualTones": [
+        "C",
+        "G",
+        "A#",
+        "D"
+      ],
+      "missingTones": [
+        "D#"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "C#",
+      "quality": "m9",
+      "pattern": "x46444",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "C#",
+        "E",
+        "G#",
+        "B",
+        "D#"
+      ],
+      "actualTones": [
+        "C#",
+        "G#",
+        "B",
+        "D#"
+      ],
+      "missingTones": [
+        "E"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "D",
+      "quality": "m9",
+      "pattern": "x57555",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "D",
+        "F",
+        "A",
+        "C",
+        "E"
+      ],
+      "actualTones": [
+        "D",
+        "A",
+        "C",
+        "E"
+      ],
+      "missingTones": [
+        "F"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "D#",
+      "quality": "m9",
+      "pattern": "x68666",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "D#",
+        "F#",
+        "A#",
+        "C#",
+        "F"
+      ],
+      "actualTones": [
+        "D#",
+        "A#",
+        "C#",
+        "F"
+      ],
+      "missingTones": [
+        "F#"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "E",
+      "quality": "m9",
+      "pattern": "x79777",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "E",
+        "G",
+        "B",
+        "D",
+        "F#"
+      ],
+      "actualTones": [
+        "E",
+        "B",
+        "D",
+        "F#"
+      ],
+      "missingTones": [
+        "G"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "A",
+      "quality": "m9",
+      "pattern": "x02000",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "A",
+        "C",
+        "E",
+        "G",
+        "B"
+      ],
+      "actualTones": [
+        "A",
+        "E",
+        "G",
+        "B"
+      ],
+      "missingTones": [
+        "C"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "A#",
+      "quality": "m9",
+      "pattern": "x13111",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "A#",
+        "C#",
+        "F",
+        "G#",
+        "C"
+      ],
+      "actualTones": [
+        "A#",
+        "F",
+        "G#",
+        "C"
+      ],
+      "missingTones": [
+        "C#"
+      ],
+      "extraTones": []
+    },
+    {
+      "root": "B",
+      "quality": "m9",
+      "pattern": "x24222",
+      "rootString": 5,
+      "inversion": 0,
+      "status": "FAIL",
+      "expectedTones": [
+        "B",
+        "D",
+        "F#",
+        "A",
+        "C#"
+      ],
+      "actualTones": [
+        "B",
+        "F#",
+        "A",
+        "C#"
+      ],
+      "missingTones": [
+        "D"
+      ],
       "extraTones": []
     }
   ]
