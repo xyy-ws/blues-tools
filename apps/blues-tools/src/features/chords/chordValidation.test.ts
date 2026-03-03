@@ -43,4 +43,27 @@ describe('chordValidation', () => {
     const result = validateChordPlayability('022100')
     expect(result.status).toBe('PASS')
   })
+
+  it('rejects malformed pattern with special characters', () => {
+    const playability = validateChordPlayability('0@2100')
+    const tonal = validateChordPattern('E', '7', '0@2100')
+
+    expect(playability.status).toBe('FAIL')
+    expect(tonal.status).toBe('FAIL')
+  })
+
+  it('rejects malformed overlong pattern', () => {
+    const playability = validateChordPlayability('022100022100')
+    const tonal = validateChordPattern('E', 'maj', '022100022100')
+
+    expect(playability.status).toBe('FAIL')
+    expect(tonal.status).toBe('FAIL')
+  })
+
+  it('rejects malformed patterns with wrong length or uppercase mute markers', () => {
+    for (const pattern of ['02210', '02210X', '0x21-0']) {
+      expect(validateChordPlayability(pattern).status).toBe('FAIL')
+      expect(validateChordPattern('E', 'maj', pattern).status).toBe('FAIL')
+    }
+  })
 })

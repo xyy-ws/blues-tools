@@ -77,12 +77,16 @@ export function deriveTargetChordTones(root: MusicalKey, quality: ChordQuality):
 }
 
 export function computePatternTones(pattern: string): MusicalKey[] {
+  if (!isValidPatternFormat(pattern)) {
+    return []
+  }
+
   return [
     ...new Set(
       pattern
         .split('')
         .map((char, stringIndex) => {
-          if (char.toLowerCase() === 'x') return null
+          if (char === 'x') return null
           const fret = Number.parseInt(char, 10)
           if (Number.isNaN(fret)) return null
           return semitoneOffset(OPEN_STRINGS[stringIndex], fret)
@@ -94,6 +98,18 @@ export function computePatternTones(pattern: string): MusicalKey[] {
 
 export function validateChordPattern(root: MusicalKey, quality: ChordQuality, pattern: string): TonalValidationResult {
   const expectedTones = deriveTargetChordTones(root, quality)
+
+  const formatReasons = validatePatternFormat(pattern)
+  if (formatReasons.length > 0) {
+    return {
+      status: 'FAIL',
+      expectedTones,
+      actualTones: [],
+      missingTones: expectedTones,
+      extraTones: [],
+    }
+  }
+
   const actualTones = computePatternTones(pattern)
 
   const expectedSet = new Set(expectedTones)
@@ -127,11 +143,13 @@ export function validateChordPattern(root: MusicalKey, quality: ChordQuality, pa
 }
 
 export function inferBassInversion(root: MusicalKey, quality: ChordQuality, pattern: string): number {
+  if (!isValidPatternFormat(pattern)) return 0
+
   const expectedTones = deriveTargetChordTones(root, quality)
   const bassTone = pattern
     .split('')
     .map((char, stringIndex) => {
-      if (char.toLowerCase() === 'x') return null
+      if (char === 'x') return null
       const fret = Number.parseInt(char, 10)
       if (Number.isNaN(fret)) return null
       return semitoneOffset(OPEN_STRINGS[stringIndex], fret)
@@ -145,8 +163,10 @@ export function inferBassInversion(root: MusicalKey, quality: ChordQuality, patt
 }
 
 export function inferRootString(pattern: string): RootString {
+  if (!isValidPatternFormat(pattern)) return 6
+
   const chars = pattern.split('')
-  const firstActive = chars.findIndex((char) => char.toLowerCase() !== 'x')
+  const firstActive = chars.findIndex((char) => char !== 'x')
   if (firstActive <= 0) return 6
   if (firstActive === 1) return 5
   return 4
@@ -154,9 +174,29 @@ export function inferRootString(pattern: string): RootString {
 
 const NON_PLAYABLE_PATTERNS = new Set(['5x2009'])
 
+function isValidPatternFormat(pattern: string): boolean {
+  return pattern.length === 6 && /^[0-9x]+$/.test(pattern)
+}
+
+function validatePatternFormat(pattern: string): string[] {
+  const reasons: string[] = []
+  if (pattern.length !== 6) {
+    reasons.push(`pattern length must be 6 (got ${pattern.length})`)
+  }
+  if (!/^[0-9x]+$/.test(pattern)) {
+    reasons.push('pattern contains invalid characters (only 0-9 and lowercase x allowed)')
+  }
+  return reasons
+}
+
 export function validateChordPlayability(pattern: string): PlayabilityValidationResult {
   if (NON_PLAYABLE_PATTERNS.has(pattern)) {
     return { status: 'FAIL', reasons: ['blocked known unreliable shape'] }
+  }
+
+  const formatReasons = validatePatternFormat(pattern)
+  if (formatReasons.length > 0) {
+    return { status: 'FAIL', reasons: formatReasons }
   }
 
   const chars = pattern.split('')
