@@ -1,6 +1,15 @@
 import { describe, expect, it } from 'vitest'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
-import { CHORD_LIBRARY_VALIDATION_REPORT, getChordFingerings, getChordVoicingOptions, getInversionOptionsFor, getRootStringOptions, hasStandardChordShapes, type ChordQuality } from './chords'
+import {
+  CHORD_LIBRARY_VALIDATION_REPORT,
+  getChordFingerings,
+  getChordVoicingOptions,
+  getInversionOptionsFor,
+  getRankedGeneratedChordVoicings,
+  getRootStringOptions,
+  hasStandardChordShapes,
+  type ChordQuality,
+} from './chords'
 
 const CORE_QUALITIES: ChordQuality[] = ['maj', 'm', '7', 'maj7', 'm7']
 const EXPANDED_QUALITIES: ChordQuality[] = ['5', '6', 'm6', 'sus2', 'sus4', 'add9', 'dim', 'dim7', 'aug']
@@ -72,5 +81,15 @@ describe('standard chord library', () => {
       const voicing = getChordVoicingOptions(item.root, item.quality, item.rootString, item.inversion)
       expect(voicing.find((entry) => entry.pattern === item.pattern)).toBeUndefined()
     }
+  })
+
+  it('returns generated voicings ranked by descending score', () => {
+    const generated = getRankedGeneratedChordVoicings('E', '7', 6, 0, 5)
+    expect(generated.length).toBeGreaterThanOrEqual(3)
+    expect(generated.length).toBeLessThanOrEqual(5)
+    expect(generated.every((entry) => entry.sourceKind === 'generated')).toBe(true)
+
+    const scores = generated.map((entry) => entry.rankingScore ?? 0)
+    expect(scores).toEqual([...scores].sort((a, b) => b - a))
   })
 })

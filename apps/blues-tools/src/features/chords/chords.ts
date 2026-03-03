@@ -1,13 +1,14 @@
 import type { MusicalKey } from '../../domain/music/types'
 import { inferBassInversion, validateChordPattern, validateChordPlayability } from './chordValidation'
 import { CURATED_CHORD_SHAPES } from './curatedShapes'
+import { generateRankedFingerings } from './algorithmicFingerings'
 
 export type ChordQuality = 'maj' | 'm' | '5' | '6' | 'm6' | 'sus2' | 'sus4' | 'add9' | 'dim' | 'dim7' | 'aug' | '7' | 'maj7' | 'm7' | 'm7b5' | '9' | 'maj9' | 'm9'
 export type RootString = 6 | 5 | 4
 export type Inversion = 0 | 1 | 2 | 3
 export type ChordInversion = 'root' | '1st' | '2nd'
 
-export type ChordSourceType = '理论' | '指型参考' | '课程实践'
+export type ChordSourceType = '理论' | '指型参考' | '课程实践' | '算法生成'
 export type ConfidenceLevel = 'high' | 'medium' | 'low'
 export type VerificationStatus = '已校验' | '近似'
 
@@ -38,6 +39,9 @@ export type ChordVoicingOption = {
   note?: string
   isApproximateFallback: boolean
   fallbackReason?: string
+  sourceKind?: 'curated' | 'generated'
+  rankingScore?: number
+  rankingBadges?: string[]
 }
 
 type StandardChordShape = {
@@ -53,6 +57,15 @@ type StandardChordShape = {
 }
 
 const CHORD_SOURCES: Record<string, ChordSource> = {
+  generated: {
+    id: 'generated',
+    title: 'OpenClaw Algorithmic Fingering Generator',
+    publisherOrAuthor: 'blues-tools',
+    sourceName: '算法生成器',
+    sourceType: '算法生成',
+    confidenceLevel: 'medium',
+    notes: '按和弦音/可演奏性规则搜索并排序',
+  },
   justin: {
     id: 'justin',
     title: 'JustinGuitar Chord Library',
@@ -267,8 +280,39 @@ export function getChordVoicingOptions(
       fallback: false,
       note: shape.labelZh,
       isApproximateFallback: false,
+      sourceKind: 'curated',
     }
   })
+}
+
+export function getRankedGeneratedChordVoicings(
+  root: MusicalKey,
+  quality: ChordQuality,
+  rootString: RootString = 6,
+  inversion: Inversion | ChordInversion = 0,
+  topN = 5,
+): ChordVoicingOption[] {
+  const inversionNumber = toInversionNumber(inversion)
+  const generated = generateRankedFingerings(root, quality, rootString, inversionNumber, topN)
+  const source = CHORD_SOURCES.generated
+
+  return generated.map((item) => ({
+    pattern: item.pattern,
+    inversion: item.inversion,
+    source,
+    shapeSource: {
+      source,
+      verificationStatus: '已校验',
+      verificationNotes: '算法生成：和弦音 + 可演奏性校验通过',
+    },
+    confidence: 0.78,
+    fallback: false,
+    note: `评分 ${item.score.toFixed(1)} / 组合权重`,
+    isApproximateFallback: false,
+    sourceKind: 'generated',
+    rankingScore: item.score,
+    rankingBadges: item.badges,
+  }))
 }
 
 export function getChordFingeringEntries(

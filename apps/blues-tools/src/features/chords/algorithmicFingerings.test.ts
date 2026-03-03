@@ -1,0 +1,29 @@
+import { describe, expect, it } from 'vitest'
+import { generateRankedFingerings } from './algorithmicFingerings'
+
+describe('generateRankedFingerings', () => {
+  it('is deterministic for the same context', () => {
+    const first = generateRankedFingerings('E', '7', 6, 0, 5)
+    const second = generateRankedFingerings('E', '7', 6, 0, 5)
+
+    expect(first.map((item) => item.pattern)).toEqual(second.map((item) => item.pattern))
+    expect(first.map((item) => item.score)).toEqual(second.map((item) => item.score))
+  })
+
+  it('prioritizes lower-position easier voicings', () => {
+    const result = generateRankedFingerings('E', 'maj', 6, 0, 5)
+    expect(result.length).toBeGreaterThanOrEqual(3)
+
+    const top = result[0]
+    const bottom = result[result.length - 1]
+
+    expect(top.metrics.avgFret).toBeLessThanOrEqual(bottom.metrics.avgFret)
+    expect(top.metrics.fretSpan).toBeLessThanOrEqual(bottom.metrics.fretSpan + 2)
+    expect(top.score).toBeGreaterThanOrEqual(bottom.score)
+  })
+
+  it('clamps topN to 3~5', () => {
+    expect(generateRankedFingerings('E', '7', 6, 0, 1).length).toBeLessThanOrEqual(3)
+    expect(generateRankedFingerings('E', '7', 6, 0, 9).length).toBeLessThanOrEqual(5)
+  })
+})

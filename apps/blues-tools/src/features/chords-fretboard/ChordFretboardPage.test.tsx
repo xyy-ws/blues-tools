@@ -82,6 +82,7 @@ describe('ChordFretboardPage', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
+    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
@@ -92,12 +93,34 @@ describe('ChordFretboardPage', () => {
 
   it('shows shape-level source traceability metadata for selected standard fingering', () => {
     render(<ChordFretboardPage />)
+    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const sourcePanel = screen.getByLabelText('指型来源追溯')
     expect(sourcePanel).toHaveTextContent('来源名称：')
     expect(sourcePanel).toHaveTextContent('来源类型：')
     expect(sourcePanel).toHaveTextContent('可信度等级：')
     expect(sourcePanel).toHaveTextContent('校验状态：')
+  })
+
+  it('shows generated top list with 3-5 items sorted by score', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'generated' } })
+
+    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    expect(voicingSelect.options.length).toBeGreaterThanOrEqual(3)
+    expect(voicingSelect.options.length).toBeLessThanOrEqual(5)
+
+    const scores: number[] = []
+    for (let i = 0; i < voicingSelect.options.length; i += 1) {
+      fireEvent.change(voicingSelect, { target: { value: String(i) } })
+      const scoreText = within(screen.getByLabelText('评分摘要')).getByText(/评分/).textContent ?? ''
+      const score = Number(scoreText.replace(/[^0-9.]/g, ''))
+      scores.push(score)
+    }
+
+    const sorted = [...scores].sort((a, b) => b - a)
+    expect(scores).toEqual(sorted)
   })
 
   it('renders string 1 on top and string 6 on bottom', () => {

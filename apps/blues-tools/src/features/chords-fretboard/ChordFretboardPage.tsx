@@ -3,6 +3,7 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
 import {
   getChordVoicingOptions,
+  getRankedGeneratedChordVoicings,
   getInversionOptionsFor,
   getRootStringOptions,
   hasStandardChordShapes,
@@ -94,6 +95,7 @@ export function ChordFretboardPage() {
   const [voicingIndex, setVoicingIndex] = useState(0)
   const [inversion, setInversion] = useState<Inversion>(0)
   const [fretRange, setFretRange] = useState<FretRange>('0-7')
+  const [sourceFilter, setSourceFilter] = useState<'all' | 'generated' | 'curated'>('all')
 
   const playableRootStrings = useMemo(() => getRootStringOptions(root, quality), [quality, root])
   const resolvedRootString = playableRootStrings.includes(rootString) ? rootString : playableRootStrings[0]
@@ -120,8 +122,12 @@ export function ChordFretboardPage() {
 
   const fingeringEntries = useMemo(() => {
     if (!resolvedRootString || resolvedInversion === undefined) return []
-    return getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
-  }, [quality, resolvedInversion, resolvedRootString, root])
+    const curated = getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
+    const generated = getRankedGeneratedChordVoicings(root, quality, resolvedRootString, resolvedInversion, 5)
+    if (sourceFilter === 'curated') return curated
+    if (sourceFilter === 'generated') return generated
+    return [...generated, ...curated]
+  }, [quality, resolvedInversion, resolvedRootString, root, sourceFilter])
   const selectedEntry = fingeringEntries[voicingIndex] ?? fingeringEntries[0]
   const selectedPattern = selectedEntry?.pattern ?? 'xxxxxx'
   const voicingConstrained = fingeringEntries.length < 2
@@ -226,6 +232,22 @@ export function ChordFretboardPage() {
         </label>
 
         <label className="control">
+          指型来源
+          <select
+            aria-label="指型来源"
+            value={sourceFilter}
+            onChange={(e) => {
+              setSourceFilter(e.target.value as 'all' | 'generated' | 'curated')
+              setVoicingIndex(0)
+            }}
+          >
+            <option value="all">综合（算法 + 标准库）</option>
+            <option value="generated">算法生成</option>
+            <option value="curated">标准库</option>
+          </select>
+        </label>
+
+        <label className="control">
           按法变体（Voicing）
           <select
             aria-label="按法变体"
@@ -235,7 +257,7 @@ export function ChordFretboardPage() {
           >
             {fingeringEntries.map((entry, index) => (
               <option key={`${entry.pattern}-${index}`} value={index}>
-                变体 {index + 1} · {entry.pattern} · {entry.source.sourceName}
+                变体 {index + 1} · {entry.pattern} · {entry.sourceKind === 'generated' ? '算法生成' : '标准库'}
               </option>
             ))}
           </select>
@@ -264,7 +286,18 @@ export function ChordFretboardPage() {
             </p>
             <p>
               当前按法变体：<strong>变体 {voicingIndex + 1}</strong>（{selectedPattern}）
+              {selectedEntry?.sourceKind === 'generated' ? ' · 算法生成' : ' · 标准库'}
             </p>
+            {selectedEntry?.sourceKind === 'generated' ? (
+              <div className="inline-actions" aria-label="评分摘要">
+                <span className="badge info">评分 {selectedEntry.rankingScore?.toFixed(1) ?? '--'}</span>
+                {(selectedEntry.rankingBadges ?? []).map((badge) => (
+                  <span key={badge} className="badge success">
+                    {badge}
+                  </span>
+                ))}
+              </div>
+            ) : null}
             <div className="card-nested" aria-label="指型来源追溯" style={{ marginTop: 8 }}>
               <p className="muted helper-text" style={{ marginTop: 0 }}>
                 来源名称：<strong>{selectedEntry?.shapeSource.source.sourceName ?? '未标注'}</strong>
