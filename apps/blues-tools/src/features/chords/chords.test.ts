@@ -18,7 +18,7 @@ const chordPlayabilityStatusCache = new Map<string, ReturnType<typeof validateCh
 function getChordPatternStatus(root: (typeof CHROMATIC_KEYS)[number], quality: ChordQuality, pattern: string) {
   const key = `${root}|${quality}|${pattern}`
   const cached = chordPatternStatusCache.get(key)
-  if (cached) return cached
+  if (cached !== undefined) return cached
   const status = validateChordPattern(root, quality, pattern).status
   chordPatternStatusCache.set(key, status)
   return status
@@ -26,7 +26,7 @@ function getChordPatternStatus(root: (typeof CHROMATIC_KEYS)[number], quality: C
 
 function getChordPlayabilityStatus(pattern: string) {
   const cached = chordPlayabilityStatusCache.get(pattern)
-  if (cached) return cached
+  if (cached !== undefined) return cached
   const status = validateChordPlayability(pattern).status
   chordPlayabilityStatusCache.set(pattern, status)
   return status
