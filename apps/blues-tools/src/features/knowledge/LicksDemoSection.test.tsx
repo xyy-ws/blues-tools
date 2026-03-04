@@ -53,13 +53,16 @@ describe('LicksDemoSection', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByLabelText('选择乐句')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /乐句 A/i })).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: /乐句 B/i })).not.toBeInTheDocument()
+    const selector = screen.getByLabelText('选择乐句') as HTMLSelectElement
+    expect(selector).toBeInTheDocument()
+    expect(selector.value).toBe('lick-a')
+    expect(screen.getByText(DEMO_LICKS[0].practiceTip)).toBeInTheDocument()
+    expect(screen.queryByText(DEMO_LICKS[1].practiceTip)).not.toBeInTheDocument()
 
-    fireEvent.change(screen.getByLabelText('选择乐句'), { target: { value: 'lick-b' } })
-    expect(screen.getByRole('heading', { name: /乐句 B/i })).toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: /乐句 A/i })).not.toBeInTheDocument()
+    fireEvent.change(selector, { target: { value: 'lick-b' } })
+    expect(selector.value).toBe('lick-b')
+    expect(screen.getByText(DEMO_LICKS[1].practiceTip)).toBeInTheDocument()
+    expect(screen.queryByText(DEMO_LICKS[0].practiceTip)).not.toBeInTheDocument()
   })
 
   it('shows 12-bar recommendation and chinese timing guidance', () => {
