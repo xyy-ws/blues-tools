@@ -1,7 +1,48 @@
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { KnowledgePage } from './KnowledgePage'
+
+vi.mock('./LicksDemoSection', () => ({
+  LicksDemoSection: () => null,
+}))
+
+vi.mock('../../styles/blues', () => ({
+  bluesStylePack: {
+    knowledgeCards: [
+      {
+        id: 'card-a',
+        title: '蓝调色彩音',
+        content: 'b3 与 b5 的色彩使用',
+        tags: ['音色', '问答'],
+        whereInTwelveBar: '第 1-4 小节',
+        commonMistakes: ['音高不准'],
+        relatedLicks: ['乐句 A'],
+        practiceLink: { key: 'C', bpm: 90, progression: 'standard-12' },
+      },
+      {
+        id: 'card-b',
+        title: '收尾句构建',
+        content: '11-12 小节收尾思路',
+        tags: ['收尾'],
+        whereInTwelveBar: '第 11-12 小节',
+        commonMistakes: ['节奏拖沓'],
+        relatedLicks: ['乐句 B'],
+        practiceLink: { key: 'G', bpm: 96, progression: 'turnaround' },
+      },
+      {
+        id: 'card-c',
+        title: '问答句结构',
+        content: '呼应与停顿',
+        tags: ['问答'],
+        whereInTwelveBar: '全段',
+        commonMistakes: ['没有留白'],
+        relatedLicks: ['乐句 C'],
+        practiceLink: { key: 'A', bpm: 100, progression: 'quick-change' },
+      },
+    ],
+  },
+}))
 
 afterEach(() => {
   cleanup()

@@ -99,7 +99,7 @@ describe('BackingPage', () => {
     expect(screen.getByText('上传失败：仅支持音频文件。')).toBeInTheDocument()
   })
 
-  it('can delete uploaded track and shows empty guidance when library is empty', () => {
+  it('can delete uploaded track and shows empty guidance when library is empty', async () => {
     vi.spyOn(URL, 'createObjectURL').mockReturnValue('blob:c-jam')
     renderPage()
 
@@ -107,10 +107,14 @@ describe('BackingPage', () => {
     fireEvent.change(screen.getByLabelText('Track file'), { target: { files: [new File(['audio'], 'delete-me.mp3', { type: 'audio/mpeg' })] } })
     fireEvent.click(screen.getByRole('button', { name: '导入音轨' }))
 
+    await screen.findByText(/上传成功：Delete Me/)
     fireEvent.click(screen.getByRole('button', { name: '删除所选实录' }))
-    expect(screen.queryByRole('option', { name: /Delete Me/ })).not.toBeInTheDocument()
-    expect(screen.getByText('已删除：Delete Me')).toBeInTheDocument()
-    expect(screen.getByText('暂无已上传实录。请先在下方“上传实录伴奏”中导入音频文件。')).toBeInTheDocument()
+
+    await waitFor(() => {
+      expect(screen.queryByText(/Delete Me（/)).not.toBeInTheDocument()
+      expect(screen.getByText('已删除：Delete Me')).toBeInTheDocument()
+      expect(screen.getByText('暂无已上传实录。请先在下方“上传实录伴奏”中导入音频文件。')).toBeInTheDocument()
+    })
   })
 
   it('removes style selector from upload form', () => {
