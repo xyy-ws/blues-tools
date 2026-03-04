@@ -36,13 +36,12 @@ describe('ChordFretboardPage', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'E' } })
-
-    const qualitySelect = screen.getByLabelText('和弦性质') as HTMLSelectElement
-    fireEvent.change(qualitySelect, { target: { value: '9' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
 
     expect(screen.queryByText('近似指型')).not.toBeInTheDocument()
     expect(screen.queryByRole('alert')).not.toBeInTheDocument()
     expect(screen.getByText(/当前按法变体：/)).toBeInTheDocument()
+    expect(screen.queryByText('算法生成')).not.toBeInTheDocument()
   })
 
   it('highlights only fingering positions and keeps tone types inside highlighted notes', () => {
@@ -72,7 +71,6 @@ describe('ChordFretboardPage', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
-    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const patterns = Array.from(voicingSelect.options)
@@ -99,7 +97,6 @@ describe('ChordFretboardPage', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
-    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
@@ -114,7 +111,6 @@ describe('ChordFretboardPage', () => {
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'D' } })
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '7' } })
     fireEvent.change(screen.getByLabelText('根音弦'), { target: { value: '5' } })
-    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
@@ -124,7 +120,6 @@ describe('ChordFretboardPage', () => {
 
   it('shows shape-level source traceability metadata for selected standard fingering', () => {
     render(<ChordFretboardPage />)
-    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const sourcePanel = screen.getByLabelText('指型来源追溯')
     expect(sourcePanel).toHaveTextContent('来源名称：')
@@ -133,12 +128,11 @@ describe('ChordFretboardPage', () => {
     expect(sourcePanel).toHaveTextContent('校验状态：')
   })
 
-  it('uses chords-db traceability label for curated selector voicings', () => {
+  it('uses chords-db traceability label for selector voicings', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'E' } })
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
-    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const sourcePanel = screen.getByLabelText('指型来源追溯')
     expect(sourcePanel).toHaveTextContent('chords-db 吉他和弦库')
@@ -147,43 +141,20 @@ describe('ChordFretboardPage', () => {
   it('caps default displayed voicing count to top 5', () => {
     render(<ChordFretboardPage />)
 
-    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    expect(voicingSelect.options.length).toBeGreaterThan(0)
-    expect(voicingSelect.options.length).toBeLessThanOrEqual(5)
-  })
-
-  it('shows generated list with dynamic count sorted by score', () => {
-    render(<ChordFretboardPage />)
-
-    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'generated' } })
-
-    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    expect(voicingSelect.options.length).toBeGreaterThan(0)
-
-    const scores: number[] = []
-    const sampleCount = Math.min(voicingSelect.options.length, 8)
-    for (let i = 0; i < sampleCount; i += 1) {
-      fireEvent.change(voicingSelect, { target: { value: String(i) } })
-      const scoreText = within(screen.getByLabelText('评分摘要')).getByText(/评分/).textContent ?? ''
-      const score = Number(scoreText.replace(/[^0-9.]/g, ''))
-      scores.push(score)
-    }
-
-    const sorted = [...scores].sort((a, b) => b - a)
-    expect(scores).toEqual(sorted)
-  })
-
-  it('handles variant counts below 5 without UI break', () => {
-    render(<ChordFretboardPage />)
-
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'E' } })
-    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'add9' } })
-    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    expect(voicingSelect.options.length).toBeGreaterThan(0)
-    expect(voicingSelect.options.length).toBeLessThan(5)
-    expect(screen.getByText(/当前按法变体：/)).toHaveTextContent(new RegExp(`变体 1 / ${voicingSelect.options.length}`))
+    expect(voicingSelect.options.length).toBe(1)
+    expect(screen.queryByRole('button', { name: /显示更多/ })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /收起到前/ })).not.toBeInTheDocument()
+  })
+
+  it('does not render source filter selector or generated score summary', () => {
+    render(<ChordFretboardPage />)
+
+    expect(screen.queryByLabelText('指型来源')).not.toBeInTheDocument()
+    expect(screen.queryByLabelText('评分摘要')).not.toBeInTheDocument()
   })
 
   it('renders string 1 on top and string 6 on bottom', () => {
