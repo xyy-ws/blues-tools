@@ -144,11 +144,6 @@ export function generateRankedFingerings(root: MusicalKey, quality: ChordQuality
           nextNonZero.push(Number.parseInt(value, 10))
         }
 
-        if (nextNonZero.length > 1) {
-          const span = Math.max(...nextNonZero) - Math.min(...nextNonZero)
-          if (span > 3) continue
-        }
-
         partial.push(value)
         walk(stringIndex + 1, partial, nextNonZero)
         partial.pop()
