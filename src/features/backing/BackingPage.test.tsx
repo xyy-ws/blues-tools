@@ -66,6 +66,17 @@ describe('BackingPage', () => {
     expect(screen.getByText('状态：stopped')).toBeInTheDocument()
   })
 
+  it('allows selecting meter and persists it to localStorage', () => {
+    renderPage()
+
+    fireEvent.change(screen.getByLabelText('伴奏拍号'), { target: { value: '6/8' } })
+
+    const raw = localStorage.getItem('blues-tools:state:v1')
+    expect(raw).toBeTruthy()
+    expect(JSON.parse(raw ?? '{}').meter).toBe('6/8')
+    expect(screen.getByLabelText('6/8 节拍指示')).toBeInTheDocument()
+  })
+
   it('shows upload-only empty state for real-track library by default', () => {
     renderPage()
     expect(screen.getByText('暂无已上传实录。请先在下方“上传实录伴奏”中导入音频文件。')).toBeInTheDocument()
@@ -128,6 +139,22 @@ describe('BackingPage', () => {
     expect(screen.getByDisplayValue('96')).toBeInTheDocument()
     expect(screen.getByText('当前小节：11 · 当前拍：1')).toBeInTheDocument()
     expect(screen.getByText('练习来源乐句：lick-b')).toBeInTheDocument()
+  })
+
+  it('persists selected meter and updates beat indicator', async () => {
+    renderPage()
+
+    fireEvent.change(screen.getByLabelText('伴奏拍号'), { target: { value: '12/8' } })
+
+    const indicator = screen.getByLabelText('12/8 节拍指示')
+    expect(indicator).toBeInTheDocument()
+    expect(indicator.querySelectorAll('.beat-dot')).toHaveLength(12)
+
+    await waitFor(() => {
+      const raw = localStorage.getItem('blues-tools:state:v1')
+      expect(raw).not.toBeNull()
+      expect(JSON.parse(raw ?? '{}').meter).toBe('12/8')
+    })
   })
 
   it('shows extraction placeholder', () => {

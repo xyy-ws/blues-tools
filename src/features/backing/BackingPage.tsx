@@ -4,7 +4,18 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import { getTwelveBarBluesProgression } from '../../domain/music/progression'
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
 import { getDefaultState, loadState, saveState, toHydratedTracks, toPersistedTracks } from '../../app/persistence/localState'
-import { GROOVE_PROFILES, buildRealTrackId, inferGrooveId, type GrooveId, type RealTrack } from './backing'
+import {
+  GROOVE_PROFILES,
+  SUPPORTED_METERS,
+  buildRealTrackId,
+  getMeterBeatIntervalMs,
+  getMeterProfile,
+  inferGrooveId,
+  isAccentedBeat,
+  type GrooveId,
+  type MeterSignature,
+  type RealTrack,
+} from './backing'
 import { createBackingClickPlayer } from './backingAudio'
 import { createPlaceholderBackingExtractorService } from './backingExtractor'
 
@@ -15,7 +26,6 @@ const PROGRESSION_PRESETS: Array<{ id: ProgressionPreset; label: string }> = [
 ]
 
 const BAR_COUNT = 12
-const BEATS_PER_BAR = 4
 const extractorService = createPlaceholderBackingExtractorService()
 
 export function BackingPage() {
@@ -41,6 +51,7 @@ export function BackingPage() {
   const [selectedKey, setSelectedKey] = useState<MusicalKey>(initial.selectedKey)
   const [bpm, setBpm] = useState(initial.bpm)
   const [preset, setPreset] = useState<ProgressionPreset>(initial.preset)
+  const [meter, setMeter] = useState<MeterSignature>(initial.meter ?? '4/4')
   const [selectedGroove, setSelectedGroove] = useState<GrooveId>('slow-shuffle')
   const [tracks, setTracks] = useState<RealTrack[]>(toHydratedTracks(initial.tracks))
   const [selectedRealTrackId, setSelectedRealTrackId] = useState('')
@@ -62,6 +73,7 @@ export function BackingPage() {
 
   const selectedRealTrack = useMemo(() => tracks.find((track) => track.id === selectedRealTrackId) ?? tracks[0] ?? null, [tracks, selectedRealTrackId])
   const progression = useMemo(() => getTwelveBarBluesProgression(selectedKey, preset), [preset, selectedKey])
+  const meterProfile = useMemo(() => getMeterProfile(meter), [meter])
 
   useEffect(() => {
     const existing = loadState() ?? getDefaultState()
@@ -69,31 +81,44 @@ export function BackingPage() {
       selectedKey,
       bpm,
       preset,
+      meter,
       mode: existing.mode,
       tracks: toPersistedTracks(tracks),
       improvKey: existing.improvKey,
       improvPreset: existing.improvPreset,
       fretboardKey: existing.fretboardKey,
     })
-  }, [selectedKey, bpm, preset, tracks])
+  }, [selectedKey, bpm, preset, meter, tracks])
 
   useEffect(() => {
     if (playbackState !== 'playing' || currentSource !== 'synth') return
 
-    const beatIntervalMs = Math.max(120, Math.round((60_000 / Math.max(bpm, 1)) * 0.75))
+    const beatIntervalMs = getMeterBeatIntervalMs(bpm, meter)
     const timer = window.setInterval(() => {
       setCurrentBeat((prevBeat) => {
-        const nextBeat = prevBeat < BEATS_PER_BAR ? prevBeat + 1 : 1
-        if (prevBeat >= BEATS_PER_BAR) {
+        const nextBeat = prevBeat < meterProfile.beatsPerBar ? prevBeat + 1 : 1
+        if (prevBeat >= meterProfile.beatsPerBar) {
           setCurrentBar((prevBar) => (prevBar % BAR_COUNT) + 1)
         }
-        clickPlayerRef.current.playBeat(nextBeat === 1)
+        clickPlayerRef.current.playBeat(isAccentedBeat(meter, nextBeat))
         return nextBeat
       })
     }, beatIntervalMs)
 
     return () => window.clearInterval(timer)
-  }, [bpm, playbackState, currentSource])
+  }, [bpm, meter, meterProfile.beatsPerBar, playbackState, currentSource])
+
+  useEffect(() => {
+    if (currentBeat > meterProfile.beatsPerBar) {
+      setCurrentBeat(1)
+    }
+  }, [currentBeat, meterProfile.beatsPerBar])
+
+  useEffect(() => {
+    if (currentBeat > meterProfile.beatsPerBar) {
+      setCurrentBeat(1)
+    }
+  }, [currentBeat, meterProfile.beatsPerBar])
 
   useEffect(() => {
     if (!selectedRealTrackId && tracks[0]) {
@@ -217,7 +242,7 @@ export function BackingPage() {
     setCurrentBeat(1)
   }
 
-  const progressPercent = (((currentBar - 1) * BEATS_PER_BAR + currentBeat) / (BAR_COUNT * BEATS_PER_BAR)) * 100
+  const progressPercent = (((currentBar - 1) * meterProfile.beatsPerBar + currentBeat) / (BAR_COUNT * meterProfile.beatsPerBar)) * 100
   const selectedGrooveProfile = GROOVE_PROFILES.find((item) => item.id === selectedGroove)
 
   return (
@@ -264,6 +289,17 @@ export function BackingPage() {
           </label>
 
           <label className="control">
+            拍号
+            <select aria-label="伴奏拍号" value={meter} onChange={(e) => setMeter(e.target.value as MeterSignature)}>
+              {SUPPORTED_METERS.map((meterOption) => (
+                <option key={meterOption} value={meterOption}>
+                  {meterOption}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="control">
             律动预设
             <select
               aria-label="伴奏律动"
@@ -297,8 +333,8 @@ export function BackingPage() {
         <div className="bar-progress" aria-label="当前小节进度">
           <div className="bar-progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
-        <div className="beat-indicator" aria-label="1-2-3-4 节拍指示">
-          {[1, 2, 3, 4].map((beat) => (
+        <div className="beat-indicator" aria-label={`${meter} 节拍指示`}>
+          {Array.from({ length: meterProfile.beatsPerBar }, (_, index) => index + 1).map((beat) => (
             <span key={beat} className={`beat-dot${currentBeat === beat ? ' active' : ''}`}>
               {beat}
             </span>

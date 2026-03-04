@@ -1,5 +1,5 @@
 import type { MusicalKey, ProgressionPreset } from '../../domain/music/types'
-import type { BackingMode, GrooveId, RealTrack } from '../../features/backing/backing'
+import { SUPPORTED_METERS, type BackingMode, type GrooveId, type MeterSignature, type RealTrack } from '../../features/backing/backing'
 
 const STORAGE_KEY = 'blues-tools:state:v1'
 
@@ -18,6 +18,7 @@ export interface PersistedState {
   selectedKey: MusicalKey
   bpm: number
   preset: ProgressionPreset
+  meter: MeterSignature
   mode: BackingMode
   tracks: PersistedTrackMetadata[]
   improvKey?: MusicalKey
@@ -30,6 +31,7 @@ export function getDefaultState(): PersistedState {
     selectedKey: 'C',
     bpm: 90,
     preset: 'standard-12',
+    meter: '4/4',
     mode: 'auto',
     tracks: [],
     improvKey: 'C',
@@ -50,6 +52,7 @@ export function loadState(): PersistedState | null {
 
   try {
     const parsed = JSON.parse(raw) as PersistedState
+    parsed.meter = SUPPORTED_METERS.includes(parsed.meter) ? parsed.meter : '4/4'
     parsed.tracks = (parsed.tracks ?? []).map((track) => ({
       ...track,
       grooveId: track.grooveId ?? 'slow-shuffle',

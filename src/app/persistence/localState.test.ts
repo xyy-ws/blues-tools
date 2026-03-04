@@ -7,6 +7,7 @@ describe('localState persistence', () => {
       selectedKey: 'C',
       bpm: 90,
       preset: 'standard-12',
+      meter: '4/4',
       mode: 'auto',
       tracks: [],
       improvKey: 'E',
@@ -21,6 +22,37 @@ describe('localState persistence', () => {
   it('returns null for malformed data', () => {
     localStorage.setItem('blues-tools:state:v1', '{bad-json')
     expect(loadState()).toBeNull()
+  })
+
+  it('defaults meter to 4/4 for backward compatibility', () => {
+    localStorage.setItem(
+      'blues-tools:state:v1',
+      JSON.stringify({
+        selectedKey: 'C',
+        bpm: 90,
+        preset: 'standard-12',
+        mode: 'auto',
+        tracks: [],
+      }),
+    )
+
+    expect(loadState()?.meter).toBe('4/4')
+  })
+
+  it('falls back to 4/4 when persisted meter is unsupported', () => {
+    localStorage.setItem(
+      'blues-tools:state:v1',
+      JSON.stringify({
+        selectedKey: 'C',
+        bpm: 90,
+        preset: 'standard-12',
+        meter: '5/4',
+        mode: 'auto',
+        tracks: [],
+      }),
+    )
+
+    expect(loadState()?.meter).toBe('4/4')
   })
 
   it('serializes and hydrates tracks without object URLs', () => {

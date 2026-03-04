@@ -4,6 +4,16 @@ export type BackingMode = 'synth' | 'real' | 'auto'
 
 export type GrooveId = 'slow-shuffle' | 'chicago-shuffle' | 'texas-straight' | 'custom'
 
+export const SUPPORTED_METERS = ['2/4', '3/4', '4/4', '6/8', '12/8'] as const
+export type MeterSignature = (typeof SUPPORTED_METERS)[number]
+
+export interface MeterProfile {
+  signature: MeterSignature
+  beatsPerBar: number
+  beatUnit: 4 | 8
+  accentBeats: number[]
+}
+
 export interface GrooveProfile {
   id: GrooveId
   displayName: string
@@ -65,6 +75,15 @@ export interface PlaybackResolution {
 }
 
 const BPM_TOLERANCE = 10
+const LEGACY_SWING_FACTOR = 0.75
+
+const METER_PROFILES: Record<MeterSignature, MeterProfile> = {
+  '2/4': { signature: '2/4', beatsPerBar: 2, beatUnit: 4, accentBeats: [1] },
+  '3/4': { signature: '3/4', beatsPerBar: 3, beatUnit: 4, accentBeats: [1] },
+  '4/4': { signature: '4/4', beatsPerBar: 4, beatUnit: 4, accentBeats: [1, 3] },
+  '6/8': { signature: '6/8', beatsPerBar: 6, beatUnit: 8, accentBeats: [1, 4] },
+  '12/8': { signature: '12/8', beatsPerBar: 12, beatUnit: 8, accentBeats: [1, 4, 7, 10] },
+}
 
 export function findBestRealTrack(selection: BackingSelection, tracks: RealTrack[]): RealTrack | null {
   const candidates = tracks.filter(
@@ -121,4 +140,22 @@ export function inferGrooveId(input: string): GrooveId {
   if (text.includes('chicago') || text.includes('芝加哥')) return 'chicago-shuffle'
   if (text.includes('shuffle') || text.includes('slow') || text.includes('慢速')) return 'slow-shuffle'
   return 'custom'
+}
+
+export function getMeterProfile(meter: MeterSignature | null | undefined): MeterProfile {
+  if (!meter || !(meter in METER_PROFILES)) return METER_PROFILES['4/4']
+  return METER_PROFILES[meter]
+}
+
+export function isAccentedBeat(meter: MeterSignature | null | undefined, beat: number): boolean {
+  const profile = getMeterProfile(meter)
+  if (beat < 1 || beat > profile.beatsPerBar) return false
+  return profile.accentBeats.includes(beat)
+}
+
+export function getMeterBeatIntervalMs(bpm: number, meter: MeterSignature | null | undefined): number {
+  const profile = getMeterProfile(meter)
+  const quarterNoteMs = (60_000 / Math.max(bpm, 1)) * LEGACY_SWING_FACTOR
+  const beatMs = quarterNoteMs * (4 / profile.beatUnit)
+  return Math.max(120, Math.round(beatMs))
 }
