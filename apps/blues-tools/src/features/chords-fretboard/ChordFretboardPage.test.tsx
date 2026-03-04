@@ -75,11 +75,24 @@ describe('ChordFretboardPage', () => {
     fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
+    const patterns = Array.from(voicingSelect.options)
+      .map((option) => option.textContent ?? '')
+      .map((text) => text.match(/[0-9x]{6}/)?.[0])
+      .filter((value): value is string => Boolean(value))
 
-    expect(optionTexts.some((text) => text.includes('0x0102'))).toBe(true)
-    expect(optionTexts.some((text) => text.includes('0xx137'))).toBe(false)
-    expect(optionTexts.some((text) => text.includes('5x2009'))).toBe(false)
+    const span = (pattern: string) => {
+      const fretted = pattern
+        .split('')
+        .filter((value) => value !== 'x')
+        .map((value) => Number(value))
+        .filter((value) => value > 0)
+      if (fretted.length === 0) return 0
+      return Math.max(...fretted) - Math.min(...fretted)
+    }
+
+    expect(patterns.length).toBeGreaterThan(0)
+    expect(patterns.every((pattern) => span(pattern) <= 3)).toBe(true)
+    expect(patterns.some((pattern) => pattern === '5x2009')).toBe(false)
   })
 
   it('keeps common strummable E major shape visible and usable', () => {
@@ -118,6 +131,17 @@ describe('ChordFretboardPage', () => {
     expect(sourcePanel).toHaveTextContent('来源类型：')
     expect(sourcePanel).toHaveTextContent('可信度等级：')
     expect(sourcePanel).toHaveTextContent('校验状态：')
+  })
+
+  it('uses chords-db traceability label for curated selector voicings', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'E' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
+    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
+
+    const sourcePanel = screen.getByLabelText('指型来源追溯')
+    expect(sourcePanel).toHaveTextContent('chords-db 吉他和弦库')
   })
 
   it('caps default displayed voicing count to top 5', () => {

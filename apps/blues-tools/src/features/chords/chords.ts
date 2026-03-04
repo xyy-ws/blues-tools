@@ -1,6 +1,6 @@
 import type { MusicalKey } from '../../domain/music/types'
 import { inferBassInversion, validateChordPattern, validateChordPlayability } from './chordValidation'
-import { CURATED_CHORD_SHAPES } from './curatedShapes'
+import { CURATED_CHORD_SHAPES } from './chordsDbAdapter'
 import { generateRankedFingerings } from './algorithmicFingerings'
 
 export type ChordQuality = 'maj' | 'm' | '5' | '6' | 'm6' | 'sus2' | 'sus4' | 'add9' | 'dim' | 'dim7' | 'aug' | '7' | 'maj7' | 'm7' | 'm7b5' | '9' | 'maj9' | 'm9'
@@ -66,32 +66,23 @@ const CHORD_SOURCES: Record<string, ChordSource> = {
     confidenceLevel: 'medium',
     notes: '按和弦音/可演奏性规则搜索并排序',
   },
-  justin: {
-    id: 'justin',
-    title: 'JustinGuitar Chord Library',
-    publisherOrAuthor: 'Justin Sandercoe',
-    url: 'https://www.justinguitar.com/chords',
-    sourceName: 'JustinGuitar 和弦库',
+  chordsDb: {
+    id: 'chordsDb',
+    title: '@tombatossals/chords-db guitar dataset',
+    publisherOrAuthor: 'Tom Batossals contributors',
+    url: 'https://github.com/tombatossals/chords-db',
+    sourceName: 'chords-db 吉他和弦库',
     sourceType: '指型参考',
     confidenceLevel: 'high',
   },
-  chordRocks: {
-    id: 'chordRocks',
-    title: 'Chord.rocks practical guitar voicings',
-    publisherOrAuthor: 'chord.rocks',
-    url: 'https://chord.rocks/guitar/chords',
-    sourceName: 'Chord.rocks 实战指型',
-    sourceType: '指型参考',
-    confidenceLevel: 'high',
-  },
-  guitaristsReference: {
-    id: 'guitaristsReference',
-    title: 'Guitarists Reference chord forms',
-    publisherOrAuthor: 'Guitarists Reference',
-    url: 'https://www.guitaristsreference.com/',
-    sourceName: 'Guitarists Reference 常用和弦',
+  legacy: {
+    id: 'legacy',
+    title: 'Legacy curated fallback shapes',
+    publisherOrAuthor: 'blues-tools',
+    sourceName: '历史补充指型',
     sourceType: '课程实践',
     confidenceLevel: 'medium',
+    notes: '仅用于 chords-db 未覆盖的性质（例如 power chord 5）',
   },
 }
 
