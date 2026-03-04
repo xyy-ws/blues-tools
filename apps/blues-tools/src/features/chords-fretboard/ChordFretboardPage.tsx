@@ -141,7 +141,20 @@ export function ChordFretboardPage() {
     if (!resolvedRootString || resolvedInversion === undefined) return []
     const curated = getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
     const generated = getRankedGeneratedChordVoicings(root, quality, resolvedRootString, resolvedInversion, 20)
-    const combined = sourceFilter === 'curated' ? curated : sourceFilter === 'generated' ? generated : [...generated, ...curated]
+
+    const dedupeByPattern = (items: typeof curated) => {
+      const seen = new Set<string>()
+      return items.filter((item) => {
+        if (seen.has(item.pattern)) return false
+        seen.add(item.pattern)
+        return true
+      })
+    }
+
+    const curatedDeduped = dedupeByPattern(curated)
+    const generatedDeduped = generated.filter((item) => !curatedDeduped.some((curatedItem) => curatedItem.pattern === item.pattern))
+
+    const combined = sourceFilter === 'curated' ? curatedDeduped : sourceFilter === 'generated' ? dedupeByPattern(generated) : [...curatedDeduped, ...generatedDeduped]
 
     return combined.filter((entry) => getMaxFrettedPosition(entry.pattern) <= MAX_DEFAULT_DISPLAY_FRET)
   }, [quality, resolvedInversion, resolvedRootString, root, sourceFilter])
