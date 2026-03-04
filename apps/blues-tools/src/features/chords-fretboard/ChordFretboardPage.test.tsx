@@ -68,7 +68,7 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByLabelText('按法建议')).toBeInTheDocument()
   })
 
-  it('keeps selector voicings whose fretted span is within 4 frets', () => {
+  it('keeps selector voicings whose fretted span distance is within 3 frets', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
@@ -95,7 +95,7 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByText(/当前按法变体：/)).toHaveTextContent('022100')
   })
 
-  it('keeps D7 root-string-5 voicing visible when span is 4 frets', () => {
+  it('filters out D7 root-string-5 voicings whose fretted span distance exceeds 3 frets', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'D' } })
@@ -106,8 +106,7 @@ describe('ChordFretboardPage', () => {
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
 
-    expect(optionTexts.some((text) => text.includes('x5x212'))).toBe(true)
-    expect(screen.queryByRole('alert')).not.toBeInTheDocument()
+    expect(optionTexts.some((text) => text.includes('x5x212'))).toBe(false)
   })
 
   it('shows shape-level source traceability metadata for selected standard fingering', () => {

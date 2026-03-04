@@ -53,7 +53,7 @@ const INVERSION_LABELS: Record<Inversion, string> = {
 }
 
 const DEFAULT_VISIBLE_VOICINGS = 5
-const MAX_FRETTED_SPAN = 4
+const MAX_FRETTED_SPAN = 3
 
 function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret: number }> {
   return pattern
