@@ -3,7 +3,6 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
 import {
   getChordVoicingOptions,
-  getRankedGeneratedChordVoicings,
   getInversionOptionsFor,
   getRootStringOptions,
   hasStandardChordShapes,
@@ -52,7 +51,6 @@ const INVERSION_LABELS: Record<Inversion, string> = {
   3: '第三转位（7th 最低）',
 }
 
-const DEFAULT_VISIBLE_VOICINGS = 5
 const MAX_FRETTED_SPAN = 3
 
 function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret: number }> {
@@ -109,8 +107,6 @@ export function ChordFretboardPage() {
   const [voicingIndex, setVoicingIndex] = useState(0)
   const [inversion, setInversion] = useState<Inversion>(0)
   const [fretRange, setFretRange] = useState<FretRange>('0-7')
-  const [sourceFilter, setSourceFilter] = useState<'all' | 'generated' | 'curated'>('all')
-  const [showAllVoicings, setShowAllVoicings] = useState(false)
 
   const playableRootStrings = useMemo(() => getRootStringOptions(root, quality), [quality, root])
   const resolvedRootString = playableRootStrings.includes(rootString) ? rootString : playableRootStrings[0]
@@ -125,7 +121,6 @@ export function ChordFretboardPage() {
     if (resolvedRootString && rootString !== resolvedRootString) {
       setRootString(resolvedRootString)
       setVoicingIndex(0)
-      setShowAllVoicings(false)
     }
   }, [resolvedRootString, rootString])
 
@@ -133,36 +128,21 @@ export function ChordFretboardPage() {
     if (resolvedInversion !== undefined && inversion !== resolvedInversion) {
       setInversion(resolvedInversion)
       setVoicingIndex(0)
-      setShowAllVoicings(false)
     }
   }, [resolvedInversion, inversion])
 
-  const allFingeringEntries = useMemo(() => {
+  const fingeringEntries = useMemo(() => {
     if (!resolvedRootString || resolvedInversion === undefined) return []
-    const curated = getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
-    const generated = getRankedGeneratedChordVoicings(root, quality, resolvedRootString, resolvedInversion, 20)
 
-    const dedupeByPattern = (items: typeof curated) => {
-      const seen = new Set<string>()
-      return items.filter((item) => {
-        if (seen.has(item.pattern)) return false
-        seen.add(item.pattern)
+    const seen = new Set<string>()
+    return getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
+      .filter((entry) => {
+        if (seen.has(entry.pattern)) return false
+        seen.add(entry.pattern)
         return true
       })
-    }
-
-    const curatedDeduped = dedupeByPattern(curated)
-    const generatedDeduped = generated.filter((item) => !curatedDeduped.some((curatedItem) => curatedItem.pattern === item.pattern))
-
-    const combined = sourceFilter === 'curated' ? curatedDeduped : sourceFilter === 'generated' ? dedupeByPattern(generated) : [...curatedDeduped, ...generatedDeduped]
-
-    return combined.filter((entry) => getFrettedSpan(entry.pattern) <= MAX_FRETTED_SPAN)
-  }, [quality, resolvedInversion, resolvedRootString, root, sourceFilter])
-  const fingeringEntries = useMemo(
-    () => (showAllVoicings ? allFingeringEntries : allFingeringEntries.slice(0, DEFAULT_VISIBLE_VOICINGS)),
-    [allFingeringEntries, showAllVoicings],
-  )
-  const hiddenVoicingCount = Math.max(0, allFingeringEntries.length - fingeringEntries.length)
+      .filter((entry) => getFrettedSpan(entry.pattern) <= MAX_FRETTED_SPAN)
+  }, [quality, resolvedInversion, resolvedRootString, root])
 
   useEffect(() => {
     if (voicingIndex >= fingeringEntries.length) {
@@ -203,7 +183,6 @@ export function ChordFretboardPage() {
             onChange={(e) => {
               setRoot(e.target.value as MusicalKey)
               setVoicingIndex(0)
-              setShowAllVoicings(false)
             }}
           >
             {CHROMATIC_KEYS.map((key) => (
@@ -223,7 +202,6 @@ export function ChordFretboardPage() {
               const next = e.target.value as ChordQuality
               setQuality(next)
               setVoicingIndex(0)
-              setShowAllVoicings(false)
             }}
           >
             {Object.entries(QUALITY_LABELS).map(([value, label]) => {
@@ -245,7 +223,6 @@ export function ChordFretboardPage() {
             onChange={(e) => {
               setRootString(Number(e.target.value) as RootString)
               setVoicingIndex(0)
-              setShowAllVoicings(false)
             }}
             disabled={playableRootStrings.length === 0}
           >
@@ -265,7 +242,6 @@ export function ChordFretboardPage() {
             onChange={(e) => {
               setInversion(Number(e.target.value) as Inversion)
               setVoicingIndex(0)
-              setShowAllVoicings(false)
             }}
             disabled={inversionOptions.length === 0}
           >
@@ -274,23 +250,6 @@ export function ChordFretboardPage() {
                 {INVERSION_LABELS[inv]}
               </option>
             ))}
-          </select>
-        </label>
-
-        <label className="control">
-          指型来源
-          <select
-            aria-label="指型来源"
-            value={sourceFilter}
-            onChange={(e) => {
-              setSourceFilter(e.target.value as 'all' | 'generated' | 'curated')
-              setVoicingIndex(0)
-              setShowAllVoicings(false)
-            }}
-          >
-            <option value="all">综合（算法 + 标准库）</option>
-            <option value="generated">算法生成</option>
-            <option value="curated">标准库</option>
           </select>
         </label>
 
@@ -304,7 +263,7 @@ export function ChordFretboardPage() {
           >
             {fingeringEntries.map((entry, index) => (
               <option key={`${entry.pattern}-${index}`} value={index}>
-                变体 {index + 1} · {entry.pattern} · {entry.sourceKind === 'generated' ? '算法生成' : '标准库'}
+                变体 {index + 1} · {entry.pattern} · 标准库
               </option>
             ))}
           </select>
@@ -332,20 +291,8 @@ export function ChordFretboardPage() {
               当前转位：<strong>{INVERSION_LABELS[resolvedInversion ?? 0]}</strong>
             </p>
             <p>
-              当前按法变体：<strong>变体 {voicingIndex + 1} / {fingeringEntries.length}</strong>（{selectedPattern}）
-              {selectedEntry?.sourceKind === 'generated' ? ' · 算法生成' : ' · 标准库'}
-              {hiddenVoicingCount > 0 ? ` · 已隐藏 ${hiddenVoicingCount} 个候选` : ''}
+              当前按法变体：<strong>变体 {voicingIndex + 1} / {fingeringEntries.length}</strong>（{selectedPattern}） · 标准库
             </p>
-            {selectedEntry?.sourceKind === 'generated' ? (
-              <div className="inline-actions" aria-label="评分摘要">
-                <span className="badge info">评分 {selectedEntry.rankingScore?.toFixed(1) ?? '--'}</span>
-                {(selectedEntry.rankingBadges ?? []).map((badge) => (
-                  <span key={badge} className="badge success">
-                    {badge}
-                  </span>
-                ))}
-              </div>
-            ) : null}
             <div className="card-nested" aria-label="指型来源追溯" style={{ marginTop: 8 }}>
               <p className="muted helper-text" style={{ marginTop: 0 }}>
                 来源名称：<strong>{selectedEntry?.shapeSource.source.sourceName ?? '未标注'}</strong>
@@ -363,32 +310,6 @@ export function ChordFretboardPage() {
               ) : null}
               <p className="muted helper-text">说明：{selectedEntry?.note ?? selectedEntry?.shapeSource.verificationNotes ?? selectedEntry?.source.notes ?? '此按法来自可验证和弦资料。'}</p>
             </div>
-            {hiddenVoicingCount > 0 ? (
-              <div className="inline-actions" style={{ marginTop: 8 }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowAllVoicings(true)
-                    setVoicingIndex(0)
-                  }}
-                >
-                  显示更多（+{hiddenVoicingCount}）
-                </button>
-              </div>
-            ) : null}
-            {showAllVoicings && allFingeringEntries.length > DEFAULT_VISIBLE_VOICINGS ? (
-              <div className="inline-actions" style={{ marginTop: 8 }}>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowAllVoicings(false)
-                    setVoicingIndex(0)
-                  }}
-                >
-                  收起到前 {DEFAULT_VISIBLE_VOICINGS} 个
-                </button>
-              </div>
-            ) : null}
             {voicingConstrained ? (
               <p className="muted helper-text" role="status">
                 当前组合仅有 {fingeringEntries.length} 个通过严格校验的按法；可切换根音弦或转位以尝试更多按法。

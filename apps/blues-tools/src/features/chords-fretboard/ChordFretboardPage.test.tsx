@@ -138,14 +138,18 @@ describe('ChordFretboardPage', () => {
     expect(sourcePanel).toHaveTextContent('chords-db 吉他和弦库')
   })
 
-  it('caps default displayed voicing count to top 5', () => {
+  it('shows all available variants by default (no top-5 cap)', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'E' } })
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    expect(voicingSelect.options.length).toBe(1)
+    const summary = screen.getByText(/当前按法变体：/).textContent ?? ''
+    const total = Number(summary.match(/\/\s*(\d+)/)?.[1] ?? '0')
+
+    expect(voicingSelect.options.length).toBeGreaterThan(0)
+    expect(total).toBe(voicingSelect.options.length)
     expect(screen.queryByRole('button', { name: /显示更多/ })).not.toBeInTheDocument()
     expect(screen.queryByRole('button', { name: /收起到前/ })).not.toBeInTheDocument()
   })
