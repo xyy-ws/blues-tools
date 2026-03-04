@@ -1,0 +1,102 @@
+# Chords-DB Parity Audit
+
+- generatedAt: 2026-03-04T07:41:27.526Z
+- combinations: 204
+- matched: 165
+- mismatched: 39
+- dbCandidates: 817
+- appStrictPass: 773
+- excluded: 44
+
+## Dmaj9 Focus
+- dbCandidateCount: 4
+- appStrictPassCount: 3
+- excludedCount: 1
+- exclusionReasons: tonal=1, playability=0, other=0
+- excludedExamples:
+  - x5464x: tonal missing=[A,E] extra=[D#]
+
+## Mismatches (dbCandidateCount != appStrictPassCount)
+- C dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - x,x,10,11,x,11: playability contains inner muted-string gaps with too few anchor tones
+- C 9: db=5, app=3, excluded=2, reasons(tonal/playability/other)=2/0/0
+  - 032030: tonal missing=[A#] extra=[]
+  - 8,10,8,7,8,10: tonal missing=[E] extra=[]
+- C# dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - x,x,11,12,x,12: playability contains inner muted-string gaps with too few anchor tones
+- C# aug: db=4, app=2, excluded=2, reasons(tonal/playability/other)=2/0/0
+  - x44422: tonal missing=[F,A] extra=[F#,B]
+  - 446474: tonal missing=[F,A] extra=[G#,B,F#]
+- D dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - xx01x1: playability contains inner muted-string gaps with too few anchor tones
+- D dim7: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - x,8,0,10,9,7: playability open-string + high-fret stretch not common-practice (max fret 10)
+- D add9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/1/0
+  - x,x,0,9,7,10: tonal missing=[A] extra=[] | playability open-string + high-fret stretch not common-practice (max fret 10)
+- D m7b5: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - x,8,0,10,9,8: playability open-string + high-fret stretch not common-practice (max fret 10)
+- D maj9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - x5464x: tonal missing=[A,E] extra=[D#]
+- D# dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - xx12x2: playability contains inner muted-string gaps with too few anchor tones
+- D# m9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - x,x,8,10,7,9: tonal missing=[D#] extra=[]
+- D# maj9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - x,x,12,12,11,13: tonal missing=[D#] extra=[]
+- E dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - xx23x3: playability contains inner muted-string gaps with too few anchor tones
+- E sus4: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - x,x,9,9,10,0: playability open-string + high-fret stretch not common-practice (max fret 10)
+- E aug: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - 12,11,10,9,9,0: playability open-string + high-fret stretch not common-practice (max fret 12)
+- E 9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - 0,9,9,9,9,10: playability open-string + high-fret stretch not common-practice (max fret 10)
+- E m9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - 0,10,12,11,12,10: playability open-string + high-fret stretch not common-practice (max fret 12)
+- E maj9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - x,x,9,11,9,11: tonal missing=[E] extra=[]
+- F dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - xx34x4: playability contains inner muted-string gaps with too few anchor tones
+- F add9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - xx3065: tonal missing=[C] extra=[]
+- F m7b5: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - 13,11,13,13,0,x: playability open-string + high-fret stretch not common-practice (max fret 13)
+- F m9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - 13,11,13,0,13,13: playability open-string + high-fret stretch not common-practice (max fret 13)
+- F maj9: db=4, app=2, excluded=2, reasons(tonal/playability/other)=2/0/0
+  - xx2213: tonal missing=[F] extra=[]
+  - x,x,10,12,10,12: tonal missing=[F] extra=[]
+- F# dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - xx45x5: playability contains inner muted-string gaps with too few anchor tones
+- F# m9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - x,x,11,13,10,12: tonal missing=[F#] extra=[]
+- G dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - xx56x6: playability contains inner muted-string gaps with too few anchor tones
+- G add9: db=4, app=2, excluded=2, reasons(tonal/playability/other)=1/1/0
+  - xx3214: tonal missing=[G,B,D] extra=[F,C,G#]
+  - x,10,9,0,10,10: playability open-string + high-fret stretch not common-practice (max fret 10)
+- G maj9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - xx4435: tonal missing=[G] extra=[]
+- G# dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - xx67x7: playability contains inner muted-string gaps with too few anchor tones
+- A maj: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - x,0,7,9,10,9: playability open-string + high-fret stretch not common-practice (max fret 10)
+- A m: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - x,0,7,9,10,8: playability open-string + high-fret stretch not common-practice (max fret 10)
+- A dim: db=4, app=2, excluded=2, reasons(tonal/playability/other)=1/1/0
+  - 53x43x: tonal missing=[D#] extra=[B,D]
+  - xx78x8: playability contains inner muted-string gaps with too few anchor tones
+- A# dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - xx89x9: playability contains inner muted-string gaps with too few anchor tones
+- A# 6: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - x,13,11,11,10,x: tonal missing=[D,F,G] extra=[C#,F#,A]
+- A# add9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/1/0
+  - xx87x8: tonal missing=[F] extra=[] | playability contains inner muted-string gaps with too few anchor tones
+- A# m9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - xx3524: tonal missing=[A#] extra=[]
+- B dim: db=4, app=3, excluded=1, reasons(tonal/playability/other)=0/1/0
+  - x,x,9,10,x,10: playability contains inner muted-string gaps with too few anchor tones
+- B aug: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/1/0
+  - x,14,13,12,12,0: tonal missing=[] extra=[E] | playability open-string + high-fret stretch not common-practice (max fret 14)
+- B maj9: db=4, app=3, excluded=1, reasons(tonal/playability/other)=1/0/0
+  - xx4646: tonal missing=[B] extra=[]

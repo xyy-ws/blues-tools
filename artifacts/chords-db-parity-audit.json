@@ -1,0 +1,3786 @@
+{
+  "generatedAt": "2026-03-04T07:41:27.526Z",
+  "totals": {
+    "combinations": 204,
+    "matched": 165,
+    "mismatched": 39,
+    "dbCandidates": 817,
+    "appStrictPass": 773,
+    "excluded": 44
+  },
+  "mismatches": [
+    {
+      "root": "C",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,10,11,x,11",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "C",
+      "quality": "9",
+      "dbCandidateCount": 5,
+      "appStrictPassCount": 3,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 2,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "032030",
+          "reasons": [
+            "tonal missing=[A#] extra=[]"
+          ]
+        },
+        {
+          "pattern": "8,10,8,7,8,10",
+          "reasons": [
+            "tonal missing=[E] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "C#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,11,12,x,12",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "C#",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 2,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 2,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x44422",
+          "reasons": [
+            "tonal missing=[F,A] extra=[F#,B]"
+          ]
+        },
+        {
+          "pattern": "446474",
+          "reasons": [
+            "tonal missing=[F,A] extra=[G#,B,F#]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx01x1",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,8,0,10,9,7",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,0,9,7,10",
+          "reasons": [
+            "tonal missing=[A] extra=[]",
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,8,0,10,9,8",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x5464x",
+          "reasons": [
+            "tonal missing=[A,E] extra=[D#]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx12x2",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D#",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,8,10,7,9",
+          "reasons": [
+            "tonal missing=[D#] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D#",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,12,12,11,13",
+          "reasons": [
+            "tonal missing=[D#] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx23x3",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,9,9,10,0",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "12,11,10,9,9,0",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 12)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "0,9,9,9,9,10",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "0,10,12,11,12,10",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 12)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,9,11,9,11",
+          "reasons": [
+            "tonal missing=[E] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx34x4",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx3065",
+          "reasons": [
+            "tonal missing=[C] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "13,11,13,13,0,x",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 13)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "13,11,13,0,13,13",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 13)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 2,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 2,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx2213",
+          "reasons": [
+            "tonal missing=[F] extra=[]"
+          ]
+        },
+        {
+          "pattern": "x,x,10,12,10,12",
+          "reasons": [
+            "tonal missing=[F] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx45x5",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F#",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,11,13,10,12",
+          "reasons": [
+            "tonal missing=[F#] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "G",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx56x6",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "G",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 2,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx3214",
+          "reasons": [
+            "tonal missing=[G,B,D] extra=[F,C,G#]"
+          ]
+        },
+        {
+          "pattern": "x,10,9,0,10,10",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "G",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx4435",
+          "reasons": [
+            "tonal missing=[G] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "G#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx67x7",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,0,7,9,10,9",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,0,7,9,10,8",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 2,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "53x43x",
+          "reasons": [
+            "tonal missing=[D#] extra=[B,D]"
+          ]
+        },
+        {
+          "pattern": "xx78x8",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx89x9",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,13,11,11,10,x",
+          "reasons": [
+            "tonal missing=[D,F,G] extra=[C#,F#,A]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx87x8",
+          "reasons": [
+            "tonal missing=[F] extra=[]",
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx3524",
+          "reasons": [
+            "tonal missing=[A#] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "B",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,9,10,x,10",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "B",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,14,13,12,12,0",
+          "reasons": [
+            "tonal missing=[] extra=[E]",
+            "playability open-string + high-fret stretch not common-practice (max fret 14)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "B",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx4646",
+          "reasons": [
+            "tonal missing=[B] extra=[]"
+          ]
+        }
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "root": "C",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,10,11,x,11",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "C",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "9",
+      "dbCandidateCount": 5,
+      "appStrictPassCount": 3,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 2,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "032030",
+          "reasons": [
+            "tonal missing=[A#] extra=[]"
+          ]
+        },
+        {
+          "pattern": "8,10,8,7,8,10",
+          "reasons": [
+            "tonal missing=[E] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "C",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,11,12,x,12",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "C#",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 2,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 2,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x44422",
+          "reasons": [
+            "tonal missing=[F,A] extra=[F#,B]"
+          ]
+        },
+        {
+          "pattern": "446474",
+          "reasons": [
+            "tonal missing=[F,A] extra=[G#,B,F#]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "C#",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "maj7",
+      "dbCandidateCount": 3,
+      "appStrictPassCount": 3,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "C#",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx01x1",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,8,0,10,9,7",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,0,9,7,10",
+          "reasons": [
+            "tonal missing=[A] extra=[]",
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,8,0,10,9,8",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x5464x",
+          "reasons": [
+            "tonal missing=[A,E] extra=[D#]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D#",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx12x2",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D#",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,8,10,7,9",
+          "reasons": [
+            "tonal missing=[D#] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "D#",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "D#",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,12,12,11,13",
+          "reasons": [
+            "tonal missing=[D#] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx23x3",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,9,9,10,0",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "12,11,10,9,9,0",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 12)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "0,9,9,9,9,10",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "m7",
+      "dbCandidateCount": 5,
+      "appStrictPassCount": 5,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "0,10,12,11,12,10",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 12)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "E",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "E",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,9,11,9,11",
+          "reasons": [
+            "tonal missing=[E] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx34x4",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx3065",
+          "reasons": [
+            "tonal missing=[C] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "13,11,13,13,0,x",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 13)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "13,11,13,0,13,13",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 13)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 2,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 2,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx2213",
+          "reasons": [
+            "tonal missing=[F] extra=[]"
+          ]
+        },
+        {
+          "pattern": "x,x,10,12,10,12",
+          "reasons": [
+            "tonal missing=[F] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F#",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx45x5",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F#",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,11,13,10,12",
+          "reasons": [
+            "tonal missing=[F#] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "F#",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "F#",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx56x6",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "G",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 2,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx3214",
+          "reasons": [
+            "tonal missing=[G,B,D] extra=[F,C,G#]"
+          ]
+        },
+        {
+          "pattern": "x,10,9,0,10,10",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "G",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx4435",
+          "reasons": [
+            "tonal missing=[G] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "G#",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx67x7",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "G#",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "G#",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,0,7,9,10,9",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,0,7,9,10,8",
+          "reasons": [
+            "playability open-string + high-fret stretch not common-practice (max fret 10)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 2,
+      "excludedCount": 2,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "53x43x",
+          "reasons": [
+            "tonal missing=[D#] extra=[B,D]"
+          ]
+        },
+        {
+          "pattern": "xx78x8",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx89x9",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,13,11,11,10,x",
+          "reasons": [
+            "tonal missing=[D,F,G] extra=[C#,F#,A]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx87x8",
+          "reasons": [
+            "tonal missing=[F] extra=[]",
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx3524",
+          "reasons": [
+            "tonal missing=[A#] extra=[]"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "A#",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "A#",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "maj",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "m",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "dim",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,x,9,10,x,10",
+          "reasons": [
+            "playability contains inner muted-string gaps with too few anchor tones"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "B",
+      "quality": "dim7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "sus2",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "sus4",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "aug",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 1,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "x,14,13,12,12,0",
+          "reasons": [
+            "tonal missing=[] extra=[E]",
+            "playability open-string + high-fret stretch not common-practice (max fret 14)"
+          ]
+        }
+      ]
+    },
+    {
+      "root": "B",
+      "quality": "6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "add9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "m6",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "m7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "m7b5",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "m9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "maj7",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 4,
+      "excludedCount": 0,
+      "exclusionReasons": {
+        "tonalFail": 0,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": []
+    },
+    {
+      "root": "B",
+      "quality": "maj9",
+      "dbCandidateCount": 4,
+      "appStrictPassCount": 3,
+      "excludedCount": 1,
+      "exclusionReasons": {
+        "tonalFail": 1,
+        "playabilityFail": 0,
+        "other": 0
+      },
+      "excludedExamples": [
+        {
+          "pattern": "xx4646",
+          "reasons": [
+            "tonal missing=[B] extra=[]"
+          ]
+        }
+      ]
+    }
+  ]
+}
