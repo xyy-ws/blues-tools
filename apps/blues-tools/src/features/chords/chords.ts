@@ -30,6 +30,10 @@ export type ChordShapeSourceRef = {
   verificationNotes?: string
 }
 
+export type VoicingMode = 'strict' | 'complete'
+
+export type VoicingFailureReason = 'tonal-fail' | 'playability-fail'
+
 export type ChordVoicingOption = {
   pattern: string
   inversion: Inversion
@@ -43,6 +47,8 @@ export type ChordVoicingOption = {
   sourceKind?: 'curated' | 'generated'
   rankingScore?: number
   rankingBadges?: string[]
+  strictPass?: boolean
+  failReasons?: VoicingFailureReason[]
 }
 
 type StandardChordShape = {
@@ -205,7 +211,7 @@ function finalizeShapes(rawShapes: StandardChordShape[]) {
   return { curated, records }
 }
 
-const { curated: STANDARD_CHORD_SHAPES, records: CHORD_LIBRARY_VALIDATION_REPORT } = finalizeShapes(CURATED_CHORD_SHAPES)
+const { records: CHORD_LIBRARY_VALIDATION_REPORT } = finalizeShapes(CURATED_CHORD_SHAPES)
 
 export { CHORD_LIBRARY_VALIDATION_REPORT }
 
@@ -222,14 +228,33 @@ function confidenceBySource(source: ChordSource): number {
   return 0.62
 }
 
+type VoicingValidationSummary = {
+  strictPass: boolean
+  failReasons: VoicingFailureReason[]
+}
+
+export function getVoicingValidationSummary(root: MusicalKey, quality: ChordQuality, pattern: string): VoicingValidationSummary {
+  const tonal = validateChordPattern(root, quality, pattern)
+  const playability = validateChordPlayability(pattern)
+  const failReasons: VoicingFailureReason[] = []
+
+  if (tonal.status !== 'PASS') failReasons.push('tonal-fail')
+  if (playability.status !== 'PASS') failReasons.push('playability-fail')
+
+  return {
+    strictPass: failReasons.length === 0,
+    failReasons,
+  }
+}
+
 export function getRootStringOptions(root: MusicalKey, quality: ChordQuality): RootString[] {
-  return [...new Set(STANDARD_CHORD_SHAPES.filter((shape) => shape.root === root && shape.quality === quality).map((shape) => shape.rootString))] as RootString[]
+  return [...new Set(CURATED_CHORD_SHAPES.filter((shape) => shape.root === root && shape.quality === quality).map((shape) => shape.rootString))] as RootString[]
 }
 
 export function getInversionOptionsFor(root: MusicalKey, quality: ChordQuality, rootString: RootString): Inversion[] {
   return [
     ...new Set(
-      STANDARD_CHORD_SHAPES
+      CURATED_CHORD_SHAPES
         .filter((shape) => shape.root === root && shape.quality === quality && shape.rootString === rootString)
         .map((shape) => shape.inversion),
     ),
@@ -237,7 +262,7 @@ export function getInversionOptionsFor(root: MusicalKey, quality: ChordQuality, 
 }
 
 export function hasStandardChordShapes(root: MusicalKey, quality: ChordQuality): boolean {
-  return STANDARD_CHORD_SHAPES.some((shape) => shape.root === root && shape.quality === quality)
+  return CURATED_CHORD_SHAPES.some((shape) => shape.root === root && shape.quality === quality)
 }
 
 export function getChordVoicingOptions(
@@ -245,10 +270,12 @@ export function getChordVoicingOptions(
   quality: ChordQuality,
   rootString: RootString = 6,
   inversion: Inversion | ChordInversion = 0,
+  mode: VoicingMode = 'strict',
 ): ChordVoicingOption[] {
   const inversionNumber = toInversionNumber(inversion)
-  const selected = STANDARD_CHORD_SHAPES
+  const selected = CURATED_CHORD_SHAPES
     .filter((shape) => shape.root === root && shape.quality === quality && shape.rootString === rootString && shape.inversion === inversionNumber)
+    .filter((shape) => mode === 'complete' || getVoicingValidationSummary(root, quality, shape.pattern).strictPass)
     .slice()
     .sort((a, b) => shapeRank(a.pattern) - shapeRank(b.pattern) || a.pattern.localeCompare(b.pattern))
 
@@ -260,6 +287,8 @@ export function getChordVoicingOptions(
       verificationNotes: shape.verificationNotes ?? shape.labelZh,
     }
 
+    const validation = getVoicingValidationSummary(root, quality, shape.pattern)
+
     return {
       pattern: shape.pattern,
       inversion: shape.inversion,
@@ -270,6 +299,8 @@ export function getChordVoicingOptions(
       note: shape.labelZh,
       isApproximateFallback: false,
       sourceKind: 'curated',
+      strictPass: validation.strictPass,
+      failReasons: validation.failReasons,
     }
   })
 }

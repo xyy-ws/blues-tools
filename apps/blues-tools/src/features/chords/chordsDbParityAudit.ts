@@ -1,8 +1,7 @@
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
-import { validateChordPattern, validateChordPlayability } from './chordValidation'
 import { CURATED_CHORD_SHAPES } from './chordsDbAdapter'
-import { getChordVoicingOptions, getInversionOptionsFor, getRootStringOptions, type ChordQuality } from './chords'
+import { getChordVoicingOptions, getInversionOptionsFor, getRootStringOptions, getVoicingValidationSummary, type ChordQuality } from './chords'
 
 const DB_SUPPORTED_QUALITIES: ChordQuality[] = [
   'maj',
@@ -73,19 +72,18 @@ function getAppSelectorStrictPass(root: MusicalKey, quality: ChordQuality): Set<
 }
 
 function bucketReasons(root: MusicalKey, quality: ChordQuality, pattern: string): { buckets: ExclusionReasonBuckets; reasons: string[] } {
-  const tonal = validateChordPattern(root, quality, pattern)
-  const playability = validateChordPlayability(pattern)
+  const validation = getVoicingValidationSummary(root, quality, pattern)
   const reasons: string[] = []
   const buckets: ExclusionReasonBuckets = { tonalFail: 0, playabilityFail: 0, other: 0 }
 
-  if (tonal.status !== 'PASS') {
+  if (validation.failReasons.includes('tonal-fail')) {
     buckets.tonalFail += 1
-    reasons.push(`tonal missing=[${tonal.missingTones.join(',')}] extra=[${tonal.extraTones.join(',')}]`)
+    reasons.push('tonal fail')
   }
 
-  if (playability.status !== 'PASS') {
+  if (validation.failReasons.includes('playability-fail')) {
     buckets.playabilityFail += 1
-    reasons.push(...playability.reasons.map((reason) => `playability ${reason}`))
+    reasons.push('playability fail')
   }
 
   if (reasons.length === 0) {

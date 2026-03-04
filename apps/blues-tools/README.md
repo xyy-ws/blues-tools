@@ -14,6 +14,9 @@
 - **即兴 / Improv**
   - 12 小节计时与当前和弦提示
 - **和弦 / Chords** 与 **乐句库 / Knowledge** 页面（基础内容）
+- **和弦与指板 / Chord Fretboard**
+  - 严格模式（默认）：仅显示 tonal + 可演奏性双 PASS 按法
+  - 完整模式：显示同根音/性质上下文的全部 chords-db 按法，并标注 `tonal fail` / `playability fail`
 - **本地持久化 (localStorage)**
   - 保存并恢复：selected key / bpm / preset / mode
   - 保存并恢复：导入音轨元数据（名称、调性、BPM、文件信息）

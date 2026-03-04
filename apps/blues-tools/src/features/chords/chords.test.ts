@@ -81,17 +81,26 @@ describe('standard chord library', () => {
     }
   })
 
-  it('includes all 4 chords-db variants for D9 in selector-facing options', () => {
-    const variants = new Set<string>()
-    for (const rootString of getRootStringOptions('D', '9')) {
-      for (const inversion of getInversionOptionsFor('D', '9', rootString)) {
-        for (const entry of getChordVoicingOptions('D', '9', rootString, inversion)) {
-          variants.add(entry.pattern)
+  it('Dmaj9 complete mode exposes all 4 chords-db voicings with one tonal fail', () => {
+    const strictVariants = new Set<string>()
+    const completeVariants = new Set<string>()
+    let tonalFailCount = 0
+
+    for (const rootString of getRootStringOptions('D', 'maj9')) {
+      for (const inversion of getInversionOptionsFor('D', 'maj9', rootString)) {
+        for (const entry of getChordVoicingOptions('D', 'maj9', rootString, inversion)) {
+          strictVariants.add(entry.pattern)
+        }
+        for (const entry of getChordVoicingOptions('D', 'maj9', rootString, inversion, 'complete')) {
+          completeVariants.add(entry.pattern)
+          if (entry.failReasons?.includes('tonal-fail')) tonalFailCount += 1
         }
       }
     }
 
-    expect(variants.size).toBe(4)
+    expect(strictVariants.size).toBe(3)
+    expect(completeVariants.size).toBe(4)
+    expect(tonalFailCount).toBe(1)
   })
 
   it('provides representative standard voicings for newly supported practical quality families', () => {

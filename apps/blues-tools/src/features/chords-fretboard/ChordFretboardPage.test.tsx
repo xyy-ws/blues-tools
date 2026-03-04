@@ -94,14 +94,48 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByText(/当前按法变体：/)).toHaveTextContent('022100')
   })
 
-  it('shows all validated variants by default (no selector fret-span clipping)', () => {
+  it('default strict mode only shows strict-pass variants', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'D' } })
-    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj9' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    expect(voicingSelect.options.length).toBe(1)
+    expect(Array.from(voicingSelect.options).every((option) => !(option.textContent ?? '').includes('tonal fail'))).toBe(true)
+  })
+
+  it('complete mode shows extra failed voicings with reason tags', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'D' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj9' } })
+    fireEvent.change(screen.getByLabelText('根音弦'), { target: { value: '5' } })
+    fireEvent.change(screen.getByLabelText('转位'), { target: { value: '0' } })
+    fireEvent.change(screen.getByLabelText('按法模式'), { target: { value: 'complete' } })
+
+    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
+
     expect(voicingSelect.options.length).toBe(2)
+    expect(optionTexts.some((text) => text.includes('tonal fail'))).toBe(true)
+  })
+
+  it('renders reason tags in summary when failed voicing is selected in complete mode', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'D' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj9' } })
+    fireEvent.change(screen.getByLabelText('根音弦'), { target: { value: '5' } })
+    fireEvent.change(screen.getByLabelText('转位'), { target: { value: '0' } })
+    fireEvent.change(screen.getByLabelText('按法模式'), { target: { value: 'complete' } })
+
+    const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
+    const failedIndex = Array.from(voicingSelect.options).findIndex((option) => (option.textContent ?? '').includes('tonal fail'))
+    expect(failedIndex).toBeGreaterThanOrEqual(0)
+
+    fireEvent.change(voicingSelect, { target: { value: String(failedIndex) } })
+    expect(screen.getByText(/当前按法变体：/)).toHaveTextContent('tonal fail')
   })
 
   it('shows shape-level source traceability metadata for selected standard fingering', () => {

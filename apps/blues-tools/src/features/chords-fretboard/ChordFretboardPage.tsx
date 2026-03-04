@@ -10,6 +10,7 @@ import {
   type ChordQuality,
   type Inversion,
   type RootString,
+  type VoicingMode,
 } from '../chords/chords'
 import { parsePattern } from '../chords/pattern'
 import { getFretNote, STANDARD_TUNING } from '../fretboard/fretboard'
@@ -59,6 +60,16 @@ function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret
   return tokens.map((fret, stringIndex) => (fret === null ? null : { stringIndex, fret })).filter((item): item is { stringIndex: number; fret: number } => item !== null)
 }
 
+function getFailureTagText(failReasons: string[] | undefined): string {
+  if (!failReasons || failReasons.length === 0) return ''
+
+  const labels: string[] = []
+  if (failReasons.includes('tonal-fail')) labels.push('tonal fail')
+  if (failReasons.includes('playability-fail')) labels.push('playability fail')
+
+  return labels.join(' + ')
+}
+
 function getFingeringHint(pattern: string): string {
   const tokens = parsePattern(pattern)
   const frets = (tokens ?? []).filter((fret): fret is number => fret !== null)
@@ -87,6 +98,7 @@ export function ChordFretboardPage() {
   const [voicingIndex, setVoicingIndex] = useState(0)
   const [inversion, setInversion] = useState<Inversion>(0)
   const [fretRange, setFretRange] = useState<FretRange>('0-7')
+  const [voicingMode, setVoicingMode] = useState<VoicingMode>('strict')
 
   const playableRootStrings = useMemo(() => getRootStringOptions(root, quality), [quality, root])
   const resolvedRootString = playableRootStrings.includes(rootString) ? rootString : playableRootStrings[0]
@@ -115,12 +127,12 @@ export function ChordFretboardPage() {
     if (!resolvedRootString || resolvedInversion === undefined) return []
 
     const seen = new Set<string>()
-    return getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion).filter((entry) => {
+    return getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion, voicingMode).filter((entry) => {
       if (seen.has(entry.pattern)) return false
       seen.add(entry.pattern)
       return true
     })
-  }, [quality, resolvedInversion, resolvedRootString, root])
+  }, [quality, resolvedInversion, resolvedRootString, root, voicingMode])
 
   useEffect(() => {
     if (voicingIndex >= fingeringEntries.length) {
@@ -149,7 +161,7 @@ export function ChordFretboardPage() {
     <section className="page">
       <h1 className="page-title">和弦与指板</h1>
       <p className="muted helper-text">
-        按法变体（Voicing）= 同一转位下的不同按法；转位（Inversion）= 低音音级变化（根音/三音/五音/七音）。
+        按法变体（Voicing）= 同一转位下的不同按法；转位（Inversion）= 低音音级变化（根音/三音/五音/七音）。严格模式仅显示双重校验通过，完整模式显示全部 chords-db 按法并标注失败原因。
       </p>
 
       <div className="card grid-3 card-controls">
@@ -239,11 +251,25 @@ export function ChordFretboardPage() {
             onChange={(e) => setVoicingIndex(Number(e.target.value))}
             disabled={voicingConstrained}
           >
-            {fingeringEntries.map((entry, index) => (
-              <option key={`${entry.pattern}-${index}`} value={index}>
-                变体 {index + 1} · {entry.pattern} · 标准库
-              </option>
-            ))}
+            {fingeringEntries.map((entry, index) => {
+              const failTag = voicingMode === 'complete' && !entry.strictPass ? ` · ${getFailureTagText(entry.failReasons)}` : ''
+              return (
+                <option key={`${entry.pattern}-${index}`} value={index}>
+                  变体 {index + 1} · {entry.pattern} · 标准库{failTag}
+                </option>
+              )
+            })}
+          </select>
+        </label>
+
+        <label className="control">
+          按法模式
+          <select aria-label="按法模式" value={voicingMode} onChange={(e) => {
+            setVoicingMode(e.target.value as VoicingMode)
+            setVoicingIndex(0)
+          }}>
+            <option value="strict">严格模式（仅严格校验通过）</option>
+            <option value="complete">完整模式（显示全部并标注失败原因）</option>
           </select>
         </label>
 
@@ -270,6 +296,7 @@ export function ChordFretboardPage() {
             </p>
             <p>
               当前按法变体：<strong>变体 {voicingIndex + 1} / {fingeringEntries.length}</strong>（{selectedPattern}） · 标准库
+              {voicingMode === 'complete' && selectedEntry && !selectedEntry.strictPass ? ` · ${getFailureTagText(selectedEntry.failReasons)}` : ''}
             </p>
             <div className="card-nested" aria-label="指型来源追溯" style={{ marginTop: 8 }}>
               <p className="muted helper-text" style={{ marginTop: 0 }}>
@@ -290,12 +317,18 @@ export function ChordFretboardPage() {
             </div>
             {voicingConstrained ? (
               <p className="muted helper-text" role="status">
-                当前组合仅有 {fingeringEntries.length} 个通过严格校验的按法；可切换根音弦或转位以尝试更多按法。
+                {voicingMode === 'strict'
+                  ? `当前组合仅有 ${fingeringEntries.length} 个通过严格校验的按法；可切换根音弦或转位以尝试更多按法。`
+                  : `当前组合仅有 ${fingeringEntries.length} 个按法；完整模式会保留未通过严格校验的指型并标注原因。`}
               </p>
             ) : null}
           </>
         ) : (
-          <p className="muted helper-text" role="alert">该组合暂无通过严格校验的可用指型（0 个结果）。请切换根音、性质、根音弦或转位。</p>
+          <p className="muted helper-text" role="alert">
+            {voicingMode === 'strict'
+              ? '该组合暂无通过严格校验的可用指型（0 个结果）。请切换根音、性质、根音弦或转位，或改用完整模式查看全部。'
+              : '该组合暂无可用指型（0 个结果）。请切换根音、性质、根音弦或转位。'}
+          </p>
         )}
         <p className="muted helper-text" style={{ marginBottom: 8 }}>
           记谱格式为 EADGBe（x 表示闷音）。先选转位，再切换同转位下的按法变体。
