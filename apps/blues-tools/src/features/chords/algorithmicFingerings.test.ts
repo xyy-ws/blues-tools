@@ -26,4 +26,19 @@ describe('generateRankedFingerings', () => {
     expect(generateRankedFingerings('E', '7', 6, 0, 1).length).toBeLessThanOrEqual(1)
     expect(generateRankedFingerings('E', '7', 6, 0, Number.POSITIVE_INFINITY).length).toBeGreaterThan(1)
   })
+
+  it('enforces selector span policy (non-zero fret distance <= 3)', () => {
+    const result = generateRankedFingerings('E', '7', 6, 0, 30)
+
+    for (const item of result) {
+      const nonZeroFrets = item.pattern
+        .split('')
+        .map((char) => (char === 'x' ? null : Number.parseInt(char, 10)))
+        .filter((fret): fret is number => fret !== null && !Number.isNaN(fret) && fret > 0)
+
+      if (nonZeroFrets.length < 2) continue
+      const span = Math.max(...nonZeroFrets) - Math.min(...nonZeroFrets)
+      expect(span).toBeLessThanOrEqual(3)
+    }
+  })
 })

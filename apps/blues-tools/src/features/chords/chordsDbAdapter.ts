@@ -207,7 +207,7 @@ function dedupeShapes(shapes: CuratedChordShape[]): CuratedChordShape[] {
   const deduped: CuratedChordShape[] = []
 
   for (const shape of shapes) {
-    const key = `${shape.root}|${shape.quality}|${shape.rootString}|${shape.inversion}|${shape.pattern}`
+    const key = `${shape.root}|${shape.quality}|${shape.pattern}`
     if (seen.has(key)) continue
     seen.add(key)
     deduped.push(shape)

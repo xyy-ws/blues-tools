@@ -146,7 +146,7 @@ export function generateRankedFingerings(root: MusicalKey, quality: ChordQuality
 
         if (nextNonZero.length > 1) {
           const span = Math.max(...nextNonZero) - Math.min(...nextNonZero)
-          if (span > 4) continue
+          if (span > 3) continue
         }
 
         partial.push(value)

@@ -30,7 +30,7 @@ describe('chordsDbAdapter', () => {
   })
 
   it('deduplicates repeated root-quality-pattern entries', () => {
-    const key = (item: (typeof CURATED_CHORD_SHAPES)[number]) => `${item.root}|${item.quality}|${item.rootString}|${item.inversion}|${item.pattern}`
+    const key = (item: (typeof CURATED_CHORD_SHAPES)[number]) => `${item.root}|${item.quality}|${item.pattern}`
     const keys = CURATED_CHORD_SHAPES.map(key)
     expect(new Set(keys).size).toBe(keys.length)
   })
