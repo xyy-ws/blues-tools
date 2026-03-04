@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom'
 import { LicksDemoSection, buildLickPracticeUrl } from './LicksDemoSection'
@@ -88,17 +88,25 @@ describe('LicksDemoSection', () => {
       </MemoryRouter>,
     )
 
-    fireEvent.click(screen.getByRole('button', { name: '播放' }))
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: '播放' }))
+    })
     expect(screen.getByText('播放中（乐句）')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: '只播放伴奏' }))
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: '只播放伴奏' }))
+    })
     expect(screen.getByText('播放中（仅伴奏）')).toBeInTheDocument()
 
-    vi.advanceTimersByTime(300)
-    fireEvent.click(screen.getByRole('button', { name: '暂停' }))
+    act(() => {
+      vi.advanceTimersByTime(300)
+      fireEvent.click(screen.getByRole('button', { name: '暂停' }))
+    })
     expect(screen.getByText('已暂停（仅伴奏）')).toBeInTheDocument()
 
-    fireEvent.click(screen.getByRole('button', { name: '停止' }))
+    act(() => {
+      fireEvent.click(screen.getByRole('button', { name: '停止' }))
+    })
     expect(screen.getByText('已停止')).toBeInTheDocument()
   })
 
