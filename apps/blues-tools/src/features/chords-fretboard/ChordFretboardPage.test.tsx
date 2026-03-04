@@ -35,7 +35,7 @@ describe('ChordFretboardPage', () => {
   it('keeps standard-library-only rendering without approximate fallback badge', () => {
     render(<ChordFretboardPage />)
 
-    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'B' } })
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'E' } })
 
     const qualitySelect = screen.getByLabelText('和弦性质') as HTMLSelectElement
     fireEvent.change(qualitySelect, { target: { value: '9' } })
@@ -68,15 +68,17 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByLabelText('按法建议')).toBeInTheDocument()
   })
 
-  it('keeps practical compact dominant voicings in selector and excludes blocked garbage', () => {
+  it('keeps low-position voicings in selector and excludes shapes above 4th fret', () => {
     render(<ChordFretboardPage />)
 
-    fireEvent.click(screen.getByRole('button', { name: /显示更多/ }))
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
+    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
 
-    expect(optionTexts.some((text) => text.includes('0xx137'))).toBe(true)
+    expect(optionTexts.some((text) => text.includes('0x0102'))).toBe(true)
+    expect(optionTexts.some((text) => text.includes('0xx137'))).toBe(false)
     expect(optionTexts.some((text) => text.includes('5x2009'))).toBe(false)
   })
 
@@ -91,6 +93,16 @@ describe('ChordFretboardPage', () => {
 
     expect(optionTexts.some((text) => text.includes('022100'))).toBe(true)
     expect(screen.getByText(/当前按法变体：/)).toHaveTextContent('022100')
+  })
+
+  it('shows existing unsupported message when all voicings for a combo are above 4th fret', () => {
+    render(<ChordFretboardPage />)
+
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'B' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
+    fireEvent.change(screen.getByLabelText('指型来源'), { target: { value: 'curated' } })
+
+    expect(screen.getByRole('alert')).toHaveTextContent('该组合暂无通过严格校验的可用指型（0 个结果）')
   })
 
   it('shows shape-level source traceability metadata for selected standard fingering', () => {

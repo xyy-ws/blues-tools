@@ -53,6 +53,7 @@ const INVERSION_LABELS: Record<Inversion, string> = {
 }
 
 const DEFAULT_VISIBLE_VOICINGS = 5
+const MAX_DEFAULT_DISPLAY_FRET = 4
 
 function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret: number }> {
   return pattern
@@ -64,6 +65,17 @@ function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret
       return { stringIndex, fret }
     })
     .filter((item): item is { stringIndex: number; fret: number } => item !== null)
+}
+
+function getMaxFrettedPosition(pattern: string): number {
+  const frettedPositions = pattern
+    .split('')
+    .filter((value) => value !== 'x' && value !== 'X')
+    .map((value) => Number.parseInt(value, 10))
+    .filter((value) => !Number.isNaN(value) && value > 0)
+
+  if (frettedPositions.length === 0) return 0
+  return Math.max(...frettedPositions)
 }
 
 function getFingeringHint(pattern: string): string {
@@ -129,9 +141,9 @@ export function ChordFretboardPage() {
     if (!resolvedRootString || resolvedInversion === undefined) return []
     const curated = getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
     const generated = getRankedGeneratedChordVoicings(root, quality, resolvedRootString, resolvedInversion, 20)
-    if (sourceFilter === 'curated') return curated
-    if (sourceFilter === 'generated') return generated
-    return [...generated, ...curated]
+    const combined = sourceFilter === 'curated' ? curated : sourceFilter === 'generated' ? generated : [...generated, ...curated]
+
+    return combined.filter((entry) => getMaxFrettedPosition(entry.pattern) <= MAX_DEFAULT_DISPLAY_FRET)
   }, [quality, resolvedInversion, resolvedRootString, root, sourceFilter])
   const fingeringEntries = useMemo(
     () => (showAllVoicings ? allFingeringEntries : allFingeringEntries.slice(0, DEFAULT_VISIBLE_VOICINGS)),
