@@ -53,7 +53,7 @@ const INVERSION_LABELS: Record<Inversion, string> = {
 }
 
 const DEFAULT_VISIBLE_VOICINGS = 5
-const MAX_DEFAULT_DISPLAY_FRET = 4
+const MAX_FRETTED_SPAN = 4
 
 function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret: number }> {
   return pattern
@@ -67,7 +67,7 @@ function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret
     .filter((item): item is { stringIndex: number; fret: number } => item !== null)
 }
 
-function getMaxFrettedPosition(pattern: string): number {
+function getFrettedSpan(pattern: string): number {
   const frettedPositions = pattern
     .split('')
     .filter((value) => value !== 'x' && value !== 'X')
@@ -75,7 +75,7 @@ function getMaxFrettedPosition(pattern: string): number {
     .filter((value) => !Number.isNaN(value) && value > 0)
 
   if (frettedPositions.length === 0) return 0
-  return Math.max(...frettedPositions)
+  return Math.max(...frettedPositions) - Math.min(...frettedPositions)
 }
 
 function getFingeringHint(pattern: string): string {
@@ -156,7 +156,7 @@ export function ChordFretboardPage() {
 
     const combined = sourceFilter === 'curated' ? curatedDeduped : sourceFilter === 'generated' ? dedupeByPattern(generated) : [...curatedDeduped, ...generatedDeduped]
 
-    return combined.filter((entry) => getMaxFrettedPosition(entry.pattern) <= MAX_DEFAULT_DISPLAY_FRET)
+    return combined.filter((entry) => getFrettedSpan(entry.pattern) <= MAX_FRETTED_SPAN)
   }, [quality, resolvedInversion, resolvedRootString, root, sourceFilter])
   const fingeringEntries = useMemo(
     () => (showAllVoicings ? allFingeringEntries : allFingeringEntries.slice(0, DEFAULT_VISIBLE_VOICINGS)),
