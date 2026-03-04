@@ -67,36 +67,25 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByLabelText('按法建议')).toBeInTheDocument()
   })
 
-  it('keeps selector voicings whose fretted span distance is within 3 frets', () => {
+  it('keeps strict playability gating for D9 selector options', () => {
     render(<ChordFretboardPage />)
 
+    fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'D' } })
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    const patterns = Array.from(voicingSelect.options)
-      .map((option) => option.textContent ?? '')
-      .map((text) => text.match(/[0-9x]{6}/)?.[0])
-      .filter((value): value is string => Boolean(value))
+    const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
 
-    const span = (pattern: string) => {
-      const fretted = pattern
-        .split('')
-        .filter((value) => value !== 'x')
-        .map((value) => Number(value))
-        .filter((value) => value > 0)
-      if (fretted.length === 0) return 0
-      return Math.max(...fretted) - Math.min(...fretted)
-    }
-
-    expect(patterns.length).toBeGreaterThan(0)
-    expect(patterns.every((pattern) => span(pattern) <= 3)).toBe(true)
-    expect(patterns.some((pattern) => pattern === '5x2009')).toBe(false)
+    expect(optionTexts.length).toBeGreaterThanOrEqual(1)
+    expect(optionTexts.some((text) => text.includes('5x2009'))).toBe(false)
   })
 
   it('keeps common strummable E major shape visible and usable', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: 'maj' } })
+    fireEvent.change(screen.getByLabelText('根音弦'), { target: { value: '6' } })
+    fireEvent.change(screen.getByLabelText('转位'), { target: { value: '0' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
     const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
@@ -105,17 +94,14 @@ describe('ChordFretboardPage', () => {
     expect(screen.getByText(/当前按法变体：/)).toHaveTextContent('022100')
   })
 
-  it('filters out D7 root-string-5 voicings whose fretted span distance exceeds 3 frets', () => {
+  it('shows all validated variants by default (no selector fret-span clipping)', () => {
     render(<ChordFretboardPage />)
 
     fireEvent.change(screen.getByLabelText('和弦根音'), { target: { value: 'D' } })
-    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '7' } })
-    fireEvent.change(screen.getByLabelText('根音弦'), { target: { value: '5' } })
+    fireEvent.change(screen.getByLabelText('和弦性质'), { target: { value: '9' } })
 
     const voicingSelect = screen.getByLabelText('按法变体') as HTMLSelectElement
-    const optionTexts = Array.from(voicingSelect.options).map((option) => option.textContent ?? '')
-
-    expect(optionTexts.some((text) => text.includes('x5x212'))).toBe(false)
+    expect(voicingSelect.options.length).toBe(2)
   })
 
   it('shows shape-level source traceability metadata for selected standard fingering', () => {

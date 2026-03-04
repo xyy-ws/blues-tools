@@ -34,4 +34,10 @@ describe('chordsDbAdapter', () => {
     const keys = CURATED_CHORD_SHAPES.map(key)
     expect(new Set(keys).size).toBe(keys.length)
   })
+
+  it('keeps high-fret chords-db variants using multi-digit-safe encoding', () => {
+    const d9HighFret = CURATED_CHORD_SHAPES.filter((item) => item.root === 'D' && item.quality === '9').map((item) => item.pattern)
+    expect(d9HighFret.some((pattern) => pattern.includes('10') || pattern.includes('11') || pattern.includes('12'))).toBe(true)
+    expect(d9HighFret.some((pattern) => pattern.includes(','))).toBe(true)
+  })
 })

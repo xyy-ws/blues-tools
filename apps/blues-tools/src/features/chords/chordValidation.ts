@@ -2,6 +2,7 @@ import { Chord, Note } from '@tonaljs/tonal'
 import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
 import type { ChordQuality, RootString } from './chords'
+import { CHORD_STRING_COUNT, parsePattern, stringifyPattern } from './pattern'
 
 export type TonalValidationStatus = 'PASS' | 'WARN' | 'FAIL'
 
@@ -107,23 +108,12 @@ export function deriveTargetChordTones(root: MusicalKey, quality: ChordQuality):
 }
 
 export function computePatternTones(pattern: string): MusicalKey[] {
-  if (!isValidPatternFormat(pattern)) {
+  const parsed = parsePattern(pattern)
+  if (!parsed) {
     return []
   }
 
-  return [
-    ...new Set(
-      pattern
-        .split('')
-        .map((char, stringIndex) => {
-          if (char === 'x') return null
-          const fret = Number.parseInt(char, 10)
-          if (Number.isNaN(fret)) return null
-          return semitoneOffset(OPEN_STRINGS[stringIndex], fret)
-        })
-        .filter((note): note is MusicalKey => note !== null),
-    ),
-  ]
+  return [...new Set(parsed.map((fret, stringIndex) => (fret === null ? null : semitoneOffset(OPEN_STRINGS[stringIndex], fret))).filter((note): note is MusicalKey => note !== null))]
 }
 
 export function validateChordPattern(root: MusicalKey, quality: ChordQuality, pattern: string): TonalValidationResult {
@@ -163,18 +153,11 @@ export function validateChordPattern(root: MusicalKey, quality: ChordQuality, pa
 }
 
 export function inferBassInversion(root: MusicalKey, quality: ChordQuality, pattern: string): number {
-  if (!isValidPatternFormat(pattern)) return 0
+  const parsed = parsePattern(pattern)
+  if (!parsed) return 0
 
   const expectedTones = deriveTargetChordTones(root, quality)
-  const bassTone = pattern
-    .split('')
-    .map((char, stringIndex) => {
-      if (char === 'x') return null
-      const fret = Number.parseInt(char, 10)
-      if (Number.isNaN(fret)) return null
-      return semitoneOffset(OPEN_STRINGS[stringIndex], fret)
-    })
-    .find((note): note is MusicalKey => note !== null)
+  const bassTone = parsed.map((fret, stringIndex) => (fret === null ? null : semitoneOffset(OPEN_STRINGS[stringIndex], fret))).find((note): note is MusicalKey => note !== null)
 
   if (!bassTone) return 0
   const inversionIndex = expectedTones.indexOf(bassTone)
@@ -183,30 +166,27 @@ export function inferBassInversion(root: MusicalKey, quality: ChordQuality, patt
 }
 
 export function inferRootString(pattern: string): RootString {
-  if (!isValidPatternFormat(pattern)) return 6
+  const parsed = parsePattern(pattern)
+  if (!parsed) return 6
 
-  const chars = pattern.split('')
-  const firstActive = chars.findIndex((char) => char !== 'x')
+  const firstActive = parsed.findIndex((fret) => fret !== null)
   if (firstActive <= 0) return 6
   if (firstActive === 1) return 5
   return 4
 }
 
-const NON_PLAYABLE_PATTERNS = new Set(['5x2009'])
+const NON_PLAYABLE_PATTERNS = new Set(['5,x,2,0,0,9'])
 
 function isValidPatternFormat(pattern: string): boolean {
-  return pattern.length === 6 && /^[0-9x]+$/.test(pattern)
+  return parsePattern(pattern) !== null
 }
 
 function validatePatternFormat(pattern: string): string[] {
-  const reasons: string[] = []
-  if (pattern.length !== 6) {
-    reasons.push(`pattern length must be 6 (got ${pattern.length})`)
-  }
-  if (!/^[0-9x]+$/.test(pattern)) {
-    reasons.push('pattern contains invalid characters (only 0-9 and lowercase x allowed)')
-  }
-  return reasons
+  return isValidPatternFormat(pattern)
+    ? []
+    : [
+        `pattern must encode ${CHORD_STRING_COUNT} strings using digits or x (legacy compact: 6 chars; multi-digit format: comma/space delimited)`,
+      ]
 }
 
 export function validateChordPlayability(pattern: string): PlayabilityValidationResult {
@@ -215,15 +195,19 @@ export function validateChordPlayability(pattern: string): PlayabilityValidation
     return { status: 'FAIL', reasons: formatReasons }
   }
 
-  if (NON_PLAYABLE_PATTERNS.has(pattern)) {
+  const parsed = parsePattern(pattern)
+  const canonical = parsed ? stringifyPattern(parsed) : null
+
+  if (canonical && NON_PLAYABLE_PATTERNS.has(canonical)) {
     return { status: 'FAIL', reasons: ['blocked known unreliable shape'] }
   }
 
-  const chars = pattern.split('')
-  const activeStringIndices = chars.map((char, idx) => (char === 'x' ? null : idx)).filter((idx): idx is number => idx !== null)
-  const frets = chars
-    .map((char) => (char === 'x' ? null : Number.parseInt(char, 10)))
-    .filter((fret): fret is number => fret !== null && !Number.isNaN(fret))
+  if (!parsed) {
+    return { status: 'FAIL', reasons: ['invalid pattern format'] }
+  }
+
+  const activeStringIndices = parsed.map((fret, idx) => (fret === null ? null : idx)).filter((idx): idx is number => idx !== null)
+  const frets = parsed.filter((fret): fret is number => fret !== null)
 
   if (frets.length === 0) {
     return { status: 'FAIL', reasons: ['no fretted notes'] }
@@ -240,7 +224,7 @@ export function validateChordPlayability(pattern: string): PlayabilityValidation
   if (activeStringIndices.length > 0) {
     const firstActive = activeStringIndices[0]
     const lastActive = activeStringIndices[activeStringIndices.length - 1]
-    const hasInnerMuteGap = chars.slice(firstActive, lastActive + 1).some((char) => char === 'x')
+    const hasInnerMuteGap = parsed.slice(firstActive, lastActive + 1).some((fret) => fret === null)
     if (hasInnerMuteGap && activeStringIndices.length < 4) {
       reasons.push('contains inner muted-string gaps with too few anchor tones')
     }

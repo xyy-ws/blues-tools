@@ -2,6 +2,7 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
 import { deriveTargetChordTones, inferBassInversion, validateChordPattern, validateChordPlayability } from './chordValidation'
 import type { ChordQuality, Inversion, RootString } from './chords'
+import { parsePattern } from './pattern'
 
 const OPEN_STRINGS: MusicalKey[] = ['E', 'A', 'D', 'G', 'B', 'E']
 
@@ -33,10 +34,9 @@ function noteAt(stringIndex: number, fret: number): MusicalKey {
 }
 
 function buildMetrics(pattern: string): CandidateMetrics {
-  const chars = pattern.split('')
-  const frets = chars
-    .map((char) => (char === 'x' ? null : Number.parseInt(char, 10)))
-    .filter((fret): fret is number => fret !== null && !Number.isNaN(fret))
+  const tokens = parsePattern(pattern)
+  const chars = (tokens ?? []).map((fret) => (fret === null ? 'x' : String(fret)))
+  const frets = (tokens ?? []).filter((fret): fret is number => fret !== null)
 
   const nonZeroFrets = frets.filter((fret) => fret > 0)
   const minFret = nonZeroFrets.length > 0 ? Math.min(...nonZeroFrets) : 0

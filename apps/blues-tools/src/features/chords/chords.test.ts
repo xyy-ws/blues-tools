@@ -10,7 +10,9 @@ import {
   hasStandardChordShapes,
   type ChordQuality,
 } from './chords'
+import { CURATED_CHORD_SHAPES } from './chordsDbAdapter'
 import { validateChordPattern, validateChordPlayability } from './chordValidation'
+import { parsePattern } from './pattern'
 
 const chordPatternStatusCache = new Map<string, ReturnType<typeof validateChordPattern>['status']>()
 const chordPlayabilityStatusCache = new Map<string, ReturnType<typeof validateChordPlayability>['status']>()
@@ -77,6 +79,19 @@ describe('standard chord library', () => {
         expect(getChordFingerings(root, quality, rootStrings[0], inversions[0]).length, `${root} ${quality} should return fingering`).toBeGreaterThan(0)
       }
     }
+  })
+
+  it('includes all 4 chords-db variants for D9 in selector-facing options', () => {
+    const variants = new Set<string>()
+    for (const rootString of getRootStringOptions('D', '9')) {
+      for (const inversion of getInversionOptionsFor('D', '9', rootString)) {
+        for (const entry of getChordVoicingOptions('D', '9', rootString, inversion)) {
+          variants.add(entry.pattern)
+        }
+      }
+    }
+
+    expect(variants.size).toBe(4)
   })
 
   it('provides representative standard voicings for newly supported practical quality families', () => {
@@ -146,5 +161,43 @@ describe('standard chord library', () => {
         expect(getChordPlayabilityStatus(entry.pattern)).toBe('PASS')
       }
     }
+  })
+
+  it('D9 selector includes all chords-db strict-pass variants and reports exact exclusion reasons when any are dropped', () => {
+    const selectorPatterns = new Set<string>()
+    for (const rootString of getRootStringOptions('D', '9')) {
+      for (const inversion of getInversionOptionsFor('D', '9', rootString)) {
+        for (const entry of getChordVoicingOptions('D', '9', rootString, inversion)) {
+          selectorPatterns.add(entry.pattern)
+        }
+      }
+    }
+
+    const d9Source = CURATED_CHORD_SHAPES.filter((shape) => shape.sourceId === 'chordsDb' && shape.root === 'D' && shape.quality === '9')
+    const strictPass = d9Source.filter((shape) => validateChordPattern('D', '9', shape.pattern).status === 'PASS' && validateChordPlayability(shape.pattern).status === 'PASS')
+    const missingStrictPass = strictPass.map((shape) => shape.pattern).filter((pattern) => !selectorPatterns.has(pattern))
+
+    const exclusionDetails = d9Source
+      .filter((shape) => !selectorPatterns.has(shape.pattern))
+      .map((shape) => {
+        const tonal = validateChordPattern('D', '9', shape.pattern)
+        const playable = validateChordPlayability(shape.pattern)
+        return {
+          pattern: shape.pattern,
+          strictPass: tonal.status === 'PASS' && playable.status === 'PASS',
+          reasons: [
+            ...(tonal.status === 'PASS' ? [] : [`tonal=${tonal.status} missing=[${tonal.missingTones.join(',')}] extra=[${tonal.extraTones.join(',')}]`]),
+            ...(playable.status === 'PASS' ? [] : playable.reasons.map((reason) => `playability=${reason}`)),
+          ],
+        }
+      })
+
+    const hasHighFretVariant = d9Source.some((shape) => {
+      const parsed = parsePattern(shape.pattern)
+      return parsed ? parsed.some((fret) => typeof fret === 'number' && fret >= 10) : false
+    })
+
+    expect(hasHighFretVariant).toBe(true)
+    expect(missingStrictPass, `D9 strict-pass variants dropped: ${JSON.stringify(exclusionDetails, null, 2)}`).toEqual([])
   })
 })

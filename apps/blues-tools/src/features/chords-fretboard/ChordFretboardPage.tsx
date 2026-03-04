@@ -11,6 +11,7 @@ import {
   type Inversion,
   type RootString,
 } from '../chords/chords'
+import { parsePattern } from '../chords/pattern'
 import { getFretNote, STANDARD_TUNING } from '../fretboard/fretboard'
 
 type FretRange = '0-7' | '0-12'
@@ -51,37 +52,16 @@ const INVERSION_LABELS: Record<Inversion, string> = {
   3: '第三转位（7th 最低）',
 }
 
-const MAX_FRETTED_SPAN = 3
-
 function getHighlightedFrets(pattern: string): Array<{ stringIndex: number; fret: number }> {
-  return pattern
-    .split('')
-    .map((value, stringIndex) => {
-      if (value === 'x' || value === 'X') return null
-      const fret = Number.parseInt(value, 10)
-      if (Number.isNaN(fret)) return null
-      return { stringIndex, fret }
-    })
-    .filter((item): item is { stringIndex: number; fret: number } => item !== null)
-}
+  const tokens = parsePattern(pattern)
+  if (!tokens) return []
 
-function getFrettedSpan(pattern: string): number {
-  const frettedPositions = pattern
-    .split('')
-    .filter((value) => value !== 'x' && value !== 'X')
-    .map((value) => Number.parseInt(value, 10))
-    .filter((value) => !Number.isNaN(value) && value > 0)
-
-  if (frettedPositions.length === 0) return 0
-  return Math.max(...frettedPositions) - Math.min(...frettedPositions)
+  return tokens.map((fret, stringIndex) => (fret === null ? null : { stringIndex, fret })).filter((item): item is { stringIndex: number; fret: number } => item !== null)
 }
 
 function getFingeringHint(pattern: string): string {
-  const frets = pattern
-    .split('')
-    .filter((value) => value !== 'x' && value !== 'X')
-    .map((value) => Number.parseInt(value, 10))
-    .filter((value) => !Number.isNaN(value))
+  const tokens = parsePattern(pattern)
+  const frets = (tokens ?? []).filter((fret): fret is number => fret !== null)
 
   if (frets.length === 0) return '没有可按的品位。'
 
@@ -135,13 +115,11 @@ export function ChordFretboardPage() {
     if (!resolvedRootString || resolvedInversion === undefined) return []
 
     const seen = new Set<string>()
-    return getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion)
-      .filter((entry) => {
-        if (seen.has(entry.pattern)) return false
-        seen.add(entry.pattern)
-        return true
-      })
-      .filter((entry) => getFrettedSpan(entry.pattern) <= MAX_FRETTED_SPAN)
+    return getChordVoicingOptions(root, quality, resolvedRootString, resolvedInversion).filter((entry) => {
+      if (seen.has(entry.pattern)) return false
+      seen.add(entry.pattern)
+      return true
+    })
   }, [quality, resolvedInversion, resolvedRootString, root])
 
   useEffect(() => {

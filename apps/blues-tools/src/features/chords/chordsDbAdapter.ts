@@ -3,6 +3,7 @@ import { CHROMATIC_KEYS } from '../../domain/music/keys'
 import type { MusicalKey } from '../../domain/music/types'
 import { inferBassInversion } from './chordValidation'
 import type { ChordQuality, Inversion, RootString } from './chords'
+import { CHORD_STRING_COUNT, parsePattern, stringifyPattern } from './pattern'
 
 type ChordsDbPosition = {
   frets: number[]
@@ -127,18 +128,24 @@ function toAbsoluteFret(fret: number, baseFret: number): number {
 }
 
 function toPattern(position: ChordsDbPosition): string | null {
-  if (position.frets.length !== 6) return null
-  const pattern = position.frets
-    .map((fret) => {
-      if (fret < 0) return 'x'
-      const absolute = toAbsoluteFret(fret, position.baseFret)
-      if (absolute < 0 || absolute > 9) return null
-      return String(absolute)
-    })
-    .join('')
+  if (position.frets.length !== CHORD_STRING_COUNT) return null
 
-  if (pattern.includes('null')) return null
-  return pattern
+  const tokens = position.frets.map((fret) => {
+    if (fret < 0) return null
+    const absolute = toAbsoluteFret(fret, position.baseFret)
+    if (absolute < 0) return undefined
+    return absolute
+  })
+
+  if (tokens.some((token) => token === undefined)) return null
+
+  const normalized = tokens as Array<number | null>
+  const allSingleDigit = normalized.every((token) => token === null || token <= 9)
+  if (allSingleDigit) {
+    return normalized.map((token) => (token === null ? 'x' : String(token))).join('')
+  }
+
+  return stringifyPattern(normalized)
 }
 
 function semitoneOffset(from: MusicalKey, semitone: number): MusicalKey {
@@ -147,20 +154,20 @@ function semitoneOffset(from: MusicalKey, semitone: number): MusicalKey {
 }
 
 function inferRootStringFromPattern(root: MusicalKey, pattern: string): RootString | null {
-  const chars = pattern.split('')
+  const tokens = parsePattern(pattern)
+  if (!tokens) return null
+
   const candidates: RootString[] = [6, 5, 4]
 
   for (const rootString of candidates) {
     const stringIndex = 6 - rootString
-    const char = chars[stringIndex]
-    if (char === 'x') continue
-    const fret = Number.parseInt(char, 10)
-    if (Number.isNaN(fret)) continue
+    const fret = tokens[stringIndex]
+    if (fret === null) continue
     const note = semitoneOffset(OPEN_STRINGS[stringIndex], fret)
     if (note === root) return rootString
   }
 
-  const firstActive = chars.findIndex((char) => char !== 'x')
+  const firstActive = tokens.findIndex((fret) => fret !== null)
   if (firstActive <= 0) return 6
   if (firstActive === 1) return 5
   if (firstActive === 2) return 4

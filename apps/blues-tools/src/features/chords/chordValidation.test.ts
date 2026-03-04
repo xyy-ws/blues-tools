@@ -78,4 +78,10 @@ describe('chordValidation', () => {
       expect(validateChordPattern('E', 'maj', pattern).status).toBe('FAIL')
     }
   })
+
+  it('accepts multi-digit delimited patterns at high frets when tonal+playability pass', () => {
+    const pattern = 'x,5,4,5,5,5'
+    expect(validateChordPattern('D', '9', pattern).status).toBe('PASS')
+    expect(validateChordPlayability(pattern).status).toBe('PASS')
+  })
 })

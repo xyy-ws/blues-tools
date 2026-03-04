@@ -1,5 +1,6 @@
 import type { MusicalKey } from '../../domain/music/types'
 import { inferBassInversion, validateChordPattern, validateChordPlayability } from './chordValidation'
+import { parsePattern } from './pattern'
 import { CURATED_CHORD_SHAPES } from './chordsDbAdapter'
 import { generateRankedFingerings } from './algorithmicFingerings'
 
@@ -163,11 +164,8 @@ export type ChordLibraryValidationRecord = {
 }
 
 function shapeRank(pattern: string): number {
-  const frets = pattern
-    .split('')
-    .filter((char) => char !== 'x' && char !== 'X')
-    .map((char) => Number.parseInt(char, 10))
-    .filter((fret) => !Number.isNaN(fret))
+  const parsed = parsePattern(pattern)
+  const frets = (parsed ?? []).filter((fret): fret is number => fret !== null)
 
   if (frets.length === 0) return 999
   const min = Math.min(...frets)
