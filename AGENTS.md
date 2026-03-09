@@ -253,6 +253,12 @@ After each milestone completion:
 - Credentials must be stored/retrieved via Bitwarden.
 - Never persist plaintext secrets in repo or memory files.
 
+### 7) State & Continuation Consistency
+For any run/resume workflow:
+- Use exactly one continuation primitive (`session` OR `previous_response`/`conversation`), never mixed.
+- Treat state-carry paths as mutually exclusive; on conflict, fail fast (no implicit merge/fallback).
+- On every resume/reentry, record a minimal provenance receipt: `continuation_authority`, `state_source`, `merge_policy`.
+
 ### 7) Repo Export Safety
 When user asks to publish only one project/repo:
 - NEVER run `orphan + wipe workspace` style operations at workspace root.
