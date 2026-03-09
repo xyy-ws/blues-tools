@@ -259,7 +259,26 @@ For any run/resume workflow:
 - Treat state-carry paths as mutually exclusive; on conflict, fail fast (no implicit merge/fallback).
 - On every resume/reentry, record a minimal provenance receipt: `continuation_authority`, `state_source`, `merge_policy`.
 
-### 7) Repo Export Safety
+### 8) Interrupt/Reentry & Side-Effect Safety
+For interrupt/retry/resume workflows:
+- Pre-interrupt steps must be replay-safe (no irreversible side effects).
+- Irreversible side effects run only after resume approval and must include idempotency keys.
+- Reentry should be validated (same thread/continuation context) before replaying actions.
+
+### 9) Completion & Stream Closure
+Never mark tasks complete from visible output alone.
+Require completion gates:
+- transport/stream finished,
+- decision loop closed (no unresolved interruptions/approvals),
+- failure visibility closed (critical failures surfaced, operational budget respected).
+
+### 10) Evidence Receipts & Delta-First Loops
+For claims and recurring automation:
+- Numeric/high-impact claims must have receipts (source/log/path/hash/tool evidence id).
+- Errors must keep structured evidence envelopes (not text-only summaries).
+- Recurring loops default to Phase-0 delta checks; skip heavy reasoning when no change is detected.
+
+### 11) Repo Export Safety
 When user asks to publish only one project/repo:
 - NEVER run `orphan + wipe workspace` style operations at workspace root.
 - Use isolated project directories (e.g., `workspace/projects/<repo>`) or a temp export dir.
