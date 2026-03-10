@@ -1,0 +1,7 @@
+body { font-family: Arial, sans-serif; margin: 0; background: #f8fafc; }
+.container { max-width: 1100px; margin: 20px auto; padding: 16px; background: #fff; }
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 16px 0; }
+.card { border: 1px solid #ddd; padding: 12px; border-radius: 8px; background: #f9fafb; }
+table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+.charts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }

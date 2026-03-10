@@ -1,0 +1,47 @@
+{
+  "date": "2026-03-10",
+  "overview": {
+    "total_painpoints": 3,
+    "high_emotion_ratio": 0.333,
+    "weekly_wow_change": 0
+  },
+  "top20": [
+    {
+      "id": 3,
+      "source_id": "m3",
+      "text": "feature broken after latest update inventory sync keeps failing and this is frustrating",
+      "category": "function",
+      "intensity": 0.6666666666666666,
+      "sentiment": -1.0,
+      "theme": "feature",
+      "date": "2026-03-10"
+    },
+    {
+      "id": 2,
+      "source_id": "m2",
+      "text": "onboarding process takes too long and users churn our setup steps are too many and support tickets are exploding",
+      "category": "process",
+      "intensity": 0.3333333333333333,
+      "sentiment": -1.0,
+      "theme": "onboarding",
+      "date": "2026-03-10"
+    },
+    {
+      "id": 1,
+      "source_id": "m1",
+      "text": "stripe pricing is killing my margins transaction fees subscriptions feel impossible for early stage",
+      "category": "pricing",
+      "intensity": 0.3333333333333333,
+      "sentiment": -1.0,
+      "theme": "stripe",
+      "date": "2026-03-10"
+    }
+  ],
+  "weekly": [
+    {
+      "week": "2026-W11",
+      "new_count": 3,
+      "wow_change": 0
+    }
+  ]
+}
