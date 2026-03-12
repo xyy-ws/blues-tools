@@ -32,7 +32,8 @@ Covered all 12 target keys:
 - B: **16**
 
 ## Items needing manual verification
-- **27/30** entries include at least one uncertain field in notes (estimated BPM/duration/meter/key or URL slug verification).
+- **28/30** entries include at least one uncertain field in notes (estimated BPM/duration/meter/key or URL slug verification).
+- Method: flagged count = rows whose `notes` contain any uncertainty keyword (`estimated`, `verify`, `interpreted`, `assumed`).
 - Main verification actions:
   1. Replace channel-level YouTube links with exact video URLs selected for final catalog.
   2. Confirm exact BPM/duration from source page/video description.
