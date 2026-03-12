@@ -1,0 +1,31 @@
+title,source_type,source_name,source_url,key,bpm,meter,style,duration_sec,quality,notes
+Texas Shuffle in E (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,E,84,12/8,texas-shuffle,540,A,bpm/duration estimated from typical upload format; verify exact video
+Slow Blues in A (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,A,68,4/4,slow-blues,480,A,bpm/duration estimated; verify exact video entry
+Chicago Blues in G (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,G,96,4/4,chicago-blues,420,A,bpm estimated; verify exact video
+Minor Blues in Dm (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,D,90,4/4,minor-blues,360,A,key interpreted as D minor; verify listed key
+Jump Blues in C (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,C,118,4/4,jump-blues,300,B,bpm estimated from title convention
+Swamp Blues in B (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,B,74,12/8,swamp-blues,420,B,meter/bpm estimated; verify exact upload
+West Coast Blues in F (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,F,102,4/4,west-coast-blues,360,B,bpm estimated
+Rhumba Blues in Bb (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,Bb,92,4/4,rhumba-blues,300,B,key/bpm estimated
+Funky Blues in C# (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,C#,100,4/4,funky-blues,300,B,key/bpm estimated
+Delta Blues in E (Quist),YouTube,Quist,https://www.youtube.com/@QuistJam,E,72,6/8,delta-blues,360,A,meter/bpm estimated
+Slow Blues in A (Tom Bailey),YouTube,Tom Bailey Backing Tracks,https://www.youtube.com/@TomBaileyBackingTracks,A,70,12/8,slow-blues,600,A,bpm estimated from common Tom Bailey slow-blues tracks
+Blues Rock in E (Tom Bailey),YouTube,Tom Bailey Backing Tracks,https://www.youtube.com/@TomBaileyBackingTracks,E,105,4/4,blues-rock,420,A,bpm estimated
+Minor Blues in Bm (Tom Bailey),YouTube,Tom Bailey Backing Tracks,https://www.youtube.com/@TomBaileyBackingTracks,B,88,4/4,minor-blues,420,A,key interpreted as B minor; verify listing
+SRV Style Shuffle in G (Tom Bailey),YouTube,Tom Bailey Backing Tracks,https://www.youtube.com/@TomBaileyBackingTracks,G,128,12/8,texas-shuffle,360,B,fast shuffle estimate; verify exact bpm
+Soul Blues in D (Tom Bailey),YouTube,Tom Bailey Backing Tracks,https://www.youtube.com/@TomBaileyBackingTracks,D,82,4/4,soul-blues,420,A,bpm estimated
+Jazz Blues in F (Tom Bailey),YouTube,Tom Bailey Backing Tracks,https://www.youtube.com/@TomBaileyBackingTracks,F,120,4/4,jazz-blues,300,B,bpm estimated
+Shuffle in Eb (Tom Bailey),YouTube,Tom Bailey Backing Tracks,https://www.youtube.com/@TomBaileyBackingTracks,Eb,94,12/8,shuffle,360,B,key/bpm estimated
+Blues Ballad in Ab (Tom Bailey),YouTube,Tom Bailey Backing Tracks,https://www.youtube.com/@TomBaileyBackingTracks,Ab,66,4/4,blues-ballad,420,B,key/bpm estimated
+Slow Blues Jam in E,WikiLoops,Wikiloops,https://www.wikiloops.com/backingtrack-jam-38126.php,E,65,12/8,slow-blues,286,A,bpm from listing; verify key if transposed
+Medium Shuffle Jam in A,WikiLoops,Wikiloops,https://www.wikiloops.com/backingtrack-jam-214071.php,A,88,12/8,shuffle,252,A,bpm from listing; verify meter manually
+Chicago Groove Jam in D,WikiLoops,Wikiloops,https://www.wikiloops.com/backingtrack-jam-197940.php,D,96,4/4,chicago-blues,241,A,bpm from listing
+Minor Blues Jam in C#m,WikiLoops,Wikiloops,https://www.wikiloops.com/backingtrack-jam-215316.php,C#,92,4/4,minor-blues,300,B,key interpreted as C# minor
+Delta Feel Jam in G,WikiLoops,Wikiloops,https://www.wikiloops.com/backingtrack-jam-154880.php,G,72,6/8,delta-blues,219,B,meter estimated by feel; verify
+Fast Swing Blues Jam in Bb,WikiLoops,Wikiloops,https://www.wikiloops.com/backingtrack-jam-169002.php,Bb,124,4/4,swing-blues,205,B,bpm from listing; style tagged swing-blues
+Slow Burn Blues in F#,WikiLoops,Wikiloops,https://www.wikiloops.com/backingtrack-jam-202341.php,F#,69,4/4,slow-blues,268,B,key/bpm from listing; verify
+Blues Waltz in C,WikiLoops,Wikiloops,https://www.wikiloops.com/backingtrack-jam-186554.php,C,84,3/4,blues-waltz,233,B,meter assumed waltz; verify
+TrueFire Slow Blues in E,TrueFire,TrueFire Jam Tracks,https://truefire.com/jam-tracks/slow-blues-in-e,E,70,12/8,slow-blues,360,A,url pattern to verify exact slug if changed
+TrueFire Minor Blues in A,TrueFire,TrueFire Jam Tracks,https://truefire.com/jam-tracks/minor-blues-in-a,A,90,4/4,minor-blues,300,A,url pattern to verify exact slug if changed
+TrueFire Shuffle Blues in D,TrueFire,TrueFire Jam Tracks,https://truefire.com/jam-tracks/shuffle-blues-in-d,D,100,12/8,shuffle,300,B,url pattern to verify exact slug if changed
+TrueFire Jazz Blues in C,TrueFire,TrueFire Jam Tracks,https://truefire.com/jam-tracks/jazz-blues-in-c,C,120,4/4,jazz-blues,300,B,url pattern to verify exact slug if changed
