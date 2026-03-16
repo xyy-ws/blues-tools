@@ -7,6 +7,7 @@
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - status: `PAUSED`
 - last_update: `2026-02-26 00:00 UTC`
+- progress_file: task-progress/tasks/VOICE-20260225-DEBUG-LOG-RELAY.md
 
 ## 目标
 实现手机日志通过网络实时回传到网关，便于远程协同调试唤醒服务。

@@ -7,6 +7,7 @@
 - workdir: `/root/.openclaw/workspace/.projects/xiaodeng-voice-assistant`
 - status: `PAUSED`
 - last_update: `2026-02-26 00:00 UTC`
+- progress_file: task-progress/tasks/VOICE-20260225-ANDROID-UI-DEBUG-PANEL.md
 
 ## 目标
 优化主界面可用性，提供状态、错误、事件流可视化，支持快速验收与排障。
