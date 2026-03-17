@@ -1,0 +1,2 @@
+# one filename per line, e.g. 2026-03-10.md
+# listed files stay in HOT tier regardless of age
