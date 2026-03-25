@@ -9,7 +9,7 @@ import main  # noqa
 
 def judge(item):
     zone = item.get("zone", "")
-    sources = item.get("sources") or []
+    sources = item.get("sources") or item.get("data_sources") or []
     if zone == "数据不足" or len(sources) <= 1:
         return "OBSERVE", "数据不足/单源数据，按规则仅观察不交易"
     return "REVIEW", "可进入人工复核，不可自动下单"
@@ -38,7 +38,7 @@ def run(codes):
         out["items"].append({
             "symbol": item.get("code"),
             "zone": item.get("zone"),
-            "sources": item.get("sources", []),
+            "sources": item.get("sources") or item.get("data_sources") or [],
             "action": action,
             "reason": reason,
         })
