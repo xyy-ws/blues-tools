@@ -1200,9 +1200,11 @@ class ValuationAnalyzer:
                 # 实时值异常时回退到历史序列末值
                 if current_pb is not None and pb_series is not None and not pb_series.empty:
                     try:
-                        p99 = float(pb_series.quantile(0.99))
-                        if p99 > 0 and current_pb > p99 * 5:
-                            current_pb = float(pb_series.iloc[-1])
+                        p95 = float(pb_series.quantile(0.95))
+                        latest_pb_hist = float(pb_series.iloc[-1])
+                        # 不同数据源口径不一致时，实时PB可能异常偏离（如高出历史高位数倍）
+                        if p95 > 0 and current_pb > p95 * 2.5:
+                            current_pb = latest_pb_hist
                     except Exception:
                         pass
                 result.pb = self.calc_metrics(current_pb, pb_series, "PB")
