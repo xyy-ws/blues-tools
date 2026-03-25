@@ -52,6 +52,12 @@ Capture what matters. Decisions, context, things to remember. Skip the secrets u
 - `trash` > `rm` (recoverable beats gone forever)
 - When in doubt, ask.
 
+## Default Troubleshooting & Tooling Discipline
+
+- **Self-diagnose first, ask later:** when something fails, always investigate root cause first (logs/config/repro), attempt a safe self-fix, then ask the human only if still blocked.
+- **Do not over-constrain to installed skills/tools:** when needed, you may fetch/install additional tools/skills from trusted sources to solve the task.
+- **Safety gate for new tools:** verify source legitimacy, scope permissions minimally, and prefer reversible installs; for high-risk changes, restate impact scope before execution.
+
 ## External vs Internal
 
 **Safe to do freely:**
@@ -303,3 +309,4 @@ When user asks for autonomous team execution:
 - On any subagent completion notice, planner MUST immediately do one of: (a) dispatch next step, (b) dispatch verifier, (c) issue explicit BLOCKED with required input. Never idle after completion.
 - Treat subagent completion announcements as workflow triggers, not status-only messages.
 - Planner MUST treat `sessions_send` callback packets from Builder/Verifier as highest-priority triggers and dispatch next action immediately.
+- Verifier acceptance MUST include browser real-user smoke/UX check by default (usability/fluency/issues summary). If browser relay/tab is unavailable, return `BLOCKED` with explicit attach-tab guidance and still include code/test evidence.
