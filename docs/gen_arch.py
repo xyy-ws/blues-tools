@@ -1,0 +1,280 @@
+#!/usr/bin/env python3
+"""安全运营架构图 - 纯净版 PNG"""
+import cairosvg
+import os
+
+svg = """<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 1600" width="1100" height="1600">
+<defs>
+<linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+<stop offset="0%" stop-color="#0a0a14"/>
+<stop offset="100%" stop-color="#111128"/>
+</linearGradient>
+<linearGradient id="g1" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0d2035"/><stop offset="100%" stop-color="#091525"/></linearGradient>
+<linearGradient id="g2" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1a1500"/><stop offset="100%" stop-color="#120f00"/></linearGradient>
+<linearGradient id="g3" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1a0f2e"/><stop offset="100%" stop-color="#100820"/></linearGradient>
+<linearGradient id="g4" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0a1520"/><stop offset="100%" stop-color="#050d15"/></linearGradient>
+<linearGradient id="g5" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#0a2015"/><stop offset="100%" stop-color="#051208"/></linearGradient>
+<linearGradient id="g6" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#1a1500"/><stop offset="100%" stop-color="#120f00"/></linearGradient>
+<filter id="s" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#000" flood-opacity="0.6"/></filter>
+<filter id="ss" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.4"/></filter>
+<marker id="ab" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#00d4ff"/></marker>
+<marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#e94560"/></marker>
+<marker id="ay" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#ffc107"/></marker>
+</defs>
+
+<rect width="1100" height="1600" fill="url(#bg)"/>
+
+<!-- 标题 -->
+<text x="550" y="40" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="26" font-weight="bold">安全运营架构图</text>
+<text x="550" y="65" text-anchor="middle" fill="#556" font-family="Arial" font-size="13">Security Operations Architecture</text>
+
+<!-- 分割线 -->
+<line x1="40" y1="80" x2="1060" y2="80" stroke="#1a1a3a" stroke-width="1"/>
+
+<!-- ==================== 第①层：日志源 ==================== -->
+<rect x="40" y="95" width="1020" height="170" rx="14" fill="url(#g1)" stroke="#00d4ff" stroke-width="2" filter="url(#s)"/>
+<text x="60" y="125" fill="#00d4ff" font-family="Arial" font-size="15" font-weight="bold">① 日志源层</text>
+<text x="60" y="145" fill="#556" font-family="Arial" font-size="11">LOG SOURCES</text>
+
+<!-- 8个组件 -->
+<rect x="60" y="160" width="110" height="90" rx="10" fill="#081520" stroke="#00d4ff" stroke-width="1.5" filter="url(#ss)"/>
+<text x="115" y="195" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="22">🖥️</text>
+<text x="115" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">EDR终端</text>
+<text x="115" y="238" text-anchor="middle" fill="#667" font-family="Arial" font-size="10">青藤·360·火绒</text>
+
+<rect x="185" y="160" width="110" height="90" rx="10" fill="#081520" stroke="#00d4ff" stroke-width="1.5" filter="url(#ss)"/>
+<text x="240" y="195" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="22">🛡️</text>
+<text x="240" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">WAF</text>
+<text x="240" y="238" text-anchor="middle" fill="#667" font-family="Arial" font-size="10">Web应用防火墙</text>
+
+<rect x="310" y="160" width="110" height="90" rx="10" fill="#081520" stroke="#00d4ff" stroke-width="1.5" filter="url(#ss)"/>
+<text x="365" y="195" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="22">🔥</text>
+<text x="365" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">防火墙</text>
+<text x="365" y="238" text-anchor="middle" fill="#667" font-family="Arial" font-size="10">Flow / NetFlow</text>
+
+<rect x="435" y="160" width="110" height="90" rx="10" fill="#081520" stroke="#00d4ff" stroke-width="1.5" filter="url(#ss)"/>
+<text x="490" y="195" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="22">👤</text>
+<text x="490" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">AD域控</text>
+<text x="490" y="238" text-anchor="middle" fill="#667" font-family="Arial" font-size="10">账户·登录事件</text>
+
+<rect x="560" y="160" width="110" height="90" rx="10" fill="#081520" stroke="#00d4ff" stroke-width="1.5" filter="url(#ss)"/>
+<text x="615" y="195" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="22">☁️</text>
+<text x="615" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">云平台</text>
+<text x="615" y="238" text-anchor="middle" fill="#667" font-family="Arial" font-size="10">阿里云·华为云</text>
+
+<rect x="685" y="160" width="110" height="90" rx="10" fill="#081520" stroke="#00d4ff" stroke-width="1.5" filter="url(#ss)"/>
+<text x="740" y="195" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="22">📦</text>
+<text x="740" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">容器K8s</text>
+<text x="740" y="238" text-anchor="middle" fill="#667" font-family="Arial" font-size="10">Audit日志</text>
+
+<rect x="810" y="160" width="110" height="90" rx="10" fill="#081520" stroke="#00d4ff" stroke-width="1.5" filter="url(#ss)"/>
+<text x="865" y="195" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="22">🌐</text>
+<text x="865" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">网络设备</text>
+<text x="865" y="238" text-anchor="middle" fill="#667" font-family="Arial" font-size="10">交换机·路由器</text>
+
+<rect x="935" y="160" width="110" height="90" rx="10" fill="#081520" stroke="#00d4ff" stroke-width="1.5" filter="url(#ss)"/>
+<text x="990" y="195" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="22">🗄️</text>
+<text x="990" y="220" text-anchor="middle" fill="#fff" font-family="Arial" font-size="12">数据库审计</text>
+<text x="990" y="238" text-anchor="middle" fill="#667" font-family="Arial" font-size="10">DAM</text>
+
+<!-- ==================== 第②层：采集 ==================== -->
+<rect x="40" y="285" width="1020" height="105" rx="14" fill="url(#g2)" stroke="#ff9800" stroke-width="2" filter="url(#s)"/>
+<text x="60" y="315" fill="#ff9800" font-family="Arial" font-size="15" font-weight="bold">② 采集层</text>
+<text x="60" y="335" fill="#556" font-family="Arial" font-size="11">LOG COLLECTION</text>
+
+<rect x="340" y="335" width="420" height="45" rx="10" fill="#0d1800" stroke="#ff9800" stroke-width="1.5" filter="url(#ss)"/>
+<text x="550" y="355" text-anchor="middle" fill="#ff9800" font-family="Arial" font-size="15" font-weight="bold">⚡ Vector Agent</text>
+<text x="550" y="372" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">高性能日志采集 · 统一格式归一化 · 低占用</text>
+
+<!-- ==================== 第③层：SIEM ==================== -->
+<rect x="40" y="410" width="1020" height="190" rx="14" fill="url(#g3)" stroke="#9c27b0" stroke-width="2" filter="url(#s)"/>
+<text x="60" y="440" fill="#ce93d8" font-family="Arial" font-size="15" font-weight="bold">③ SIEM 平台</text>
+<text x="60" y="460" fill="#556" font-family="Arial" font-size="11">SECURITY INFORMATION &amp; EVENT MANAGEMENT</text>
+
+<rect x="60" y="475" width="170" height="110" rx="10" fill="#0d0820" stroke="#9c27b0" stroke-width="1" filter="url(#ss)"/>
+<text x="145" y="508" text-anchor="middle" fill="#ce93d8" font-family="Arial" font-size="13" font-weight="bold">🔧 归一化引擎</text>
+<text x="145" y="530" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">统一字段格式</text>
+<text x="145" y="548" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">时间·IP·用户·行为·结果</text>
+<text x="145" y="575" text-anchor="middle" fill="#888" font-family="Arial" font-size="10">↓</text>
+
+<rect x="245" y="475" width="170" height="110" rx="10" fill="#0d0820" stroke="#9c27b0" stroke-width="1" filter="url(#ss)"/>
+<text x="330" y="508" text-anchor="middle" fill="#ce93d8" font-family="Arial" font-size="13" font-weight="bold">⚙️ 关联规则引擎</text>
+<text x="330" y="530" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">多源日志 → 复合告警</text>
+<text x="330" y="548" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">规则引擎</text>
+<text x="330" y="575" text-anchor="middle" fill="#888" font-family="Arial" font-size="10">↓</text>
+
+<rect x="430" y="475" width="170" height="110" rx="10" fill="#0d0820" stroke="#e94560" stroke-width="1.5" filter="url(#ss)"/>
+<text x="515" y="508" text-anchor="middle" fill="#ff8a80" font-family="Arial" font-size="13" font-weight="bold">🚦 告警分级</text>
+<text x="515" y="530" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">P0 · P1 · P2 · P3 · P4</text>
+<text x="515" y="548" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">分级触发SOAR</text>
+<text x="515" y="575" text-anchor="middle" fill="#888" font-family="Arial" font-size="10">↓</text>
+
+<rect x="615" y="475" width="170" height="110" rx="10" fill="#0d0820" stroke="#9c27b0" stroke-width="1" filter="url(#ss)"/>
+<text x="700" y="508" text-anchor="middle" fill="#ce93d8" font-family="Arial" font-size="13" font-weight="bold">🔍 IOC 快速检索</text>
+<text x="700" y="530" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">IP · 域名 · Hash · URL</text>
+<text x="700" y="548" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">威胁情报匹配</text>
+<text x="700" y="575" text-anchor="middle" fill="#888" font-family="Arial" font-size="10">↓</text>
+
+<rect x="800" y="475" width="170" height="110" rx="10" fill="#0d0820" stroke="#9c27b0" stroke-width="1" filter="url(#ss)"/>
+<text x="885" y="508" text-anchor="middle" fill="#ce93d8" font-family="Arial" font-size="13" font-weight="bold">📈 UEBA</text>
+<text x="885" y="530" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">用户行为异常分析</text>
+<text x="885" y="548" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">基线异常检测</text>
+<text x="885" y="575" text-anchor="middle" fill="#888" font-family="Arial" font-size="10">↓</text>
+
+<!-- ==================== 第④层：SOAR ==================== -->
+<rect x="40" y="620" width="1020" height="200" rx="14" fill="url(#g4)" stroke="#2196f3" stroke-width="2" filter="url(#s)"/>
+<text x="60" y="650" fill="#90caf9" font-family="Arial" font-size="15" font-weight="bold">④ SOAR 编排  Shuffle</text>
+<text x="60" y="670" fill="#556" font-family="Arial" font-size="11">SECURITY ORCHESTRATION, AUTOMATION &amp; RESPONSE</text>
+
+<rect x="60" y="685" width="140" height="120" rx="10" fill="#050d15" stroke="#64b5f6" stroke-width="1" filter="url(#ss)"/>
+<text x="130" y="720" text-anchor="middle" fill="#90caf9" font-family="Arial" font-size="12" font-weight="bold">📥 告警接收</text>
+<text x="130" y="742" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">Webhook</text>
+<text x="130" y="760" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">API</text>
+<text x="130" y="795" text-anchor="middle" fill="#555" font-family="Arial" font-size="10">↓</text>
+
+<rect x="215" y="685" width="140" height="120" rx="10" fill="#050d15" stroke="#64b5f6" stroke-width="1" filter="url(#ss)"/>
+<text x="285" y="720" text-anchor="middle" fill="#90caf9" font-family="Arial" font-size="12" font-weight="bold">🔁 去重聚合</text>
+<text x="285" y="742" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">同源</text>
+<text x="285" y="760" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">同事件</text>
+<text x="285" y="795" text-anchor="middle" fill="#555" font-family="Arial" font-size="10">↓</text>
+
+<rect x="370" y="685" width="160" height="120" rx="10" fill="#050d15" stroke="#ffc107" stroke-width="1.5" filter="url(#ss)"/>
+<text x="450" y="720" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="12" font-weight="bold">📋 剧本编排</text>
+<text x="450" y="742" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">可视化编辑器</text>
+<text x="450" y="760" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">低代码</text>
+<text x="450" y="795" text-anchor="middle" fill="#555" font-family="Arial" font-size="10">↓</text>
+
+<rect x="545" y="685" width="140" height="120" rx="10" fill="#050d15" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="615" y="720" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="12" font-weight="bold">👆 人工审批</text>
+<text x="615" y="742" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">钉钉</text>
+<text x="615" y="760" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">企微 · 邮件</text>
+<text x="615" y="795" text-anchor="middle" fill="#555" font-family="Arial" font-size="10">↓</text>
+
+<rect x="700" y="685" width="140" height="120" rx="10" fill="#050d15" stroke="#00e676" stroke-width="1" filter="url(#ss)"/>
+<text x="770" y="720" text-anchor="middle" fill="#69f0ae" font-family="Arial" font-size="12" font-weight="bold">⚡ 自动执行</text>
+<text x="770" y="742" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">封锁 · 隔离</text>
+<text x="770" y="760" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">禁用</text>
+<text x="770" y="795" text-anchor="middle" fill="#555" font-family="Arial" font-size="10">↓</text>
+
+<rect x="855" y="685" width="140" height="120" rx="10" fill="#050d15" stroke="#00d4ff" stroke-width="1" filter="url(#ss)"/>
+<text x="925" y="720" text-anchor="middle" fill="#00d4ff" font-family="Arial" font-size="12" font-weight="bold">🤖 AI 辅助</text>
+<text x="925" y="742" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">PentAGI</text>
+<text x="925" y="760" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">告警研判</text>
+<text x="925" y="795" text-anchor="middle" fill="#555" font-family="Arial" font-size="10">↓</text>
+
+<!-- ==================== 第⑤层：案件 ==================== -->
+<rect x="40" y="840" width="1020" height="175" rx="14" fill="url(#g5)" stroke="#00e676" stroke-width="2" filter="url(#s)"/>
+<text x="60" y="870" fill="#69f0ae" font-family="Arial" font-size="15" font-weight="bold">⑤ 案件管理  TheHive</text>
+<text x="60" y="890" fill="#556" font-family="Arial" font-size="11">CASE MANAGEMENT</text>
+
+<rect x="60" y="905" width="140" height="95" rx="10" fill="#030e07" stroke="#00e676" stroke-width="1" filter="url(#ss)"/>
+<text x="130" y="935" text-anchor="middle" fill="#69f0ae" font-family="Arial" font-size="12" font-weight="bold">📝 工单创建</text>
+<text x="130" y="957" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">告警 → 自动建单</text>
+<text x="130" y="985" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">↓</text>
+
+<rect x="215" y="905" width="140" height="95" rx="10" fill="#030e07" stroke="#00e676" stroke-width="1" filter="url(#ss)"/>
+<text x="285" y="935" text-anchor="middle" fill="#69f0ae" font-family="Arial" font-size="12" font-weight="bold">👥 调查分配</text>
+<text x="285" y="957" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">类型·资产·负载</text>
+<text x="285" y="985" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">↓</text>
+
+<rect x="370" y="905" width="140" height="95" rx="10" fill="#030e07" stroke="#00e676" stroke-width="1" filter="url(#ss)"/>
+<text x="440" y="935" text-anchor="middle" fill="#69f0ae" font-family="Arial" font-size="12" font-weight="bold">➡️ 状态流转</text>
+<text x="440" y="957" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">调查→处置→闭环</text>
+<text x="440" y="985" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">↓</text>
+
+<rect x="525" y="905" width="140" height="95" rx="10" fill="#030e07" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="595" y="935" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="12" font-weight="bold">⏱️ SLA 监控</text>
+<text x="595" y="957" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">超时预警·升级</text>
+<text x="595" y="985" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">↓</text>
+
+<rect x="680" y="905" width="140" height="95" rx="10" fill="#030e07" stroke="#00e676" stroke-width="1" filter="url(#ss)"/>
+<text x="750" y="935" text-anchor="middle" fill="#69f0ae" font-family="Arial" font-size="12" font-weight="bold">📎 调查笔记</text>
+<text x="750" y="957" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">附件·截图·日志</text>
+<text x="750" y="985" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">↓</text>
+
+<rect x="835" y="905" width="140" height="95" rx="10" fill="#030e07" stroke="#00e676" stroke-width="1" filter="url(#ss)"/>
+<text x="905" y="935" text-anchor="middle" fill="#69f0ae" font-family="Arial" font-size="12" font-weight="bold">📊 指标统计</text>
+<text x="905" y="957" text-anchor="middle" fill="#667" font-family="Arial" font-size="11">MTTR·处置量</text>
+<text x="905" y="985" text-anchor="middle" fill="#556" font-family="Arial" font-size="10">↓</text>
+
+<!-- ==================== 第⑥层：指标 ==================== -->
+<rect x="40" y="1035" width="1020" height="115" rx="14" fill="url(#g6)" stroke="#ffc107" stroke-width="2" filter="url(#s)"/>
+<text x="60" y="1065" fill="#ffd54f" font-family="Arial" font-size="15" font-weight="bold">⑥ 运营指标  KPIs</text>
+
+<rect x="60" y="1080" width="185" height="55" rx="8" fill="#1a1000" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="152" y="1103" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="13" font-weight="bold">⏱️ MTTD &lt; 30min</text>
+<text x="152" y="1122" text-anchor="middle" fill="#887" font-family="Arial" font-size="11">威胁检测时间</text>
+
+<rect x="260" y="1080" width="185" height="55" rx="8" fill="#1a1000" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="352" y="1103" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="13" font-weight="bold">⏱️ MTTR &lt; 4h</text>
+<text x="352" y="1122" text-anchor="middle" fill="#887" font-family="Arial" font-size="11">响应处置时间</text>
+
+<rect x="460" y="1080" width="185" height="55" rx="8" fill="#1a1000" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="552" y="1103" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="13" font-weight="bold">📊 自动处置 &gt; 30%</text>
+<text x="552" y="1122" text-anchor="middle" fill="#887" font-family="Arial" font-size="11">自动化处置率</text>
+
+<rect x="660" y="1080" width="185" height="55" rx="8" fill="#1a1000" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="752" y="1103" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="13" font-weight="bold">📊 闭环率 &gt; 90%</text>
+<text x="752" y="1122" text-anchor="middle" fill="#887" font-family="Arial" font-size="11">工单闭环率</text>
+
+<rect x="860" y="1080" width="145" height="55" rx="8" fill="#1a1000" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="932" y="1103" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="13" font-weight="bold">🎯 误报 &lt; 40%</text>
+<text x="932" y="1122" text-anchor="middle" fill="#887" font-family="Arial" font-size="11">误报率</text>
+
+<!-- ==================== 第⑦层：情报 ==================== -->
+<rect x="40" y="1170" width="1020" height="115" rx="14" fill="url(#g6)" stroke="#ffc107" stroke-width="2" filter="url(#s)"/>
+<text x="60" y="1200" fill="#ffd54f" font-family="Arial" font-size="15" font-weight="bold">⑦ 威胁情报  Threat Intelligence</text>
+
+<rect x="340" y="1220" width="190" height="50" rx="8" fill="#1a1000" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="435" y="1242" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="13" font-weight="bold">🌍 外部情报  STIX/TAXII</text>
+
+<rect x="560" y="1220" width="190" height="50" rx="8" fill="#1a1000" stroke="#ffc107" stroke-width="1" filter="url(#ss)"/>
+<text x="655" y="1242" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="13" font-weight="bold">🏠 内部IOC  自产共享</text>
+
+<!-- ==================== 连接箭头 ==================== -->
+<!-- 主数据流 -->
+<line x1="550" y1="265" x2="550" y2="282" stroke="#00d4ff" stroke-width="2.5" marker-end="url(#ab)"/>
+<line x1="550" y1="390" x2="550" y2="407" stroke="#ff9800" stroke-width="2.5" marker-end="url(#ab)"/>
+<line x1="550" y1="600" x2="550" y2="617" stroke="#9c27b0" stroke-width="2.5" marker-end="url(#ab)"/>
+<line x1="550" y1="820" x2="550" y2="837" stroke="#2196f3" stroke-width="2.5" marker-end="url(#ab)"/>
+<line x1="550" y1="1015" x2="550" y2="1032" stroke="#00e676" stroke-width="2.5" marker-end="url(#ab)"/>
+
+<!-- 执行指令（红色虚线） -->
+<line x1="770" y1="760" x2="240" y2="200" stroke="#e94560" stroke-width="1.5" stroke-dasharray="6,4" marker-end="url(#ar)"/>
+<text x="500" y="480" text-anchor="middle" fill="#e94560" font-family="Arial" font-size="10">封锁IP</text>
+
+<line x1="770" y1="785" x2="365" y2="200" stroke="#e94560" stroke-width="1.5" stroke-dasharray="6,4"/>
+<text x="570" y="490" text-anchor="middle" fill="#e94560" font-family="Arial" font-size="10">隔离主机</text>
+
+<line x1="770" y1="800" x2="490" y2="200" stroke="#e94560" stroke-width="1.5" stroke-dasharray="6,4"/>
+<text x="630" y="500" text-anchor="middle" fill="#e94560" font-family="Arial" font-size="10">禁用账号</text>
+
+<!-- 情报输入（黄色虚线） -->
+<line x1="435" y1="1170" x2="700" y2="585" stroke="#ffc107" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ay)"/>
+<text x="575" y="870" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="10">情报命中</text>
+
+<!-- 误报反馈（黄色虚线） -->
+<line x1="595" y1="1000" x2="515" y2="585" stroke="#ffc107" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#ay)"/>
+<text x="550" y="790" text-anchor="middle" fill="#ffc107" font-family="Arial" font-size="10">误报反馈</text>
+
+<!-- 图例 -->
+<line x1="40" y1="1320" x2="80" y2="1320" stroke="#00d4ff" stroke-width="2.5"/>
+<text x="90" y="1325" fill="#667" font-family="Arial" font-size="11">数据流</text>
+
+<line x1="160" y1="1320" x2="200" y2="1320" stroke="#e94560" stroke-width="1.5" stroke-dasharray="6,4"/>
+<text x="210" y="1325" fill="#667" font-family="Arial" font-size="11">执行指令</text>
+
+<line x1="290" y1="1320" x2="330" y2="1320" stroke="#ffc107" stroke-width="1.5" stroke-dasharray="5,3"/>
+<text x="340" y="1325" fill="#667" font-family="Arial" font-size="11">情报·反馈</text>
+
+<text x="550" y="1350" text-anchor="middle" fill="#334" font-family="Arial" font-size="11">安全运营架构图  ·  Security Operations Architecture  ·  2026-04-23</text>
+</svg>"""
+
+with open('/root/.openclaw/workspace/docs/安全运营架构图-20260423-v2.svg', 'w', encoding='utf-8') as f:
+    f.write(svg)
+
+cairosvg.svg2png(url='/root/.openclaw/workspace/docs/安全运营架构图-20260423-v2.svg',
+                 write_to='/root/.openclaw/workspace/docs/安全运营架构图-20260423-v2.png',
+                 output_width=2200, output_height=3200)
+print("Done")
